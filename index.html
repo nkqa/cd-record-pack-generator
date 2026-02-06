@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <title>我的世界音乐唱片替换工具（基岩版）</title>
+    <script src="static/jszip/jszip.min.js"></script>
+    <script src="static/jszip/FileSaver.min.js"></script>
+    <script>
+         var link = document.createElement('link');
+         link.rel = 'stylesheet';
+         link.href = 'https://static.mcneko.com/font-must.css';
+         document.head.appendChild(link);
+     </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .upload-section {
+            margin-bottom: 30px;
+        }
+        .upload-section h2 {
+            color: #555;
+            margin-bottom: 15px;
+        }
+        .file-input {
+            margin-bottom: 15px;
+        }
+        .file-input label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .file-input select,
+        .file-input input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .file-input {
+            text-align: center;
+        }
+        .file-input label {
+            text-align: left;
+        }
+        
+        /* 自定义文件上传按钮样式 */
+        .custom-file-upload {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+        .custom-file-upload input[type="file"] {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+            z-index: 2;
+        }
+        .custom-btn {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #f8f9fa;
+            color: #333;
+            cursor: pointer;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+        .custom-btn:hover {
+            background-color: #e9ecef;
+            border-color: #adb5bd;
+        }
+        .btn {
+            display: inline-block;
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        .btn:hover {
+            background-color: #45a049;
+        }
+        .btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        .status {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .status.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .status.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .hint {
+            color: #666;
+            font-size: 14px;
+            margin-top: 5px;
+            font-style: italic;
+        }
+        .notice-section {
+            margin-top: 30px;
+            padding: 15px;
+            background-color: #fff3cd;
+            border: 1px solid #ffeeba;
+            border-radius: 4px;
+        }
+        .notice-section h3 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+        .notice-section p {
+            color: #856404;
+            margin: 0;
+        }
+        .tools-section {
+            margin-top: 30px;
+            padding: 15px;
+            background-color: #e3f2fd;
+            border: 1px solid #bbdefb;
+            border-radius: 4px;
+        }
+        .tools-section h3 {
+            color: #1565c0;
+            margin-bottom: 10px;
+        }
+        .tools-section p {
+            color: #1565c0;
+            margin-bottom: 15px;
+        }
+        .tool-links {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        .tool-links li {
+            margin-bottom: 10px;
+        }
+        .tool-links a {
+            color: #1976d2;
+            text-decoration: none;
+            word-break: break-all;
+        }
+        .tool-links a:hover {
+            text-decoration: underline;
+        }
+        
+        /* 时长警告样式 */
+        .duration-warning {
+            margin-top: 5px;
+            padding: 8px;
+            background-color: #fff3cd;
+            border: 1px solid #ffeeba;
+            border-radius: 4px;
+            color: #856404;
+            font-size: 14px;
+            text-align: left;
+        }
+        
+        /* 图标预览样式 */
+        .icon-preview {
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100px;
+            border: 1px dashed #ddd;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+        }
+        
+        .icon-preview img {
+            max-width: 128px;
+            max-height: 128px;
+            border-radius: 4px;
+        }
+        
+        /* 格式错误提示样式 */
+        .format-error {
+            margin-top: 5px;
+            padding: 8px;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            border-radius: 4px;
+            color: #721c24;
+            font-size: 14px;
+            text-align: left;
+        }
+        
+        /* 删除按钮样式 */
+        .delete-btn {
+            margin-left: 10px;
+            padding: 5px 10px;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            height: 38px;
+            align-self: center;
+        }
+        
+        .delete-btn:hover {
+            background-color: #c82333;
+        }
+        
+        /* 介绍部分样式 */
+        .info-section {
+            margin-bottom: 30px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .info-toggle {
+            width: 100%;
+            padding: 12px 16px;
+            background-color: #f8f9fa;
+            color: #333;
+            border: none;
+            text-align: left;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        
+        .info-toggle:hover {
+            background-color: #e9ecef;
+        }
+        
+        .toggle-icon {
+            display: inline-block;
+            margin-right: 8px;
+            transition: transform 0.3s;
+        }
+        
+        .info-content {
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-top: 1px solid #ddd;
+        }
+        
+        .info-content p {
+            margin-bottom: 10px;
+        }
+        
+        .info-content h3 {
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        /* 按钮容器样式 */
+        .btn-container {
+            display: flex;
+            align-items: center;
+        }
+        
+        /* 弹窗样式 */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+        }
+        
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            border-radius: 8px;
+            width: 300px;
+        }
+        
+        .modal-buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: flex-end;
+        }
+        
+        .modal-buttons button {
+            margin-left: 10px;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .confirm-btn {
+            background-color: #dc3545;
+            color: white;
+        }
+        
+        .cancel-btn {
+            background-color: #6c757d;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>我的世界音乐唱片替换工具（基岩版）</h1>
+        
+        <!-- 介绍部分 -->
+        <div class="info-section">
+            <button class="info-toggle" onclick="toggleInfo()">
+                <span class="toggle-icon">▼</span> 信息
+            </button>
+            <div class="info-content" style="display: none;">
+                <p>开发者：[待填写]</p>
+                <p>社区：[待填写]</p>
+                <p>源代码: [待填写]</p>
+                <h3>这个网站的用途是什么？</h3>
+                <p>这个网站提供生成我的世界基岩版唱片替换功能</p>
+                <h3>怎么使用该工具？</h3>
+                <p>只需要将ogg格式的音频上传即可，需要注意下面的最高支持时间</p>
+                <h3>为什么我无法上传或下载？</h3>
+                <p>请使用 <font color="red">Chromium</font> 内核的浏览器进行操作，例如 <font color="red">Google Chrome、Microsoft Edge</font></p>
+                <h3>我上传的音频格式不是ogg，有工具吗？</h3>
+                <p>有的，点击<a href="#convert-tools" onclick="event.preventDefault(); smoothScroll('convert-tools');">这里</a>查看</p>
+            </div>
+        </div>
+        
+        <div class="upload-section">
+            <h2>上传音乐文件</h2>
+            
+            <div class="file-input">
+                <label>11.ogg</label>
+                <div class="custom-file-upload">
+                    <input type="file" id="oggFile_11">
+                    <div class="custom-btn" id="fileBtnText_11">选择音频（不上传即为保持原版音乐）</div>
+                </div>
+                <div class="duration-warning">此名字的乐曲对应时长不能超过 1:10</div>
+                <input type="text" id="desc_11" placeholder="自定义描述（默认自动填入文件名）" style="margin-top: 5px;">
+            </div>
+            
+            <div class="file-input">
+                <label>13.ogg</label>
+                <div class="custom-file-upload">
+                    <input type="file" id="oggFile_13">
+                    <div class="custom-btn" id="fileBtnText_13">选择音频（不上传即为保持原版音乐）</div>
+                </div>
+                <div class="duration-warning">此名字的乐曲对应时长不能超过 2:55</div>
+                <input type="text" id="desc_13" placeholder="自定义描述（默认自动填入文件名）" style="margin-top: 5px;">
+            </div>
+            
+            <div class="file-input">
+                <label>5.ogg</label>
+                <div class="custom-file-upload">
+                    <input type="file" id="oggFile_5">
+                    <div class="custom-btn" id="fileBtnText_5">选择音频（不上传即为保持原版音乐）</div>
+                </div>
+                <div class="duration-warning">此名字的乐曲对应时长不能超过 3:00</div>
+                <input type="text" id="desc_5" placeholder="自定义描述（默认自动填入文件名）" style="margin-top: 5px;">
+            </div>
+            
+            <div class="file-input">
+                <label>blocks.ogg</label>
+                <div class="custom-file-upload">
+                    <input type="file" id="oggFile_blocks" accept=".ogg">
+                    <div class="custom-btn" id="fileBtnText_blocks">选择音频（不上传即为保持原版音乐）</div>
+                </div>
+                <div class="duration-warning">此名字的乐曲对应时长不能超过 5:40</div>
+                <input type="text" id="desc_blocks" placeholder="自定义描述（默认自动填入文件名）" style="margin-top: 5px;">
+            </div>
+            
+            <div class="file-input">
+                <label>cat.ogg</label>
+                <div class="custom-file-upload">
+                    <input type="file" id="oggFile_cat" accept=".ogg">
+                    <div class="custom-btn" id="fileBtnText_cat">选择音频（不上传即为保持原版音乐）</div>
+                </div>
+                <div class="duration-warning">此名字的乐曲对应时长不能超过 3:00</div>
+                <input type="text" id="desc_cat" placeholder="自定义描述（默认自动填入文件名）" style="margin-top: 5px;">
+            </div>
+            
+            <div class="file-input">
+                <label>creator.ogg</label>
+                <div class="custom-file-upload">
+                    <input type="file" id="oggFile_creator" accept=".ogg">
+                    <div class="custom-btn" id="fileBtnText_creator">选择音频（不上传即为保持原版音乐）</div>
+                </div>
+                <div class="duration-warning">此名字的乐曲对应时长不能超过 2:50</div>
+                <input type="text" id="desc_creator" placeholder="自定义描述（默认自动填入文件名）" style="margin-top: 5px;">
+            </div>
+            
+            <div class="file-input">
+                <label>creator_music_box.ogg</label>
+                <div class="custom-file-upload">
+                    <input type="file" id="oggFile_creator_music_box" accept=".ogg">
+                    <div class="custom-btn" id="fileBtnText_creator_music_box">选择音频（不上传即为保持原版音乐）</div>
+                </div>
+                <div class="duration-warning">此名字的乐曲对应时长不能超过 1:10</div>
+                <input type="text" id="desc_creator_music_box" placeholder="自定义描述（默认自动填入文件名）" style="margin-top: 5px;">
+            </div>
+            
+            <div class="file-input">
+                <label>mall.ogg</label>
+                <div class="custom-file-upload">
+                    <input type="file" id="oggFile_mall" accept=".ogg">
+                    <div class="custom-btn" id="fileBtnText_mall">选择音频（不上传即为保持原版音乐）</div>
+                </div>
+                <div class="duration-warning">此名字的乐曲对应时长不能超过 3:15</div>
+                <input type="text" id="desc_mall" placeholder="自定义描述（默认自动填入文件名）" style="margin-top: 5px;">
+            </div>
+            
+            <div class="file-input">
+                <label>mellohi.ogg</label>
+                <div class="custom-file-upload">
+                    <input type="file" id="oggFile_mellohi" accept=".ogg">
+                    <div class="custom-btn" id="fileBtnText_mellohi">选择音频（不上传即为保持原版音乐）</div>
+                </div>
+                <div class="duration-warning">此名字的乐曲对应时长不能超过 1:36</div>
+                <input type="text" id="desc_mellohi" placeholder="自定义描述（默认自动填入文件名）" style="margin-top: 5px;">
+            </div>
+            
+            <div class="file-input">
+                <label>otherside.ogg</label>
+                <div class="custom-file-upload">
+                    <input type="file" id="oggFile_otherside" accept=".ogg">
+                    <div class="custom-btn" id="fileBtnText_otherside">选择音频（不上传即为保持原版音乐）</div>
+                </div>
+                <div class="duration-warning">此名字的乐曲对应时长不能超过 3:16</div>
+                <input type="text" id="desc_otherside" placeholder="自定义描述（默认自动填入文件名）" style="margin-top: 5px;">
+            </div>
+            
+            <div class="file-input">
+                <label>pigstep_master.ogg</label>
+                <div class="custom-file-upload">
+                    <input type="file" id="oggFile_pigstep_master" accept=".ogg">
+                    <div class="custom-btn" id="fileBtnText_pigstep_master">选择音频（不上传即为保持原版音乐）</div>
+                </div>
+                <div class="duration-warning">此名字的乐曲对应时长不能超过 2:28</div>
+                <input type="text" id="desc_pigstep_master" placeholder="自定义描述（默认自动填入文件名）" style="margin-top: 5px;">
+            </div>
+            
+            <div class="file-input">
+                <label>precipice.ogg</label>
+                <div class="custom-file-upload">
+                    <input type="file" id="oggFile_precipice" accept=".ogg">
+                    <div class="custom-btn" id="fileBtnText_precipice">选择音频（不上传即为保持原版音乐）</div>
+                </div>
+                <div class="duration-warning">此名字的乐曲对应时长不能超过 4:59</div>
+                <input type="text" id="desc_precipice" placeholder="自定义描述（默认自动填入文件名）" style="margin-top: 5px;">
+            </div>
+            
+            <div class="file-input">
+                <label>relic.ogg</label>
+                <div class="custom-file-upload">
+                    <input type="file" id="oggFile_relic" accept=".ogg">
+                    <div class="custom-btn" id="fileBtnText_relic">选择音频（不上传即为保持原版音乐）</div>
+                </div>
+                <div class="duration-warning">此名字的乐曲对应时长不能超过 3:39</div>
+                <input type="text" id="desc_relic" placeholder="自定义描述（默认自动填入文件名）" style="margin-top: 5px;">
+            </div>
+            
+            <div class="file-input">
+                <label>stal.ogg</label>
+                <div class="custom-file-upload">
+                    <input type="file" id="oggFile_stal" accept=".ogg">
+                    <div class="custom-btn" id="fileBtnText_stal">选择音频（不上传即为保持原版音乐）</div>
+                </div>
+                <div class="duration-warning">此名字的乐曲对应时长不能超过 2:31</div>
+                <input type="text" id="desc_stal" placeholder="自定义描述（默认自动填入文件名）" style="margin-top: 5px;">
+            </div>
+            
+            <div class="file-input">
+                <label>strad.ogg</label>
+                <div class="custom-file-upload">
+                    <input type="file" id="oggFile_strad" accept=".ogg">
+                    <div class="custom-btn" id="fileBtnText_strad">选择音频（不上传即为保持原版音乐）</div>
+                </div>
+                <div class="duration-warning">此名字的乐曲对应时长不能超过 3:08</div>
+                <input type="text" id="desc_strad" placeholder="自定义描述（默认自动填入文件名）" style="margin-top: 5px;">
+            </div>
+            
+            <div class="file-input">
+                <label>wait.ogg</label>
+                <div class="custom-file-upload">
+                    <input type="file" id="oggFile_wait" accept=".ogg">
+                    <div class="custom-btn" id="fileBtnText_wait">选择音频（不上传即为保持原版音乐）</div>
+                </div>
+                <div class="duration-warning">此名字的乐曲对应时长不能超过 3:58</div>
+                <input type="text" id="desc_wait" placeholder="自定义描述（默认自动填入文件名）" style="margin-top: 5px;">
+            </div>
+            
+            <div class="file-input">
+                <label>ward.ogg</label>
+                <div class="custom-file-upload">
+                    <input type="file" id="oggFile_ward" accept=".ogg">
+                    <div class="custom-btn" id="fileBtnText_ward">选择音频（不上传即为保持原版音乐）</div>
+                </div>
+                <div class="duration-warning">此名字的乐曲对应时长不能超过 4:11</div>
+                <input type="text" id="desc_ward" placeholder="自定义描述（默认自动填入文件名）" style="margin-top: 5px;">
+            </div>
+            
+            <div class="file-input">
+                <label>chirp.ogg</label>
+                <div class="custom-file-upload">
+                    <input type="file" id="oggFile_chirp" accept=".ogg">
+                    <div class="custom-btn" id="fileBtnText_chirp">选择音频（不上传即为保持原版音乐）</div>
+                </div>
+                <div class="duration-warning">此名字的乐曲对应时长不能超过 3:05</div>
+                <input type="text" id="desc_chirp" placeholder="自定义描述（默认自动填入文件名）" style="margin-top: 5px;">
+            </div>
+            
+            <div class="file-input">
+                <label>far.ogg</label>
+                <div class="custom-file-upload">
+                    <input type="file" id="oggFile_far" accept=".ogg">
+                    <div class="custom-btn" id="fileBtnText_far">选择音频（不上传即为保持原版音乐）</div>
+                </div>
+                <div class="duration-warning">此名字的乐曲对应时长不能超过 2:50</div>
+                <input type="text" id="desc_far" placeholder="自定义描述（默认自动填入文件名）" style="margin-top: 5px;">
+            </div>
+            
+            <div class="file-input">
+                <label>tears.ogg</label>
+                <div class="custom-file-upload">
+                    <input type="file" id="oggFile_tears" accept=".ogg">
+                    <div class="custom-btn" id="fileBtnText_tears">选择音频（不上传即为保持原版音乐）</div>
+                </div>
+                <div class="duration-warning">此名字的乐曲对应时长不能超过 2:55</div>
+                <input type="text" id="desc_tears" placeholder="自定义描述（默认自动填入文件名）" style="margin-top: 5px;">
+            </div>
+            
+            <div class="file-input">
+                <label>lava_chicken.ogg</label>
+                <div class="custom-file-upload">
+                    <input type="file" id="oggFile_lava_chicken" accept=".ogg">
+                    <div class="custom-btn" id="fileBtnText_lava_chicken">选择音频（不上传即为保持原版音乐）</div>
+                </div>
+                <div class="duration-warning">此名字的乐曲对应时长不能超过 2:15</div>
+                <input type="text" id="desc_lava_chicken" placeholder="自定义描述（默认自动填入文件名）" style="margin-top: 5px;">
+            </div>
+            
+            <div class="file-input">
+                <label>音乐包图标</label>
+                <div class="custom-file-upload">
+                    <input type="file" id="iconFile">
+                    <div class="custom-btn" id="iconBtnText">选择图标</div>
+                </div>
+                <div id="iconPreview" class="icon-preview"></div>
+            </div>
+            
+            <div class="file-input">
+                <label for="zipNameInput">音乐包名称</label>
+                <input type="text" id="zipNameInput" placeholder="未输入则使用第一个上传文件的名字">
+            </div>
+        </div>
+        
+        <button class="btn" id="packBtn">生成mcpack文件</button>
+        
+        <div class="status" id="status"></div>
+        
+        <div class="notice-section">
+            <h3>注意事项</h3>
+            <p>每个乐曲选择按钮下方都标明了限制时长，如果上传的乐曲超过了限制，会直接被游戏强制停止播放</p>
+            <p>部分浏览器会在文件名结尾增加.zip，如果遇到这种情况，需要自行去除</p>
+        </div>
+        
+        <div class="tools-section" id="convert-tools">
+            <h3>转换格式的工具</h3>
+            <p>如果您要上传的是非 .ogg 格式的文件，则推荐使用以下在线转换工具：</p>
+            <ul class="tool-links">
+                <li><a href="https://www.freeconvert.com/ogg-converter" target="_blank" rel="nofollow">https://www.freeconvert.com/ogg-converter</a></li>
+                <li><a href="https://convertio.co/zh/ogg-converter/" target="_blank" rel="nofollow">https://convertio.co/zh/ogg-converter/</a></li>
+                <li><a href="https://www.audio2edit.com/zh/convert-to-ogg" target="_blank" rel="nofollow">https://www.audio2edit.com/zh/convert-to-ogg</a></li>
+                <li><a href="https://www.aconvert.com/cn/audio/" target="_blank" rel="nofollow">https://www.aconvert.com/cn/audio/</a></li>
+                <li><a href="https://www.xiaobaitool.net/audios/convert-to-ogg/" target="_blank" rel="nofollow">https://www.xiaobaitool.net/audios/convert-to-ogg/</a></li>
+                <li><a href="https://audio-convert.com/cn/mp3-converter/mp3-to-ogg/" target="_blank" rel="nofollow">https://audio-convert.com/cn/mp3-converter/mp3-to-ogg/</a></li>
+            </ul>
+        </div>
+    </div>
+    
+    <script>
+        // 切换介绍部分的显示/隐藏
+        function toggleInfo() {
+            const content = document.querySelector('.info-content');
+            const icon = document.querySelector('.toggle-icon');
+            
+            if (content.style.display === 'none') {
+                content.style.display = 'block';
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                content.style.display = 'none';
+                icon.style.transform = 'rotate(0deg)';
+            }
+        }
+        
+        // 平滑滚动到指定元素
+        function smoothScroll(elementId) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+        
+        // 根据窗口宽高比设置背景图片
+        function setBackgroundByAspectRatio() {
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+            const aspectRatio = width / height;
+            
+            // 如果宽大于高，使用桌面版背景，否则使用移动版背景
+            if (aspectRatio > 1) {
+                document.body.style.backgroundImage = "url('static/img/bg/pc.webp')";
+            } else {
+                document.body.style.backgroundImage = "url('static/img/bg/mobile.webp')";
+            }
+        }
+        
+        // 页面加载时设置背景
+        window.onload = function() {
+            setBackgroundByAspectRatio();
+        };
+        
+        // 窗口大小改变时重新设置背景
+        window.onresize = function() {
+            setBackgroundByAspectRatio();
+        };
+        
+        // 生成UUID函数
+        function generateUUID() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+        
+        // 为每个文件上传按钮添加事件监听器
+        const fileInputs = [
+            { id: 'oggFile_11', btnId: 'fileBtnText_11', targetName: '11.ogg' },
+            { id: 'oggFile_13', btnId: 'fileBtnText_13', targetName: '13.ogg' },
+            { id: 'oggFile_5', btnId: 'fileBtnText_5', targetName: '5.ogg' },
+            { id: 'oggFile_blocks', btnId: 'fileBtnText_blocks', targetName: 'blocks.ogg' },
+            { id: 'oggFile_cat', btnId: 'fileBtnText_cat', targetName: 'cat.ogg' },
+            { id: 'oggFile_creator', btnId: 'fileBtnText_creator', targetName: 'creator.ogg' },
+            { id: 'oggFile_creator_music_box', btnId: 'fileBtnText_creator_music_box', targetName: 'creator_music_box.ogg' },
+            { id: 'oggFile_mall', btnId: 'fileBtnText_mall', targetName: 'mall.ogg' },
+            { id: 'oggFile_mellohi', btnId: 'fileBtnText_mellohi', targetName: 'mellohi.ogg' },
+            { id: 'oggFile_otherside', btnId: 'fileBtnText_otherside', targetName: 'otherside.ogg' },
+            { id: 'oggFile_pigstep_master', btnId: 'fileBtnText_pigstep_master', targetName: 'pigstep_master.ogg' },
+            { id: 'oggFile_precipice', btnId: 'fileBtnText_precipice', targetName: 'precipice.ogg' },
+            { id: 'oggFile_relic', btnId: 'fileBtnText_relic', targetName: 'relic.ogg' },
+            { id: 'oggFile_stal', btnId: 'fileBtnText_stal', targetName: 'stal.ogg' },
+            { id: 'oggFile_strad', btnId: 'fileBtnText_strad', targetName: 'strad.ogg' },
+            { id: 'oggFile_wait', btnId: 'fileBtnText_wait', targetName: 'wait.ogg' },
+            { id: 'oggFile_ward', btnId: 'fileBtnText_ward', targetName: 'ward.ogg' },
+            { id: 'oggFile_chirp', btnId: 'fileBtnText_chirp', targetName: 'chirp.ogg' },
+            { id: 'oggFile_far', btnId: 'fileBtnText_far', targetName: 'far.ogg' },
+            { id: 'oggFile_tears', btnId: 'fileBtnText_tears', targetName: 'tears.ogg' },
+            { id: 'oggFile_lava_chicken', btnId: 'fileBtnText_lava_chicken', targetName: 'lava_chicken.ogg' }
+        ];
+        
+        // 保存每个音频文件的上一次成功上传信息
+        const lastValidAudioFiles = {};
+        
+        // 当前要删除的元素信息
+        let currentDeleteTarget = null;
+        let currentDeleteType = null;
+        
+        // 打开删除弹窗
+        function openDeleteModal(target, type, name) {
+            currentDeleteTarget = target;
+            currentDeleteType = type;
+            const modal = document.getElementById('deleteModal');
+            const message = document.getElementById('deleteMessage');
+            
+            if (type === 'audio') {
+                message.textContent = `确认删除 ${name} 吗？`;
+            } else if (type === 'icon') {
+                message.textContent = '确认删除图标吗？';
+            }
+            
+            modal.style.display = 'block';
+        }
+        
+        // 关闭删除弹窗
+        function closeModal() {
+            const modal = document.getElementById('deleteModal');
+            modal.style.display = 'none';
+            currentDeleteTarget = null;
+            currentDeleteType = null;
+        }
+        
+        // 确认删除
+        function confirmDelete() {
+            if (currentDeleteType === 'audio') {
+                // 重置音频文件输入
+                const fileInput = currentDeleteTarget;
+                const btnText = document.getElementById(currentDeleteTarget.id.replace('oggFile_', 'fileBtnText_'));
+                const errorDiv = fileInput.parentElement.parentElement.parentElement.querySelector('.format-error');
+                const deleteBtn = fileInput.parentElement.parentElement.querySelector('.delete-btn');
+                const recordKey = currentDeleteTarget.id.replace('oggFile_', '');
+                const descInput = document.getElementById(`desc_${recordKey}`);
+                
+                // 重置文件输入
+                fileInput.value = '';
+                btnText.textContent = '选择音频（不上传即为保持原版音乐）';
+                if (errorDiv) {
+                    errorDiv.style.display = 'none';
+                }
+                if (deleteBtn) {
+                    deleteBtn.style.display = 'none'; // 删除后隐藏删除按钮
+                }
+                if (descInput) {
+                    descInput.value = ''; // 删除后清空描述输入框
+                }
+                
+                // 从lastValidAudioFiles中删除对应的条目
+                delete lastValidAudioFiles[fileInput.id];
+            } else if (currentDeleteType === 'icon') {
+                // 重置图标文件输入
+                const iconFileInput = document.getElementById('iconFile');
+                const iconBtnText = document.getElementById('iconBtnText');
+                const iconPreview = document.getElementById('iconPreview');
+                const iconErrorDiv = iconFileInput.parentElement.parentElement.parentElement.querySelector('.format-error');
+                const iconDeleteBtn = iconFileInput.parentElement.parentElement.querySelector('.delete-btn');
+                
+                // 重置文件输入和状态
+                iconFileInput.value = '';
+                iconBtnText.textContent = '选择图标';
+                iconPreview.innerHTML = '';
+                if (iconErrorDiv) {
+                    iconErrorDiv.style.display = 'none';
+                }
+                if (iconDeleteBtn) {
+                    iconDeleteBtn.style.display = 'none'; // 删除后隐藏删除按钮
+                }
+                lastValidIconFile = null;
+                lastValidIconPreview = '';
+                lastValidIconName = '';
+            }
+            
+            closeModal();
+        }
+        
+        // 点击弹窗外部关闭
+        window.onclick = function(event) {
+            const modal = document.getElementById('deleteModal');
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+        
+        fileInputs.forEach(input => {
+            const fileInput = document.getElementById(input.id);
+            const btnText = document.getElementById(input.btnId);
+            const customUpload = fileInput.parentElement;
+            
+            // 创建按钮容器
+            const btnContainer = document.createElement('div');
+            btnContainer.className = 'btn-container';
+            
+            // 创建新的自定义上传区域，只包含文件输入和选择按钮
+            const newCustomUpload = document.createElement('div');
+            newCustomUpload.className = 'custom-file-upload';
+            
+            // 移动现有元素到新的上传区域中
+            while (customUpload.firstChild) {
+                newCustomUpload.appendChild(customUpload.firstChild);
+            }
+            
+            // 创建删除按钮
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'delete-btn';
+            deleteBtn.textContent = '删除';
+            deleteBtn.onclick = function() {
+                openDeleteModal(fileInput, 'audio', input.targetName);
+            };
+            deleteBtn.style.display = 'none'; // 默认隐藏删除按钮
+            
+            // 将新的上传区域和删除按钮添加到按钮容器
+            btnContainer.appendChild(newCustomUpload);
+            btnContainer.appendChild(deleteBtn);
+            
+            // 将按钮容器添加到原始上传区域
+            customUpload.appendChild(btnContainer);
+            
+            // 添加错误提示区域
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'format-error';
+            errorDiv.style.display = 'none';
+            customUpload.appendChild(errorDiv); // 将错误提示添加到上传区域的最下方
+            
+            fileInput.addEventListener('change', function() {
+                const status = document.getElementById('status');
+                const oggFile = this.files[0];
+                const deleteBtn = this.parentElement.parentElement.querySelector('.delete-btn');
+                const recordKey = input.id.replace('oggFile_', '');
+                const descInput = document.getElementById(`desc_${recordKey}`);
+                
+                // 隐藏全局错误提示
+                status.textContent = '';
+                status.className = 'status';
+                
+                // 隐藏当前文件的错误提示
+                errorDiv.style.display = 'none';
+                
+                if (oggFile) {
+                    if (!oggFile.name.endsWith('.ogg')) {
+                        // 显示红色框警告提示
+                        errorDiv.textContent = '错误：格式必须为 .ogg';
+                        errorDiv.style.display = 'block';
+                        
+                        // 保持上一次成功上传的音频
+                        if (lastValidAudioFiles[input.id]) {
+                            const lastValidFile = lastValidAudioFiles[input.id];
+                            btnText.textContent = `已选择文件：${lastValidFile.name}`;
+                            deleteBtn.style.display = 'block'; // 有有效音频时显示删除按钮
+                            
+                            // 保持上一次的描述
+                            if (descInput) {
+                                descInput.value = lastValidFile.description;
+                            }
+                        } else {
+                            btnText.textContent = '选择音频（不上传即为保持原版音乐）';
+                            deleteBtn.style.display = 'none'; // 无有效音频时隐藏删除按钮
+                            
+                            // 清空描述输入框
+                            if (descInput) {
+                                descInput.value = '';
+                            }
+                        }
+                    } else {
+                        // 保存当前有效的音频信息
+                        const fileNameWithoutExt = oggFile.name.replace('.ogg', '');
+                        lastValidAudioFiles[input.id] = {
+                            file: oggFile,
+                            name: oggFile.name,
+                            description: fileNameWithoutExt
+                        };
+                        
+                        btnText.textContent = `已选择文件：${oggFile.name}`;
+                        deleteBtn.style.display = 'block'; // 选择文件后显示删除按钮
+                        
+                        // 自动填入文件名（不含扩展名）到描述输入框
+                        if (descInput) {
+                            descInput.value = fileNameWithoutExt;
+                        }
+                    }
+                } else {
+                    // 如果用户取消选择文件，保持上一次成功上传的音频
+                    if (lastValidAudioFiles[input.id]) {
+                        const lastValidFile = lastValidAudioFiles[input.id];
+                        btnText.textContent = `已选择文件：${lastValidFile.name}`;
+                        deleteBtn.style.display = 'block'; // 有有效音频时显示删除按钮
+                        
+                        // 保持上一次的描述
+                        if (descInput) {
+                            descInput.value = lastValidFile.description;
+                        }
+                    } else {
+                        btnText.textContent = '选择音频（不上传即为保持原版音乐）';
+                        deleteBtn.style.display = 'none'; // 未选择文件时隐藏删除按钮
+                        
+                        // 清空描述输入框
+                        if (descInput) {
+                            descInput.value = '';
+                        }
+                    }
+                }
+            });
+        });
+        
+        // 图标上传事件监听器
+        const iconFileInput = document.getElementById('iconFile');
+        const iconBtnText = document.getElementById('iconBtnText');
+        const iconPreview = document.getElementById('iconPreview');
+        const iconCustomUpload = iconFileInput.parentElement;
+        
+        // 创建按钮容器
+        const iconBtnContainer = document.createElement('div');
+        iconBtnContainer.className = 'btn-container';
+        
+        // 创建新的自定义上传区域，只包含文件输入和选择按钮
+        const newIconCustomUpload = document.createElement('div');
+        newIconCustomUpload.className = 'custom-file-upload';
+        
+        // 移动现有元素到新的上传区域中
+        while (iconCustomUpload.firstChild) {
+            newIconCustomUpload.appendChild(iconCustomUpload.firstChild);
+        }
+        
+        // 创建删除按钮
+        const iconDeleteBtn = document.createElement('button');
+        iconDeleteBtn.className = 'delete-btn';
+        iconDeleteBtn.textContent = '删除';
+        iconDeleteBtn.onclick = function() {
+            openDeleteModal(iconFileInput, 'icon');
+        };
+        iconDeleteBtn.style.display = 'none'; // 默认隐藏删除按钮
+        
+        // 将新的上传区域和删除按钮添加到按钮容器
+        iconBtnContainer.appendChild(newIconCustomUpload);
+        iconBtnContainer.appendChild(iconDeleteBtn);
+        
+        // 将按钮容器添加到原始上传区域
+        iconCustomUpload.appendChild(iconBtnContainer);
+        
+        // 添加图标错误提示区域
+        const iconErrorDiv = document.createElement('div');
+        iconErrorDiv.className = 'format-error';
+        iconErrorDiv.style.display = 'none';
+        iconCustomUpload.appendChild(iconErrorDiv); // 将错误提示添加到上传区域的最下方
+        
+        // 保存上一次成功上传的图标信息
+        let lastValidIconFile = null;
+        let lastValidIconPreview = '';
+        let lastValidIconName = '';
+        
+        iconFileInput.addEventListener('change', function() {
+            const status = document.getElementById('status');
+            const iconFile = this.files[0];
+            const iconDeleteBtn = this.parentElement.parentElement.querySelector('.delete-btn');
+            
+            // 隐藏全局错误提示
+            status.textContent = '';
+            status.className = 'status';
+            
+            // 隐藏图标错误提示
+            iconErrorDiv.style.display = 'none';
+            
+            if (iconFile) {
+                if (!iconFile.name.endsWith('.png')) {
+                    // 显示红色框警告提示
+                    iconErrorDiv.textContent = '错误：格式必须为 .png';
+                    iconErrorDiv.style.display = 'block';
+                    
+                    // 保持上一次成功上传的图标
+                    if (lastValidIconFile) {
+                        iconBtnText.textContent = `已选择图标：${lastValidIconName}`;
+                        iconPreview.innerHTML = lastValidIconPreview;
+                        iconDeleteBtn.style.display = 'block'; // 有有效图标时显示删除按钮
+                    } else {
+                        iconBtnText.textContent = '选择图标';
+                        iconPreview.innerHTML = '';
+                        iconDeleteBtn.style.display = 'none'; // 无有效图标时隐藏删除按钮
+                    }
+                } else {
+                    // 保存当前有效的图标信息
+                    lastValidIconFile = iconFile;
+                    lastValidIconName = iconFile.name;
+                    
+                    iconBtnText.textContent = `已选择图标：${iconFile.name}`;
+                    iconDeleteBtn.style.display = 'block'; // 选择图标后显示删除按钮
+                    
+                    // 预览图标
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const previewHTML = `<img src="${e.target.result}" alt="图标预览">`;
+                        iconPreview.innerHTML = previewHTML;
+                        lastValidIconPreview = previewHTML;
+                    };
+                    reader.readAsDataURL(iconFile);
+                }
+            } else {
+                // 如果用户取消选择文件，保持上一次成功上传的图标
+                if (lastValidIconFile) {
+                    iconBtnText.textContent = `已选择图标：${lastValidIconName}`;
+                    iconPreview.innerHTML = lastValidIconPreview;
+                    iconDeleteBtn.style.display = 'block'; // 有有效图标时显示删除按钮
+                } else {
+                    iconBtnText.textContent = '选择图标';
+                    iconPreview.innerHTML = '';
+                    iconDeleteBtn.style.display = 'none'; // 无有效图标时隐藏删除按钮
+                }
+            }
+        });
+        
+        // 打包压缩功能
+        document.getElementById('packBtn').addEventListener('click', async function() {
+            const status = document.getElementById('status');
+            status.textContent = '';
+            status.className = 'status';
+            
+            try {
+                // 收集所有上传的文件
+                const uploadedFiles = [];
+                fileInputs.forEach(input => {
+                    let file = null;
+                    
+                    // 优先使用lastValidAudioFiles中保存的有效文件
+                    if (lastValidAudioFiles[input.id]) {
+                        file = lastValidAudioFiles[input.id].file;
+                    } else {
+                        const fileInput = document.getElementById(input.id);
+                        file = fileInput.files[0];
+                    }
+                    
+                    if (file) {
+                        if (!file.name.endsWith('.ogg')) {
+                            throw new Error(`上传失败，${input.targetName} 的文件格式必须是.ogg`);
+                        }
+                        uploadedFiles.push({ file, targetName: input.targetName });
+                    }
+                });
+                
+                // 验证至少上传了一个文件
+                if (uploadedFiles.length === 0) {
+                    throw new Error('请至少上传一个 .ogg 格式文件');
+                }
+                
+                // 获取用户输入的音乐包名称，如果未输入则使用第一个上传文件的名字
+                let defaultPackName = '音乐唱片';
+                let defaultZipName = '音乐唱片';
+                if (uploadedFiles.length > 0) {
+                    defaultPackName = uploadedFiles[0].file.name;
+                    defaultZipName = uploadedFiles[0].file.name.replace('.ogg', '');
+                }
+                const packName = document.getElementById('zipNameInput').value || defaultPackName;
+                const zipName = document.getElementById('zipNameInput').value || defaultZipName;
+                
+                // 创建JSZip实例
+                const zip = new JSZip();
+                
+                // 处理图标文件
+                const iconFile = document.getElementById('iconFile').files[0];
+                if (lastValidIconFile) {
+                    // 使用上一次成功上传的图标
+                    zip.file('pack_icon.png', lastValidIconFile);
+                } else if (iconFile && iconFile.name.endsWith('.png')) {
+                    // 如果没有上一次成功上传的图标，但当前选择的是有效图标
+                    zip.file('pack_icon.png', iconFile);
+                } else {
+                    // 使用默认图标
+                    try {
+                        // 由于浏览器安全限制，我们无法直接读取本地文件
+                        // 但我们可以使用fetch从服务器获取默认图标
+                        const response = await fetch('static/img/pack/pack_icon.png');
+                        const blob = await response.blob();
+                        zip.file('pack_icon.png', blob);
+                    } catch (error) {
+                        console.error('获取默认图标失败:', error);
+                    }
+                }
+                
+                // 创建manifest.json文件
+                const manifest = {
+                    "format_version": 1,
+                    "header": {
+                        "description": "音乐唱片包",
+                        "name": packName,
+                        "uuid": generateUUID(),
+                        "version": [1, 0, 0]
+                    },
+                    "modules": [
+                        {
+                            "description": "音乐唱片资源",
+                            "type": "resources",
+                            "uuid": generateUUID(),
+                            "version": [1, 0, 0]
+                        }
+                    ]
+                };
+                zip.file('manifest.json', JSON.stringify(manifest, null, 2));
+                
+                // 创建texts文件夹和zh_CN.lang文件
+                const texts = zip.folder('texts');
+                
+                // 生成描述文本
+                let zhCNLangContent = '';
+                
+                // 为每个音乐唱片生成描述
+                uploadedFiles.forEach(item => {
+                    const targetName = item.targetName;
+                    const recordKey = targetName.replace('.ogg', '');
+                    const descInput = document.getElementById(`desc_${recordKey}`);
+                    
+                    // 获取用户输入的描述，如果没有则使用文件名（不含扩展名）
+                    let description = descInput ? descInput.value.trim() : '';
+                    if (!description) {
+                        description = item.file.name.replace('.ogg', '');
+                    }
+                    
+                    // 添加到lang文件内容
+                    zhCNLangContent += `item.record_${recordKey}.desc=${description}\n`;
+                });
+                
+                // 添加所有唱片的基础名称（确保完整）
+                zhCNLangContent += `
+item.record_11=音乐唱片 11
+item.record_13=音乐唱片 13
+item.record_5=音乐唱片 5
+item.record_blocks=音乐唱片 blocks
+item.record_cat=音乐唱片 cat
+item.record_creator=音乐唱片 creator
+item.record_creator_music_box=音乐唱片 creator_music_box
+item.record_mall=音乐唱片 mall
+item.record_mellohi=音乐唱片 mellohi
+item.record_otherside=音乐唱片 otherside
+item.record_pigstep=音乐唱片 pigstep
+item.record_precipice=音乐唱片 precipice
+item.record_relic=音乐唱片 relic
+item.record_stal=音乐唱片 stal
+item.record_strad=音乐唱片 strad
+item.record_wait=音乐唱片 wait
+item.record_ward=音乐唱片 ward
+item.record_chirp=音乐唱片 chirp
+item.record_far=音乐唱片 far
+item.record_tears=音乐唱片 tears
+item.record_lava_chicken=音乐唱片 lava_chicken`;
+                
+                texts.file('zh_CN.lang', zhCNLangContent);
+                
+                // 创建sounds/music/game/records文件夹并添加用户上传的.ogg文件
+                const sounds = zip.folder('sounds');
+                const music = sounds.folder('music');
+                const game = music.folder('game');
+                const records = game.folder('records');
+                
+                // 添加所有上传的文件
+                uploadedFiles.forEach(item => {
+                    records.file(item.targetName, item.file);
+                });
+                
+                // 创建textures文件夹结构
+                const textures = zip.folder('textures');
+                const items = textures.folder('items');
+                const ui = textures.folder('ui');
+                
+                // 创建文件列表
+                const filePaths = [];
+                
+                // 添加基本文件路径
+                filePaths.push('manifest.json');
+                filePaths.push('texts/zh_CN.lang');
+                filePaths.push('pack_icon.png');
+                
+                // 添加上传的文件路径
+                uploadedFiles.forEach(item => {
+                    filePaths.push(`sounds/music/game/records/${item.targetName}`);
+                });
+                
+                // 添加textures目录结构到文件列表
+                filePaths.push('textures/items/apple_golden.png');
+                filePaths.push('textures/items/record_11.png');
+                filePaths.push('textures/items/record_13.png');
+                filePaths.push('textures/items/record_5.png');
+                filePaths.push('textures/items/record_blocks.png');
+                filePaths.push('textures/items/record_cat.png');
+                filePaths.push('textures/ui/2hangar.png');
+                filePaths.push('textures/ui/5stars_empty.png');
+                filePaths.push('textures/ui/5stars_full.png');
+                
+                // 创建filelist.txt
+                const fileListContent = filePaths.sort().join('\n');
+                zip.file('filelist.txt', fileListContent);
+                
+                // 生成压缩包
+                const content = await zip.generateAsync({ type: 'blob' });
+                
+                // 下载压缩包
+                saveAs(content, `${zipName}.mcpack`);
+                
+                // 显示成功信息
+                status.textContent = 'mcpack文件已成功生成并开始下载';
+                status.className = 'status success';
+                
+            } catch (error) {
+                // 显示错误信息
+                status.textContent = '错误: ' + error.message;
+                status.className = 'status error';
+            }
+        });
+    </script>
+    
+    <!-- 删除确认弹窗 -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <p id="deleteMessage">确认删除？</p>
+            <div class="modal-buttons">
+                <button class="cancel-btn" onclick="closeModal()">不删除</button>
+                <button class="confirm-btn" onclick="confirmDelete()">确认删除</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

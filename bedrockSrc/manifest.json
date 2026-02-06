@@ -1,0 +1,24 @@
+{
+    "format_version": 1,
+    "header": {
+        "description": "自定义音乐包",
+        "name": "UI唱片音乐包",
+        "uuid": "28edabfe-c906-46e3-be75-9246df83bdc8",
+        "version": [1, 0, 0]
+    },
+    "modules": [
+        {
+            "description": "自定义音乐包",
+            "type": "resources",
+            "uuid": "0571de39-805c-4c8d-825c-f8a31502874c",
+            "version": [1, 0, 0]
+        }
+  ],
+    "metadata": {
+        "authors": [
+            "MeowcoQAQ"
+        ],
+        "license": "MIT",
+        "url": "https://www.mcneko.com/tools/cdpack/"
+    }
+}
