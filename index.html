@@ -36,7 +36,7 @@
                 <p>请使用 <font color="red">Chromium</font> 内核的浏览器进行操作，例如 <font color="red">Google Chrome、Microsoft Edge</font></p>
                 <p>请确保您上传了正确的格式</p>
                 <h3>我上传的音频格式不是ogg，有转换格式的工具吗？</h3>
-                <p>有的，<a href="#convert-tools" onclick="event.preventDefault(); smoothScroll('convert-tools');">点击这里</a>查看</p>
+                <p>有的，<a href="#convert-tools" onclick="smoothScroll('convert-tools'); return false;">点击这里</a>查看</p>
                 <h3>感谢</h3>
                 <p>感谢由<a href="https://www.bilibili.com/video/BV1DSBRYrE6N/" target="_blank" rel="nofollow">此视频</a>给我带来的启发以及文件提供</p>
             </div>
@@ -316,37 +316,42 @@
         
         // 平滑滚动到指定元素
         function smoothScroll(elementId) {
+            // 确保信息部分已展开
+            const infoContent = document.querySelector('.info-content');
+            if (infoContent && infoContent.style.display === 'none') {
+                infoContent.style.display = 'block';
+                const icon = document.querySelector('.toggle-icon');
+                if (icon) {
+                    icon.style.transform = 'rotate(180deg)';
+                }
+            }
+
             const element = document.getElementById(elementId);
             if (element) {
-                // 检查浏览器是否支持原生平滑滚动
-                if ('scrollBehavior' in document.documentElement.style) {
-                    element.scrollIntoView({ behavior: 'smooth' });
-                } else {
-                    // 自定义平滑滚动实现
-                    const targetPosition = element.getBoundingClientRect().top;
-                    const startPosition = window.pageYOffset;
-                    const distance = targetPosition - startPosition;
-                    const duration = 800; // 滚动持续时间（毫秒）
-                    let startTime = null;
+                // 自定义平滑滚动实现（强制使用，不依赖浏览器支持）
+                const targetPosition = element.getBoundingClientRect().top + window.pageYOffset;
+                const startPosition = window.pageYOffset;
+                const distance = targetPosition - startPosition;
+                const duration = 1000; // 滚动持续时间（毫秒）
+                let startTime = null;
 
-                    function animation(currentTime) {
-                        if (startTime === null) startTime = currentTime;
-                        const timeElapsed = currentTime - startTime;
-                        const run = ease(timeElapsed, startPosition, distance, duration);
-                        window.scrollTo(0, run);
-                        if (timeElapsed < duration) requestAnimationFrame(animation);
-                    }
-
-                    // 缓动函数，使滚动更自然
-                    function ease(t, b, c, d) {
-                        t /= d / 2;
-                        if (t < 1) return c / 2 * t * t + b;
-                        t--;
-                        return -c / 2 * (t * (t - 2) - 1) + b;
-                    }
-
-                    requestAnimationFrame(animation);
+                function animation(currentTime) {
+                    if (startTime === null) startTime = currentTime;
+                    const timeElapsed = currentTime - startTime;
+                    const run = ease(timeElapsed, startPosition, distance, duration);
+                    window.scrollTo(0, run);
+                    if (timeElapsed < duration) requestAnimationFrame(animation);
                 }
+
+                // 缓动函数，使滚动更自然
+                function ease(t, b, c, d) {
+                    t /= d / 2;
+                    if (t < 1) return c / 2 * t * t + b;
+                    t--;
+                    return -c / 2 * (t * (t - 2) - 1) + b;
+                }
+
+                requestAnimationFrame(animation);
             }
         }
         
