@@ -318,7 +318,35 @@
         function smoothScroll(elementId) {
             const element = document.getElementById(elementId);
             if (element) {
-                element.scrollIntoView({ behavior: 'smooth' });
+                // 检查浏览器是否支持原生平滑滚动
+                if ('scrollBehavior' in document.documentElement.style) {
+                    element.scrollIntoView({ behavior: 'smooth' });
+                } else {
+                    // 自定义平滑滚动实现
+                    const targetPosition = element.getBoundingClientRect().top;
+                    const startPosition = window.pageYOffset;
+                    const distance = targetPosition - startPosition;
+                    const duration = 800; // 滚动持续时间（毫秒）
+                    let startTime = null;
+
+                    function animation(currentTime) {
+                        if (startTime === null) startTime = currentTime;
+                        const timeElapsed = currentTime - startTime;
+                        const run = ease(timeElapsed, startPosition, distance, duration);
+                        window.scrollTo(0, run);
+                        if (timeElapsed < duration) requestAnimationFrame(animation);
+                    }
+
+                    // 缓动函数，使滚动更自然
+                    function ease(t, b, c, d) {
+                        t /= d / 2;
+                        if (t < 1) return c / 2 * t * t + b;
+                        t--;
+                        return -c / 2 * (t * (t - 2) - 1) + b;
+                    }
+
+                    requestAnimationFrame(animation);
+                }
             }
         }
         
