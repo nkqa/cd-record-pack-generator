@@ -1150,33 +1150,9 @@
                         description = item.file.name.replace('.ogg', '');
                     }
                     
-                    // 添加到lang文件内容
+                    // 添加到lang文件内容，只添加带有.desc的条目
                     zhCNLangContent += `item.record_${recordKey}.desc=${description}\n`;
                 });
-                
-                // 添加所有唱片的基础名称（确保完整）
-                zhCNLangContent += `
-item.record_11=音乐唱片 11
-item.record_13=音乐唱片 13
-item.record_5=音乐唱片 5
-item.record_blocks=音乐唱片 blocks
-item.record_cat=音乐唱片 cat
-item.record_creator=音乐唱片 creator
-item.record_creator_music_box=音乐唱片 creator_music_box
-item.record_mall=音乐唱片 mall
-item.record_mellohi=音乐唱片 mellohi
-item.record_otherside=音乐唱片 otherside
-item.record_pigstep=音乐唱片 pigstep
-item.record_precipice=音乐唱片 precipice
-item.record_relic=音乐唱片 relic
-item.record_stal=音乐唱片 stal
-item.record_strad=音乐唱片 strad
-item.record_wait=音乐唱片 wait
-item.record_ward=音乐唱片 ward
-item.record_chirp=音乐唱片 chirp
-item.record_far=音乐唱片 far
-item.record_tears=音乐唱片 tears
-item.record_lava_chicken=音乐唱片 lava_chicken`;
                 
                 texts.file('zh_CN.lang', zhCNLangContent);
                 
