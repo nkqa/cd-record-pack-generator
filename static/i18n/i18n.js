@@ -179,11 +179,11 @@ const i18n = {
       const input = parent.querySelector('input');
       
       // 识别音乐包图标标签
-      if (input && input.type === 'file' && input.accept === 'image/*') {
+      if (input && input.type === 'file' && input.id === 'iconFile') {
         label.textContent = this.t('upload.icon_label', 'Music pack icon');
       }
       // 识别音乐包名称标签
-      else if (input && input.type === 'text' && input.id === 'zipNameInput') {
+      else if (label.getAttribute('for') === 'zipNameInput' || (input && input.type === 'text' && input.id === 'zipNameInput')) {
         label.textContent = this.t('upload.pack_name', 'Music pack name');
       }
     });
@@ -195,11 +195,11 @@ const i18n = {
       const input = parent.querySelector('input[type="file"]');
       
       // 识别音频选择按钮
-      if (input && !input.accept) {
+      if (input && input.id && input.id.startsWith('oggFile_')) {
         btn.textContent = this.t('upload.select_audio', 'Select audio');
       }
       // 识别图标选择按钮
-      else if (input && input.accept === 'image/*') {
+      else if (input && input.id === 'iconFile') {
         btn.textContent = this.t('upload.select_icon', 'Select icon');
       }
     });
