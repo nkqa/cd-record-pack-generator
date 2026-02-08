@@ -1,4 +1,7 @@
 ### 我的世界基岩版CD唱片更改工具
+
+[简体中文（中国大陆）](https://github.com/nkqa/cd-record-pack-generator/blob/master/README.md)|[English（United States）](https://github.com/nkqa/cd-record-pack-generator/blob/master/README_EN_US.md)|[にほんご（日本）](https://github.com/nkqa/cd-record-pack-generator/blob/master/README_JA_JP.md)
+
 _用简单的方式将原版唱片换成您的音乐_
 _下载的资源包可以上传各个论坛和我的世界网站、软件上_
 
