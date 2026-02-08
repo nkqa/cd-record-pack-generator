@@ -359,24 +359,28 @@
     
     <script>
         // 加载进度条逻辑
-        document.addEventListener('DOMContentLoaded', function() {
-            const loadingOverlay = document.getElementById('loadingOverlay');
-            const loadingBar = document.getElementById('loadingBar');
-            
-            let progress = 0;
-            const interval = setInterval(function() {
-                progress += 5;
+        let progress = 0;
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const loadingBar = document.getElementById('loadingBar');
+        
+        // 模拟加载进度
+        const interval = setInterval(function() {
+            progress += 5;
+            if (progress <= 90) { // 只加载到90%，剩下的10%等所有资源加载完成后再加载
                 loadingBar.style.width = progress + '%';
-                
-                if (progress >= 100) {
-                    clearInterval(interval);
-                    // 延迟一点时间再隐藏，让用户看到100%的状态
-                    setTimeout(function() {
-                        loadingOverlay.style.display = 'none';
-                    }, 500);
-                }
-            }, 100);
-        });
+            }
+        }, 100);
+        
+        // 监听所有资源加载完成
+        window.onload = function() {
+            clearInterval(interval);
+            // 加载到100%
+            loadingBar.style.width = '100%';
+            // 延迟一点时间再隐藏，让用户看到100%的状态
+            setTimeout(function() {
+                loadingOverlay.style.display = 'none';
+            }, 500);
+        };
         
         // 切换介绍部分的显示/隐藏
         function toggleInfo() {
