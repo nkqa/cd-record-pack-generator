@@ -136,10 +136,7 @@ const i18n = {
       }
       const formatDescElement = infoContent.querySelector('p:nth-child(12)');
       if (formatDescElement) {
-        const link = formatDescElement.querySelector('a');
-        if (link) {
-          formatDescElement.innerHTML = `${this.t('info.not_ogg_format_desc', 'Yes, click here to view').replace('click here', `<a href="#convert-tools" onclick="smoothScroll('convert-tools'); return false;">click here</a>`)}`;
-        }
+        formatDescElement.innerHTML = `${this.t('info.not_ogg_format_desc', 'Yes, click here to view').replace('click here', `<a href="#convert-tools" onclick="smoothScroll('convert-tools'); return false;">click here</a>`)}`;
       }
       
       // 感谢
