@@ -333,13 +333,13 @@ window.addEventListener('DOMContentLoaded', function() {
     `;
     
     button.addEventListener('mouseenter', function() {
-      if (savedLang !== lang.code) {
+      if (i18n.currentLang !== lang.code) {
         this.style.backgroundColor = '#f0f0f0';
       }
     });
     
     button.addEventListener('mouseleave', function() {
-      if (savedLang !== lang.code) {
+      if (i18n.currentLang !== lang.code) {
         this.style.backgroundColor = 'white';
       }
     });
