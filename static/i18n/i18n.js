@@ -254,19 +254,34 @@ const i18n = {
 
 // 初始化i18n
 window.addEventListener('DOMContentLoaded', function() {
-  // 从localStorage获取语言设置
-  const savedLang = localStorage.getItem('language') || 'zh_CN';
+  // 自动检测系统语言
+  function detectSystemLanguage() {
+    const systemLang = navigator.language || navigator.userLanguage;
+    const langCode = systemLang.toLowerCase();
+    
+    // 检测语言
+    if (langCode.includes('zh')) {
+      return 'zh_CN';
+    } else if (langCode.includes('ja')) {
+      return 'ja_JP';
+    } else {
+      // 默认使用英语
+      return 'en_US';
+    }
+  }
+  
+  // 从localStorage获取语言设置，如果没有则检测系统语言
+  const savedLang = localStorage.getItem('language') || detectSystemLanguage();
   i18n.init(savedLang);
   
   // 创建语言切换按钮
   const langContainer = document.createElement('div');
   langContainer.className = 'language-selector';
   langContainer.style.cssText = `
-    position: absolute;
-    top: 20px;
-    right: 20px;
     display: flex;
-    gap: 10px;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 20px;
   `;
   
   // 语言选项
@@ -280,14 +295,27 @@ window.addEventListener('DOMContentLoaded', function() {
     const button = document.createElement('button');
     button.textContent = lang.name;
     button.style.cssText = `
-      padding: 5px 10px;
+      padding: 6px 12px;
       border: 1px solid #ddd;
       border-radius: 4px;
       background-color: ${savedLang === lang.code ? '#4CAF50' : 'white'};
       color: ${savedLang === lang.code ? 'white' : '#333'};
       cursor: pointer;
       font-size: 12px;
+      transition: all 0.3s ease;
     `;
+    
+    button.addEventListener('mouseenter', function() {
+      if (savedLang !== lang.code) {
+        this.style.backgroundColor = '#f0f0f0';
+      }
+    });
+    
+    button.addEventListener('mouseleave', function() {
+      if (savedLang !== lang.code) {
+        this.style.backgroundColor = 'white';
+      }
+    });
     
     button.addEventListener('click', function() {
       i18n.changeLang(lang.code);
@@ -305,10 +333,10 @@ window.addEventListener('DOMContentLoaded', function() {
     langContainer.appendChild(button);
   });
   
-  // 添加到页面
+  // 添加到页面（在标题之前）
   const container = document.querySelector('.container');
-  if (container) {
-    container.style.position = 'relative';
-    container.appendChild(langContainer);
+  const h1 = document.querySelector('h1');
+  if (container && h1) {
+    container.insertBefore(langContainer, h1);
   }
 });
