@@ -1,0 +1,63 @@
+{
+  "title": "Minecraft Music Disc Replacement Tool (Bedrock Edition)",
+  "header": {
+    "title": "Minecraft Music Disc Replacement Tool (Bedrock Edition)"
+  },
+  "info": {
+    "toggle": "Information",
+    "developer": "Developer:",
+    "community": "Community:",
+    "source_code": "Source code:",
+    "what_is_this": "What is the purpose of this website?",
+    "what_is_this_desc": "This website provides a function to generate Minecraft Bedrock Edition disc replacements",
+    "how_to_use": "How to use this tool?",
+    "how_to_use_desc": "Just upload audio in ogg format, please note the maximum supported duration below",
+    "why_cant_upload": "Why can't I upload or download?",
+    "why_cant_upload_desc1": "Please use a Chromium-based browser, such as Google Chrome or Microsoft Edge",
+    "why_cant_upload_desc2": "Please ensure you upload the correct format",
+    "not_ogg_format": "My audio format is not ogg, is there a tool to convert format?",
+    "not_ogg_format_desc": "Yes, click here to view",
+    "thanks": "Thanks",
+    "thanks_desc": "Thanks to this video for inspiring me and providing files"
+  },
+  "upload": {
+    "title": "Upload Music Files",
+    "select_audio": "Select audio (not uploading will keep original music)",
+    "duration_warning": "The maximum duration for this music cannot exceed",
+    "custom_desc": "Custom description (default is automatically filled with file name)",
+    "icon_label": "Music pack icon",
+    "select_icon": "Select icon",
+    "pack_name": "Music pack name",
+    "pack_name_placeholder": "If not entered, the name of the first uploaded file will be used"
+  },
+  "buttons": {
+    "generate": "Generate mcpack file"
+  },
+  "notices": {
+    "title": "Notes",
+    "notice1": "Each music selection button has a duration limit indicated below it. If the uploaded music exceeds the limit, it will be forcibly stopped by the game",
+    "notice2": "Some browsers will add .zip to the end of the file name. If this happens, you need to remove it manually"
+  },
+  "tools": {
+    "title": "Format Conversion Tools",
+    "description": "If you want to upload a file that is not in .ogg format, the following online conversion tools are recommended:"
+  },
+  "background": {
+    "notice": "Background image source: Internet. If there is any infringement, please visit my personal website to get contact email"
+  },
+  "errors": {
+    "ogg_format": "Error: Format must be .ogg",
+    "png_format": "Error: Format must be .png",
+    "no_files": "Please upload at least one .ogg format file"
+  },
+  "modal": {
+    "confirm_delete": "Confirm deletion",
+    "confirm_delete_icon": "Confirm deletion of icon?",
+    "cancel": "Cancel"
+  },
+  "language": {
+    "zh": "中文",
+    "en": "English",
+    "ja": "日本語"
+  }
+}

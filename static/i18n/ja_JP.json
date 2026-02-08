@@ -1,0 +1,63 @@
+{
+  "title": "Minecraft 音楽ディスク置換ツール（ベッドロックエディション）",
+  "header": {
+    "title": "Minecraft 音楽ディスク置換ツール（ベッドロックエディション）"
+  },
+  "info": {
+    "toggle": "情報",
+    "developer": "開発者：",
+    "community": "コミュニティ：",
+    "source_code": "ソースコード:",
+    "what_is_this": "このウェブサイトの目的は何ですか？",
+    "what_is_this_desc": "このウェブサイトは、Minecraft ベッドロックエディションのディスク置換機能を生成します",
+    "how_to_use": "このツールの使い方は？",
+    "how_to_use_desc": "ogg形式のオーディオをアップロードするだけです。以下の最大サポート時間に注意してください",
+    "why_cant_upload": "なぜアップロードまたはダウンロードできないのですか？",
+    "why_cant_upload_desc1": "Chromium ベースのブラウザ（Google Chrome、Microsoft Edgeなど）を使用して操作してください",
+    "why_cant_upload_desc2": "正しい形式をアップロードしたことを確認してください",
+    "not_ogg_format": "アップロードするオーディオの形式がoggでない場合、形式を変換するツールはありますか？",
+    "not_ogg_format_desc": "はい、ここをクリックして表示",
+    "thanks": "感謝",
+    "thanks_desc": "この動画によるインスピレーションとファイルの提供に感謝します"
+  },
+  "upload": {
+    "title": "音楽ファイルのアップロード",
+    "select_audio": "オーディオを選択（アップロードしない場合は元の音楽を保持）",
+    "duration_warning": "この名前の曲の対応時間は最大",
+    "custom_desc": "カスタム説明（デフォルトでファイル名が自動入力されます）",
+    "icon_label": "音楽パックアイコン",
+    "select_icon": "アイコンを選択",
+    "pack_name": "音楽パック名",
+    "pack_name_placeholder": "入力しない場合は、最初にアップロードされたファイルの名前が使用されます"
+  },
+  "buttons": {
+    "generate": "mcpackファイルを生成"
+  },
+  "notices": {
+    "title": "注意事項",
+    "notice1": "各曲選択ボタンの下に制限時間が表示されています。アップロードした曲が制限を超えると、ゲームによって強制的に再生が停止されます",
+    "notice2": "一部のブラウザでは、ファイル名の末尾に.zipが追加されます。この場合、手動で削除する必要があります"
+  },
+  "tools": {
+    "title": "形式変換ツール",
+    "description": "ogg形式以外のファイルをアップロードする場合は、以下のオンライン変換ツールを推奨します："
+  },
+  "background": {
+    "notice": "背景画像のソース：インターネット。著作権侵害がある場合は、個人ウェブサイトにアクセスして連絡先メールを取得してください"
+  },
+  "errors": {
+    "ogg_format": "エラー：形式は.oggでなければなりません",
+    "png_format": "エラー：形式は.pngでなければなりません",
+    "no_files": "少なくとも1つの.ogg形式のファイルをアップロードしてください"
+  },
+  "modal": {
+    "confirm_delete": "削除を確認",
+    "confirm_delete_icon": "アイコンを削除しますか？",
+    "cancel": "キャンセル"
+  },
+  "language": {
+    "zh": "中文",
+    "en": "English",
+    "ja": "日本語"
+  }
+}

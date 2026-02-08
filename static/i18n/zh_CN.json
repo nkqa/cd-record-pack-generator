@@ -1,0 +1,63 @@
+{
+  "title": "我的世界音乐唱片替换工具（基岩版）",
+  "header": {
+    "title": "我的世界音乐唱片替换工具（基岩版）"
+  },
+  "info": {
+    "toggle": "信息",
+    "developer": "开发者：",
+    "community": "社区：",
+    "source_code": "源代码:",
+    "what_is_this": "这个网站的用途是什么？",
+    "what_is_this_desc": "这个网站提供生成我的世界基岩版唱片替换功能",
+    "how_to_use": "怎么使用该工具？",
+    "how_to_use_desc": "只需要将ogg格式的音频上传即可，需要注意下面的最高支持时间",
+    "why_cant_upload": "为什么我无法上传或下载？",
+    "why_cant_upload_desc1": "请使用 Chromium 内核的浏览器进行操作，例如 Google Chrome、Microsoft Edge",
+    "why_cant_upload_desc2": "请确保您上传了正确的格式",
+    "not_ogg_format": "我上传的音频格式不是ogg，有转换格式的工具吗？",
+    "not_ogg_format_desc": "有的，点击这里查看",
+    "thanks": "感谢",
+    "thanks_desc": "感谢由此视频给我带来的启发以及文件提供"
+  },
+  "upload": {
+    "title": "上传音乐文件",
+    "select_audio": "选择音频（不上传即为保持原版音乐）",
+    "duration_warning": "此名字的乐曲对应时长不能超过",
+    "custom_desc": "自定义描述（默认自动填入文件名）",
+    "icon_label": "音乐包图标",
+    "select_icon": "选择图标",
+    "pack_name": "音乐包名称",
+    "pack_name_placeholder": "未输入则使用第一个上传文件的名字"
+  },
+  "buttons": {
+    "generate": "生成mcpack文件"
+  },
+  "notices": {
+    "title": "注意事项",
+    "notice1": "每个乐曲选择按钮下方都标明了限制时长，如果上传的乐曲超过了限制，会直接被游戏强制停止播放",
+    "notice2": "部分浏览器会在文件名结尾增加.zip，如果遇到这种情况，需要自行去除"
+  },
+  "tools": {
+    "title": "转换格式的工具",
+    "description": "如果您要上传的是非 .ogg 格式的文件，则推荐使用以下在线转换工具："
+  },
+  "background": {
+    "notice": "背景图来源互联网，如果侵权请访问我的个人网站获取联系邮箱"
+  },
+  "errors": {
+    "ogg_format": "错误：格式必须为 .ogg",
+    "png_format": "错误：格式必须为 .png",
+    "no_files": "请至少上传一个 .ogg 格式文件"
+  },
+  "modal": {
+    "confirm_delete": "确认删除",
+    "confirm_delete_icon": "确认删除图标吗？",
+    "cancel": "取消"
+  },
+  "language": {
+    "zh": "中文",
+    "en": "English",
+    "ja": "日本語"
+  }
+}
