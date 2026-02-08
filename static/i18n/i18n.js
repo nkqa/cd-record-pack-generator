@@ -215,7 +215,7 @@ const i18n = {
     });
     
     // 更新描述输入框占位符
-    const descInputs = document.querySelectorAll('input[placeholder*="自定义描述"]');
+    const descInputs = document.querySelectorAll('input[id^="desc_"]');
     descInputs.forEach(input => {
       input.placeholder = this.t('upload.custom_desc', 'Custom description');
     });
