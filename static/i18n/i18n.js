@@ -274,15 +274,32 @@ window.addEventListener('DOMContentLoaded', function() {
   const savedLang = localStorage.getItem('language') || detectSystemLanguage();
   i18n.init(savedLang);
   
-  // 创建语言切换按钮
+  // 创建语言选择栏
   const langContainer = document.createElement('div');
   langContainer.className = 'language-selector';
   langContainer.style.cssText = `
     display: flex;
-    gap: 8px;
+    gap: 10px;
     justify-content: center;
+    align-items: center;
+    margin-top: 10px;
     margin-bottom: 20px;
+    padding: 8px 16px;
+    background-color: #f5f5f5;
+    border-radius: 20px;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
   `;
+  
+  // 添加语言标签
+  const langLabel = document.createElement('span');
+  langLabel.textContent = '【语言: ';
+  langLabel.style.cssText = `
+    font-size: 14px;
+    color: #666;
+  `;
+  langContainer.appendChild(langLabel);
   
   // 语言选项
   const languages = [
@@ -295,14 +312,14 @@ window.addEventListener('DOMContentLoaded', function() {
     const button = document.createElement('button');
     button.textContent = lang.name;
     button.style.cssText = `
-      padding: 6px 12px;
+      padding: 4px 10px;
       border: 1px solid #ddd;
-      border-radius: 4px;
+      border-radius: 12px;
       background-color: ${savedLang === lang.code ? '#4CAF50' : 'white'};
       color: ${savedLang === lang.code ? 'white' : '#333'};
       cursor: pointer;
       font-size: 12px;
-      transition: all 0.3s ease;
+      transition: all 0.2s ease;
     `;
     
     button.addEventListener('mouseenter', function() {
@@ -333,10 +350,19 @@ window.addEventListener('DOMContentLoaded', function() {
     langContainer.appendChild(button);
   });
   
-  // 添加到页面（在标题之前）
+  // 添加闭合标签
+  const langEndLabel = document.createElement('span');
+  langEndLabel.textContent = '】';
+  langEndLabel.style.cssText = `
+    font-size: 14px;
+    color: #666;
+  `;
+  langContainer.appendChild(langEndLabel);
+  
+  // 添加到页面（在标题之后）
   const container = document.querySelector('.container');
   const h1 = document.querySelector('h1');
   if (container && h1) {
-    container.insertBefore(langContainer, h1);
+    container.insertBefore(langContainer, h1.nextSibling);
   }
 });
