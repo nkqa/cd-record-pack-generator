@@ -158,10 +158,19 @@ const i18n = {
       }
       const thanksDescElement = infoContent.querySelector('p:nth-child(14)');
       if (thanksDescElement) {
-        const link = thanksDescElement.querySelector('a');
-        if (link) {
-          thanksDescElement.innerHTML = `${this.t('info.thanks_desc', 'Thanks to this video for inspiring me and providing files').replace('this video', `<a href="https://www.bilibili.com/video/BV1DSBRYrE6N/" target="_blank" rel="nofollow">this video</a>`)}`;
+        let thanksText = this.t('info.thanks_desc', 'Thanks to this video for inspiring me and providing files');
+        // 根据不同语言替换链接文本
+        if (thanksText.includes('this video')) {
+          // 英文
+          thanksText = thanksText.replace('this video', `<a href="https://www.bilibili.com/video/BV1DSBRYrE6N/" target="_blank" rel="nofollow">this video</a>`);
+        } else if (thanksText.includes('此视频')) {
+          // 中文
+          thanksText = thanksText.replace('此视频', `<a href="https://www.bilibili.com/video/BV1DSBRYrE6N/" target="_blank" rel="nofollow">此视频</a>`);
+        } else if (thanksText.includes('この動画')) {
+          // 日文
+          thanksText = thanksText.replace('この動画', `<a href="https://www.bilibili.com/video/BV1DSBRYrE6N/" target="_blank" rel="nofollow">この動画</a>`);
         }
+        thanksDescElement.innerHTML = thanksText;
       }
     }
     
