@@ -294,7 +294,7 @@ window.addEventListener('DOMContentLoaded', function() {
   
   // 添加语言标签
   const langLabel = document.createElement('span');
-  langLabel.textContent = '【语言: ';
+  langLabel.textContent = '语言: ';
   langLabel.style.cssText = `
     font-size: 14px;
     color: #666;
@@ -316,7 +316,7 @@ window.addEventListener('DOMContentLoaded', function() {
       border: 1px solid #ddd;
       border-radius: 12px;
       background-color: ${savedLang === lang.code ? '#4CAF50' : 'white'};
-      color: ${savedLang === lang.code ? 'white' : '#333'};
+      color: #333;
       cursor: pointer;
       font-size: 12px;
       transition: all 0.2s ease;
@@ -341,7 +341,7 @@ window.addEventListener('DOMContentLoaded', function() {
         const btn = document.querySelector(`[data-lang="${l.code}"]`);
         if (btn) {
           btn.style.backgroundColor = l.code === lang.code ? '#4CAF50' : 'white';
-          btn.style.color = l.code === lang.code ? 'white' : '#333';
+          btn.style.color = '#333';
         }
       });
     });
@@ -349,15 +349,6 @@ window.addEventListener('DOMContentLoaded', function() {
     button.setAttribute('data-lang', lang.code);
     langContainer.appendChild(button);
   });
-  
-  // 添加闭合标签
-  const langEndLabel = document.createElement('span');
-  langEndLabel.textContent = '】';
-  langEndLabel.style.cssText = `
-    font-size: 14px;
-    color: #666;
-  `;
-  langContainer.appendChild(langEndLabel);
   
   // 添加到页面（在标题之后）
   const container = document.querySelector('.container');
