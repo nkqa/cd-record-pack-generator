@@ -362,24 +362,52 @@
         let progress = 0;
         const loadingOverlay = document.getElementById('loadingOverlay');
         const loadingBar = document.getElementById('loadingBar');
+        let loadInterval = null;
+        let timeoutId = null;
         
         // 模拟加载进度
-        const interval = setInterval(function() {
-            progress += 5;
-            if (progress <= 90) { // 只加载到90%，剩下的10%等所有资源加载完成后再加载
-                loadingBar.style.width = progress + '%';
-            }
-        }, 100);
+        function startLoading() {
+            progress = 0;
+            loadInterval = setInterval(function() {
+                progress += 5;
+                if (progress <= 90) { // 只加载到90%，剩下的10%等所有资源加载完成后再加载
+                    loadingBar.style.width = progress + '%';
+                }
+            }, 100);
+            
+            // 添加超时机制，最多加载10秒
+            timeoutId = setTimeout(function() {
+                completeLoading();
+            }, 10000);
+        }
         
-        // 监听所有资源加载完成
-        window.onload = function() {
-            clearInterval(interval);
+        // 完成加载
+        function completeLoading() {
+            if (loadInterval) {
+                clearInterval(loadInterval);
+            }
+            if (timeoutId) {
+                clearTimeout(timeoutId);
+            }
             // 加载到100%
             loadingBar.style.width = '100%';
             // 延迟一点时间再隐藏，让用户看到100%的状态
             setTimeout(function() {
                 loadingOverlay.style.display = 'none';
             }, 500);
+        }
+        
+        // 启动加载
+        startLoading();
+        
+        // 监听所有资源加载完成
+        window.onload = function() {
+            completeLoading();
+        };
+        
+        // 监听错误，即使有资源加载失败也继续
+        window.onerror = function() {
+            // 不做特殊处理，让加载继续
         };
         
         // 切换介绍部分的显示/隐藏
