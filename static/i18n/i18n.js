@@ -165,22 +165,32 @@ const i18n = {
     // 更新文件输入标签
     const fileInputs = document.querySelectorAll('.file-input label');
     fileInputs.forEach((label, index) => {
-      // 跳过不需要翻译的标签（如文件名）
-      if (label.textContent === '音乐包图标' || label.textContent === '音乐包名称') {
-        if (label.textContent === '音乐包图标') {
-          label.textContent = this.t('upload.icon_label', 'Music pack icon');
-        } else if (label.textContent === '音乐包名称') {
-          label.textContent = this.t('upload.pack_name', 'Music pack name');
-        }
+      // 基于位置和结构识别标签，不依赖于当前文本内容
+      const parent = label.parentElement;
+      const input = parent.querySelector('input');
+      
+      // 识别音乐包图标标签
+      if (input && input.type === 'file' && input.accept === 'image/*') {
+        label.textContent = this.t('upload.icon_label', 'Music pack icon');
+      }
+      // 识别音乐包名称标签
+      else if (input && input.type === 'text' && input.id === 'zipNameInput') {
+        label.textContent = this.t('upload.pack_name', 'Music pack name');
       }
     });
     
     // 更新自定义上传按钮文本
     const customBtns = document.querySelectorAll('.custom-btn');
     customBtns.forEach(btn => {
-      if (btn.textContent.includes('选择音频')) {
+      const parent = btn.parentElement;
+      const input = parent.querySelector('input[type="file"]');
+      
+      // 识别音频选择按钮
+      if (input && !input.accept) {
         btn.textContent = this.t('upload.select_audio', 'Select audio');
-      } else if (btn.textContent.includes('选择图标')) {
+      }
+      // 识别图标选择按钮
+      else if (input && input.accept === 'image/*') {
         btn.textContent = this.t('upload.select_icon', 'Select icon');
       }
     });
