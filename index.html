@@ -21,6 +21,48 @@
             y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
         })(window, document, "clarity", "script", "o11hourj5x");
     </script>
+    <script>
+        // 平滑滚动到指定元素
+        function smoothScroll(elementId) {
+            // 确保信息部分已展开
+            const infoContent = document.querySelector('.info-content');
+            if (infoContent && infoContent.style.display === 'none') {
+                infoContent.style.display = 'block';
+                const icon = document.querySelector('.toggle-icon');
+                if (icon) {
+                    icon.style.transform = 'rotate(180deg)';
+                }
+            }
+
+            const element = document.getElementById(elementId);
+            if (element) {
+                // 自定义平滑滚动实现（强制使用，不依赖浏览器支持）
+                const targetPosition = element.getBoundingClientRect().top + window.pageYOffset;
+                const startPosition = window.pageYOffset;
+                const distance = targetPosition - startPosition;
+                const duration = 1000; // 滚动持续时间（毫秒）
+                let startTime = null;
+
+                function animation(currentTime) {
+                    if (startTime === null) startTime = currentTime;
+                    const timeElapsed = currentTime - startTime;
+                    const run = ease(timeElapsed, startPosition, distance, duration);
+                    window.scrollTo(0, run);
+                    if (timeElapsed < duration) requestAnimationFrame(animation);
+                }
+
+                // 缓动函数，使滚动更自然
+                function ease(t, b, c, d) {
+                    t /= d / 2;
+                    if (t < 1) return c / 2 * t * t + b;
+                    t--;
+                    return -c / 2 * (t * (t - 2) - 1) + b;
+                }
+
+                requestAnimationFrame(animation);
+            }
+        }
+    </script>
     <script src="static/i18n/i18n.js"></script>
 </head>
 <body>

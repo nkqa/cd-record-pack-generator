@@ -136,7 +136,19 @@ const i18n = {
       }
       const formatDescElement = infoContent.querySelector('p:nth-child(12)');
       if (formatDescElement) {
-        formatDescElement.innerHTML = `${this.t('info.not_ogg_format_desc', 'Yes, click here to view').replace('click here', `<a href="#convert-tools" onclick="smoothScroll('convert-tools'); return false;">click here</a>`)}`;
+        let descText = this.t('info.not_ogg_format_desc', 'Yes, click here to view');
+        // 根据不同语言替换链接文本
+        if (descText.includes('click here')) {
+          // 英文
+          descText = descText.replace('click here', `<a href="#convert-tools" onclick="smoothScroll('convert-tools'); return false;">click here</a>`);
+        } else if (descText.includes('点击这里')) {
+          // 中文
+          descText = descText.replace('点击这里', `<a href="#convert-tools" onclick="smoothScroll('convert-tools'); return false;">点击这里</a>`);
+        } else if (descText.includes('ここをクリック')) {
+          // 日文
+          descText = descText.replace('ここをクリック', `<a href="#convert-tools" onclick="smoothScroll('convert-tools'); return false;">ここをクリック</a>`);
+        }
+        formatDescElement.innerHTML = descText;
       }
       
       // 感谢
