@@ -13,7 +13,7 @@ const i18n = {
   
   // 加载语言数据
   loadLangData(lang) {
-    fetch(`static/i18n/${lang}.json`)
+    fetch(`./static/i18n/${lang}.json`)
       .then(response => response.json())
       .then(data => {
         this.langData = data;
