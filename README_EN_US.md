@@ -3,7 +3,7 @@
 [简体中文（中国大陆）](https://github.com/nkqa/cd-record-pack-generator/blob/master/README.md)|English（United States）|[にほんご（日本）](https://github.com/nkqa/cd-record-pack-generator/blob/master/README_JA_JP.md)
 
 _Easily replace the original CDs with your own music_
-
+_No more tedious and repetitive renaming and replacement operations using a file manager_
 _The downloaded resource pack can be uploaded to various forums and Minecraft websites and software_
 
 + Developer: [Meowco](https://meowco.cn)
