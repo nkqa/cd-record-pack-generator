@@ -871,12 +871,33 @@
                     throw new Error('请至少上传一个 .ogg 格式文件');
                 }
                 
-                // 获取用户输入的音乐包名称，如果未输入则使用第一个上传文件的名字
+                // 获取用户输入的音乐包名称，如果未输入则使用第一个上传文件对应的自定义描述
                 let defaultPackName = '音乐唱片';
                 let defaultZipName = '音乐唱片';
                 if (uploadedFiles.length > 0) {
-                    defaultPackName = uploadedFiles[0].file.name;
-                    defaultZipName = uploadedFiles[0].file.name.replace('.ogg', '');
+                    // 找到第一个上传文件对应的fileInput
+                    const firstUploadedFile = uploadedFiles[0];
+                    const firstFileInput = fileInputs.find(input => input.targetName === firstUploadedFile.targetName);
+                    
+                    if (firstFileInput) {
+                        // 获取对应的描述输入框ID
+                        const recordKey = firstFileInput.id.replace('oggFile_', '');
+                        const descInput = document.getElementById(`desc_${recordKey}`);
+                        
+                        if (descInput && descInput.value.trim()) {
+                            // 使用自定义描述作为默认名称
+                            defaultPackName = descInput.value.trim();
+                            defaultZipName = descInput.value.trim();
+                        } else {
+                            // 如果没有自定义描述，使用文件名
+                            defaultPackName = firstUploadedFile.file.name;
+                            defaultZipName = firstUploadedFile.file.name.replace('.ogg', '');
+                        }
+                    } else {
+                        // 如果找不到对应的fileInput，使用文件名
+                        defaultPackName = firstUploadedFile.file.name;
+                        defaultZipName = firstUploadedFile.file.name.replace('.ogg', '');
+                    }
                 }
                 const packName = document.getElementById('zipNameInput').value || defaultPackName;
                 const zipName = document.getElementById('zipNameInput').value || defaultZipName;
