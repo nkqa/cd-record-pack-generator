@@ -3,7 +3,9 @@
 [简体中文（中国大陆）](https://github.com/nkqa/cd-record-pack-generator/blob/master/README.md)|[English（United States）](https://github.com/nkqa/cd-record-pack-generator/blob/master/README_EN_US.md)|にほんご（日本）
 
 _オリジナルCDを自分の音楽に簡単に置き換え可能_
+
 _ファイルマネージャーを使用して、面倒で繰り返しの名前変更と置き換えを行う必要はもうありません。_
+
 _ダウンロードしたリソースパックは、様々なフォーラムやマインクラフト関連のウェブサイト、ソフトウェアにアップロード可能_
 
 + 開発者: [ねこかわ](https://meowco.cn)
