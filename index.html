@@ -351,6 +351,53 @@
             </ul>
         </div>
         
+        <!-- 常见问题 -->
+        <div class="faq-section" id="faq">
+            <h3>常见问题</h3>
+            
+            <!-- 中文 FAQ -->
+            <div class="faq-language" id="faq-zh">
+                <h4>中文</h4>
+                <div class="faq-item">
+                    <p><strong>Q1：为什么我填入了自定义描述名后没有生效？</strong></p>
+                    <p>A1：可能是因为您的语言不在中英日韩里的任何一种。</p>
+                </div>
+                <div class="faq-item">
+                    <p><strong>Q2：为什么我在物品栏里查了填入的自定义描述名查不到？</strong></p>
+                    <p>A2：您需要输入的是“音乐唱片”（英：Music Disc、日：レコード），然后才能查找。</p>
+                    <img src="/static/img/qa/zh.png" alt="物品栏查找示例（中文）" style="max-width: 100%; margin-top: 10px;">
+                </div>
+            </div>
+            
+            <!-- 英文 FAQ -->
+            <div class="faq-language" id="faq-en">
+                <h4>English</h4>
+                <div class="faq-item">
+                    <p><strong>Q1: Why isn't my custom description taking effect?</strong></p>
+                    <p>A1: It might be because your language isn't one of Chinese, English, Japanese, or Korean.</p>
+                </div>
+                <div class="faq-item">
+                    <p><strong>Q2: Why can't I find my custom description in the inventory search?</strong></p>
+                    <p>A2: You need to search for "Music Disc" (Chinese: 音乐唱片, Japanese: レコード) first, then you can find it.</p>
+                    <img src="/static/img/qa/en.png" alt="Inventory search example (English)" style="max-width: 100%; margin-top: 10px;">
+                </div>
+            </div>
+            
+            <!-- 日文 FAQ -->
+            <div class="faq-language" id="faq-ja">
+                <h4>日本語</h4>
+                <div class="faq-item">
+                    <p><strong>Q1：なぜカスタム説明が有効にならないのですか？</strong></p>
+                    <p>A1：お使いの言語が中国語、英語、日本語、韓国語のいずれでもない可能性があります。</p>
+                </div>
+                <div class="faq-item">
+                    <p><strong>Q2：なぜインベントリ検索でカスタム説明を見つけることができないのですか？</strong></p>
+                    <p>A2：最初に「レコード」（中国語：音乐唱片、英語：Music Disc）を検索する必要があります。その後、見つけることができます。</p>
+                    <img src="/static/img/qa/ja.png" alt="インベントリ検索の例（日本語）" style="max-width: 100%; margin-top: 10px;">
+                </div>
+            </div>
+        </div>
+        
         <!-- 背景图来源声明 -->
         <div class="background-notice">
             <p>背景图来源互联网，如果侵权请访问我的个人网站获取联系邮箱</p>
@@ -974,6 +1021,7 @@
                 texts.file('en_US.lang', langContent);
                 texts.file('en_GB.lang', langContent);
                 texts.file('ja_JP.lang', langContent);
+                texts.file('ko_KR.lang', langContent);
                 
                 // 创建sounds/music/game/records文件夹并添加用户上传的.ogg文件
                 const sounds = zip.folder('sounds');
@@ -1001,6 +1049,7 @@
                 filePaths.push('texts/en_US.lang');
                 filePaths.push('texts/en_GB.lang');
                 filePaths.push('texts/ja_JP.lang');
+                filePaths.push('texts/ko_KR.lang');
                 filePaths.push('pack_icon.png');
                 
                 // 添加上传的文件路径
