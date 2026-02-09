@@ -182,9 +182,9 @@ const i18n = {
       if (faqDescElement) {
         let faqText = this.t('info.faq_desc', 'Yes, click here to view');
         // 根据不同语言替换链接文本
-        if (faqText.includes('click here')) {
+        if (faqText.toLowerCase().includes('click here')) {
           // 英文
-          faqText = faqText.replace('click here', `<a href="#faq" onclick="smoothScroll('faq'); return false;">click here</a>`);
+          faqText = faqText.replace(/Click here|click here/i, `<a href="#faq" onclick="smoothScroll('faq'); return false;">$&</a>`);
         } else if (faqText.includes('点击这里')) {
           // 中文
           faqText = faqText.replace('点击这里', `<a href="#faq" onclick="smoothScroll('faq'); return false;">点击这里</a>`);
