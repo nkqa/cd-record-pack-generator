@@ -949,10 +949,6 @@
                 // 创建texts文件夹和en_US.lang文件
                 const texts = zip.folder('texts');
                 
-                // 创建language.json文件
-                const languageJson = ["en_US"];
-                texts.file('language.json', JSON.stringify(languageJson, null, 2));
-                
                 // 生成描述文本
                 let enUSLangContent = '';
                 
@@ -996,7 +992,6 @@
                 // 添加基本文件路径
                 filePaths.push('manifest.json');
                 filePaths.push('texts/en_US.lang');
-                filePaths.push('texts/language.json');
                 filePaths.push('pack_icon.png');
                 
                 // 添加上传的文件路径
