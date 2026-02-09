@@ -3,7 +3,7 @@
 简体中文（中国大陆）|[English（United States）](https://github.com/nkqa/cd-record-pack-generator/blob/master/README_EN_US.md)|[にほんご（日本）](https://github.com/nkqa/cd-record-pack-generator/blob/master/README_JA_JP.md)
 
 _用简单的方式将原版唱片换成您的音乐_
-_不用文件管理器进行繁琐的改名替换_
+_不用文件管理器进行繁琐且重复的改名和替换操作_
 _下载的资源包可以上传各个论坛和我的世界网站、软件上_
 
 + 开发者: [喵可酱QAQ](https://meowco.cn)
