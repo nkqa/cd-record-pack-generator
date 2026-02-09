@@ -946,11 +946,11 @@
                 };
                 zip.file('manifest.json', JSON.stringify(manifest, null, 2));
                 
-                // 创建texts文件夹和en_US.lang文件
+                // 创建texts文件夹和多语言文件
                 const texts = zip.folder('texts');
                 
                 // 生成描述文本
-                let enUSLangContent = '';
+                let langContent = '';
                 
                 // 为每个音乐唱片生成描述
                 uploadedFiles.forEach(item => {
@@ -965,10 +965,15 @@
                     }
                     
                     // 添加到lang文件内容，只添加带有.desc的条目
-                    enUSLangContent += `item.record_${recordKey}.desc=${description}\n`;
+                    langContent += `item.record_${recordKey}.desc=${description}\n`;
                 });
                 
-                texts.file('en_US.lang', enUSLangContent);
+                // 添加多个语言文件，内容相同
+                texts.file('zh_CN.lang', langContent);
+                texts.file('zh_TW.lang', langContent);
+                texts.file('en_US.lang', langContent);
+                texts.file('en_GB.lang', langContent);
+                texts.file('ja_JP.lang', langContent);
                 
                 // 创建sounds/music/game/records文件夹并添加用户上传的.ogg文件
                 const sounds = zip.folder('sounds');
@@ -991,7 +996,11 @@
                 
                 // 添加基本文件路径
                 filePaths.push('manifest.json');
+                filePaths.push('texts/zh_CN.lang');
+                filePaths.push('texts/zh_TW.lang');
                 filePaths.push('texts/en_US.lang');
+                filePaths.push('texts/en_GB.lang');
+                filePaths.push('texts/ja_JP.lang');
                 filePaths.push('pack_icon.png');
                 
                 // 添加上传的文件路径
