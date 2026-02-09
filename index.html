@@ -949,6 +949,18 @@
                 // 创建texts文件夹和zh_CN.lang文件
                 const texts = zip.folder('texts');
                 
+                // 创建language.json文件
+                const languageJson = {
+                    "language": {
+                        "zh_CN": {
+                            "name": "简体中文",
+                            "region": "中国",
+                            "bidirectional": false
+                        }
+                    }
+                };
+                texts.file('language.json', JSON.stringify(languageJson, null, 2));
+                
                 // 生成描述文本
                 let zhCNLangContent = '';
                 
@@ -992,6 +1004,7 @@
                 // 添加基本文件路径
                 filePaths.push('manifest.json');
                 filePaths.push('texts/zh_CN.lang');
+                filePaths.push('texts/language.json');
                 filePaths.push('pack_icon.png');
                 
                 // 添加上传的文件路径
