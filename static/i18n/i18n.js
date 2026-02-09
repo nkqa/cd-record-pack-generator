@@ -172,6 +172,28 @@ const i18n = {
         }
         thanksDescElement.innerHTML = thanksText;
       }
+      
+      // 常见问题
+      const faqElement = infoContent.querySelector('h3:nth-child(15)');
+      if (faqElement) {
+        faqElement.textContent = this.t('info.faq', 'Frequently Asked Questions');
+      }
+      const faqDescElement = infoContent.querySelector('p:nth-child(16)');
+      if (faqDescElement) {
+        let faqText = this.t('info.faq_desc', 'Yes, click here to view');
+        // 根据不同语言替换链接文本
+        if (faqText.includes('click here')) {
+          // 英文
+          faqText = faqText.replace('click here', `<a href="#faq" onclick="smoothScroll('faq'); return false;">click here</a>`);
+        } else if (faqText.includes('点击这里')) {
+          // 中文
+          faqText = faqText.replace('点击这里', `<a href="#faq" onclick="smoothScroll('faq'); return false;">点击这里</a>`);
+        } else if (faqText.includes('ここをクリック')) {
+          // 日文
+          faqText = faqText.replace('ここをクリック', `<a href="#faq" onclick="smoothScroll('faq'); return false;">ここをクリック</a>`);
+        }
+        faqDescElement.innerHTML = faqText;
+      }
     }
     
     // 更新上传部分标题
@@ -196,6 +218,112 @@ const i18n = {
         label.textContent = this.t('upload.pack_name', 'Music pack name');
       }
     });
+    
+    // 更新FAQ区域
+    const faqSection = document.querySelector('.faq-section');
+    if (faqSection) {
+      // 更新FAQ标题
+      const faqTitle = faqSection.querySelector('h3');
+      if (faqTitle) {
+        faqTitle.textContent = this.t('faq.title', 'Frequently Asked Questions');
+      }
+      
+      // 更新中文FAQ
+      const faqZh = document.querySelector('#faq-zh');
+      if (faqZh) {
+        const faqZhTitle = faqZh.querySelector('h4');
+        if (faqZhTitle) {
+          faqZhTitle.textContent = this.t('faq.zh_title', 'Chinese');
+        }
+        
+        const faqZhItems = faqZh.querySelectorAll('.faq-item');
+        if (faqZhItems[0]) {
+          const q1 = faqZhItems[0].querySelector('p:nth-child(1)');
+          if (q1) {
+            q1.innerHTML = `<strong>${this.t('faq.zh_q1', 'Q1: Why isn\'t my custom description taking effect?')}</strong>`;
+          }
+          const a1 = faqZhItems[0].querySelector('p:nth-child(2)');
+          if (a1) {
+            a1.textContent = this.t('faq.zh_a1', 'A1: It might be because your language isn\'t one of Chinese, English, Japanese, or Korean.');
+          }
+        }
+        
+        if (faqZhItems[1]) {
+          const q2 = faqZhItems[1].querySelector('p:nth-child(1)');
+          if (q2) {
+            q2.innerHTML = `<strong>${this.t('faq.zh_q2', 'Q2: Why can\'t I find my custom description in the inventory search?')}</strong>`;
+          }
+          const a2 = faqZhItems[1].querySelector('p:nth-child(2)');
+          if (a2) {
+            a2.textContent = this.t('faq.zh_a2', 'A2: You need to search for "音乐唱片" (English: Music Disc, Japanese: レコード) first, then you can find it.');
+          }
+        }
+      }
+      
+      // 更新英文FAQ
+      const faqEn = document.querySelector('#faq-en');
+      if (faqEn) {
+        const faqEnTitle = faqEn.querySelector('h4');
+        if (faqEnTitle) {
+          faqEnTitle.textContent = this.t('faq.en_title', 'English');
+        }
+        
+        const faqEnItems = faqEn.querySelectorAll('.faq-item');
+        if (faqEnItems[0]) {
+          const q1 = faqEnItems[0].querySelector('p:nth-child(1)');
+          if (q1) {
+            q1.innerHTML = `<strong>${this.t('faq.en_q1', 'Q1: Why isn\'t my custom description taking effect?')}</strong>`;
+          }
+          const a1 = faqEnItems[0].querySelector('p:nth-child(2)');
+          if (a1) {
+            a1.textContent = this.t('faq.en_a1', 'A1: It might be because your language isn\'t one of Chinese, English, Japanese, or Korean.');
+          }
+        }
+        
+        if (faqEnItems[1]) {
+          const q2 = faqEnItems[1].querySelector('p:nth-child(1)');
+          if (q2) {
+            q2.innerHTML = `<strong>${this.t('faq.en_q2', 'Q2: Why can\'t I find my custom description in the inventory search?')}</strong>`;
+          }
+          const a2 = faqEnItems[1].querySelector('p:nth-child(2)');
+          if (a2) {
+            a2.textContent = this.t('faq.en_a2', 'A2: You need to search for "Music Disc" (Chinese: 音乐唱片, Japanese: レコード) first, then you can find it.');
+          }
+        }
+      }
+      
+      // 更新日文FAQ
+      const faqJa = document.querySelector('#faq-ja');
+      if (faqJa) {
+        const faqJaTitle = faqJa.querySelector('h4');
+        if (faqJaTitle) {
+          faqJaTitle.textContent = this.t('faq.ja_title', 'Japanese');
+        }
+        
+        const faqJaItems = faqJa.querySelectorAll('.faq-item');
+        if (faqJaItems[0]) {
+          const q1 = faqJaItems[0].querySelector('p:nth-child(1)');
+          if (q1) {
+            q1.innerHTML = `<strong>${this.t('faq.ja_q1', 'Q1: Why isn\'t my custom description taking effect?')}</strong>`;
+          }
+          const a1 = faqJaItems[0].querySelector('p:nth-child(2)');
+          if (a1) {
+            a1.textContent = this.t('faq.ja_a1', 'A1: It might be because your language isn\'t one of Chinese, English, Japanese, or Korean.');
+          }
+        }
+        
+        if (faqJaItems[1]) {
+          const q2 = faqJaItems[1].querySelector('p:nth-child(1)');
+          if (q2) {
+            q2.innerHTML = `<strong>${this.t('faq.ja_q2', 'Q2: Why can\'t I find my custom description in the inventory search?')}</strong>`;
+          }
+          const a2 = faqJaItems[1].querySelector('p:nth-child(2)');
+          if (a2) {
+            a2.textContent = this.t('faq.ja_a2', 'A2: You need to search for "レコード" (Chinese: 音乐唱片, English: Music Disc) first, then you can find it.');
+          }
+        }
+      }
+    }
     
     // 更新自定义上传按钮文本
     const customBtns = document.querySelectorAll('.custom-btn');

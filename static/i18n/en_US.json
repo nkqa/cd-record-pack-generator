@@ -18,7 +18,27 @@
     "not_ogg_format": "My audio format is not ogg, is there a tool to convert format?",
     "not_ogg_format_desc": "Yes, click here to view",
     "thanks": "Thanks",
-    "thanks_desc": "Thanks to this video for inspiring me and providing files"
+    "thanks_desc": "Thanks to this video for inspiring me and providing files",
+    "faq": "Frequently Asked Questions",
+    "faq_desc": "Yes, click here to view"
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "zh_title": "Chinese",
+    "zh_q1": "Q1：为什么我填入了自定义描述名后没有生效？",
+    "zh_a1": "A1：可能是因为您的语言不在中英日韩里的任何一种。",
+    "zh_q2": "Q2：为什么我在物品栏里查了填入的自定义描述名查不到？",
+    "zh_a2": "A2：您需要输入的是\"音乐唱片\"（英：Music Disc、日：レコード），然后才能查找。",
+    "en_title": "English",
+    "en_q1": "Q1: Why isn't my custom description taking effect?",
+    "en_a1": "A1: It might be because your language isn't one of Chinese, English, Japanese, or Korean.",
+    "en_q2": "Q2: Why can't I find my custom description in the inventory search?",
+    "en_a2": "A2: You need to search for \"Music Disc\" (Chinese: 音乐唱片, Japanese: レコード) first, then you can find it.",
+    "ja_title": "Japanese",
+    "ja_q1": "Q1：なぜカスタム説明が有効にならないのですか？",
+    "ja_a1": "A1：お使いの言語が中国語、英語、日本語、韓国語のいずれでもない可能性があります。",
+    "ja_q2": "Q2：なぜインベントリ検索でカスタム説明を見つけることができないのですか？",
+    "ja_a2": "A2：最初に\"レコード\"（中国語：音乐唱片、英語：Music Disc）を検索する必要があります。その後、見つけることができます。"
   },
   "upload": {
     "title": "Upload Music Files",
