@@ -228,14 +228,26 @@ const i18n = {
         faqTitle.textContent = this.t('faq.title', 'Frequently Asked Questions');
       }
       
-      // 确保所有语言区块都显示
-      const faqLanguages = document.querySelectorAll('.faq-language');
-      faqLanguages.forEach(langBlock => {
-        langBlock.style.display = 'block';
-      });
+      // 根据当前语言显示对应的FAQ区块
+      const faqZh = document.querySelector('#faq-zh');
+      const faqEn = document.querySelector('#faq-en');
+      const faqJa = document.querySelector('#faq-ja');
+      
+      // 隐藏所有语言区块
+      if (faqZh) faqZh.style.display = 'none';
+      if (faqEn) faqEn.style.display = 'none';
+      if (faqJa) faqJa.style.display = 'none';
+      
+      // 根据当前语言显示对应的区块
+      if (this.currentLang === 'zh_CN' && faqZh) {
+        faqZh.style.display = 'block';
+      } else if (this.currentLang === 'en_US' && faqEn) {
+        faqEn.style.display = 'block';
+      } else if (this.currentLang === 'ja_JP' && faqJa) {
+        faqJa.style.display = 'block';
+      }
       
       // 更新中文FAQ
-      const faqZh = document.querySelector('#faq-zh');
       if (faqZh) {
         const faqZhTitle = faqZh.querySelector('h4');
         if (faqZhTitle) {
@@ -267,7 +279,6 @@ const i18n = {
       }
       
       // 更新英文FAQ
-      const faqEn = document.querySelector('#faq-en');
       if (faqEn) {
         const faqEnTitle = faqEn.querySelector('h4');
         if (faqEnTitle) {
@@ -299,7 +310,6 @@ const i18n = {
       }
       
       // 更新日文FAQ
-      const faqJa = document.querySelector('#faq-ja');
       if (faqJa) {
         const faqJaTitle = faqJa.querySelector('h4');
         if (faqJaTitle) {
