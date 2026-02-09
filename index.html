@@ -99,7 +99,7 @@
                 <p>感谢由<a href="https://www.bilibili.com/video/BV1DSBRYrE6N/" target="_blank" rel="nofollow">此视频</a>给我带来的启发以及文件提供</p>
                 
                 <h3>常见问题</h3>
-                <p>有的，<a href="#faq" onclick="smoothScroll('faq'); return false;">点击这里</a>查看</p>
+                <p><a href="#faq" onclick="smoothScroll('faq'); return false;">点击这里</a>查看</p>
             </div>
         </div>
         
@@ -1040,7 +1040,6 @@
                 // 创建textures文件夹结构
                 const textures = zip.folder('textures');
                 const items = textures.folder('items');
-                const ui = textures.folder('ui');
                 
                 // 创建文件列表
                 const filePaths = [];
@@ -1067,9 +1066,6 @@
                 filePaths.push('textures/items/record_5.png');
                 filePaths.push('textures/items/record_blocks.png');
                 filePaths.push('textures/items/record_cat.png');
-                filePaths.push('textures/ui/2hangar.png');
-                filePaths.push('textures/ui/5stars_empty.png');
-                filePaths.push('textures/ui/5stars_full.png');
                 
                 // 创建filelist.txt
                 const fileListContent = filePaths.sort().join('\n');
