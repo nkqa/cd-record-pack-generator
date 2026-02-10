@@ -258,22 +258,11 @@ const i18n = {
         if (faqZhItems[0]) {
           const q1 = faqZhItems[0].querySelector('p:nth-child(1)');
           if (q1) {
-            q1.innerHTML = `<strong>Q1：为什么我填入了自定义描述名后没有生效？</strong>`;
+            q1.innerHTML = `<strong>Q1：为什么我在物品栏里查了填入的自定义描述名查不到？</strong>`;
           }
           const a1 = faqZhItems[0].querySelector('p:nth-child(2)');
           if (a1) {
-            a1.textContent = 'A1：可能是因为您的语言不在中英日韩里的任何一种。';
-          }
-        }
-        
-        if (faqZhItems[1]) {
-          const q2 = faqZhItems[1].querySelector('p:nth-child(1)');
-          if (q2) {
-            q2.innerHTML = `<strong>Q2：为什么我在物品栏里查了填入的自定义描述名查不到？</strong>`;
-          }
-          const a2 = faqZhItems[1].querySelector('p:nth-child(2)');
-          if (a2) {
-            a2.textContent = 'A2：您需要输入的是"音乐唱片"（英：Music Disc、日：レコード），然后才能查找。';
+            a1.textContent = 'A1：您需要输入的是"音乐唱片"（英：Music Disc、日：レコード），然后才能查找。';
           }
         }
       }
@@ -289,22 +278,11 @@ const i18n = {
         if (faqEnItems[0]) {
           const q1 = faqEnItems[0].querySelector('p:nth-child(1)');
           if (q1) {
-            q1.innerHTML = `<strong>Q1: Why isn't my custom description taking effect?</strong>`;
+            q1.innerHTML = `<strong>Q1: Why can't I find my custom description in the inventory search?</strong>`;
           }
           const a1 = faqEnItems[0].querySelector('p:nth-child(2)');
           if (a1) {
-            a1.textContent = 'A1: It might be because your language isn\'t one of Chinese, English, Japanese, or Korean.';
-          }
-        }
-        
-        if (faqEnItems[1]) {
-          const q2 = faqEnItems[1].querySelector('p:nth-child(1)');
-          if (q2) {
-            q2.innerHTML = `<strong>Q2: Why can't I find my custom description in the inventory search?</strong>`;
-          }
-          const a2 = faqEnItems[1].querySelector('p:nth-child(2)');
-          if (a2) {
-            a2.textContent = 'A2: You need to search for "Music Disc" (Chinese: 音乐唱片, Japanese: レコード) first, then you can find it.';
+            a1.textContent = 'A1: You need to search for "Music Disc" (Chinese: 音乐唱片, Japanese: レコード) first, then you can find it.';
           }
         }
       }
@@ -320,22 +298,11 @@ const i18n = {
         if (faqJaItems[0]) {
           const q1 = faqJaItems[0].querySelector('p:nth-child(1)');
           if (q1) {
-            q1.innerHTML = `<strong>Q1：なぜカスタム説明が有効にならないのですか？</strong>`;
+            q1.innerHTML = `<strong>Q1：なぜインベントリ検索でカスタム説明を見つけることができないのですか？</strong>`;
           }
           const a1 = faqJaItems[0].querySelector('p:nth-child(2)');
           if (a1) {
-            a1.textContent = 'A1：お使いの言語が中国語、英語、日本語、韓国語のいずれでもない可能性があります。';
-          }
-        }
-        
-        if (faqJaItems[1]) {
-          const q2 = faqJaItems[1].querySelector('p:nth-child(1)');
-          if (q2) {
-            q2.innerHTML = `<strong>Q2：なぜインベントリ検索でカスタム説明を見つけることができないのですか？</strong>`;
-          }
-          const a2 = faqJaItems[1].querySelector('p:nth-child(2)');
-          if (a2) {
-            a2.textContent = 'A2：最初に「レコード」（中国語：音乐唱片、英語：Music Disc）を検索する必要があります。その後、見つけることができます。';
+            a1.textContent = 'A1：最初に「レコード」（中国語：音乐唱片、英語：Music Disc）を検索する必要があります。その後、見つけることができます。';
           }
         }
       }
