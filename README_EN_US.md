@@ -11,10 +11,8 @@ _The downloaded resource pack can be uploaded to various forums and Minecraft we
 + Developer: [Meowco](https://meowco.cn)
 
 - Features:
-
-+ Replace the original CDs with your own music
-
-+ Customize the CD description name for easy identification
+ + Replace the original CDs with your own music
+ + Customize the CD description name for easy identification
 
 - [Create your own CD pack! > w <](https://www.mcneko.com/tools/cdpack/)
 
