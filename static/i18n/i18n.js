@@ -345,19 +345,26 @@ const i18n = {
         }
       }
       // 识别物品展示图按钮
-      else if (input && input.id && input.id.startsWith('imageFile_')) {
-        // 检查是否有保存的图片文件信息
-        if (window.lastValidImageFiles && window.lastValidImageFiles[input.id]) {
-          const lastValidFile = window.lastValidImageFiles[input.id];
-          if (lastValidFile.isConverted) {
-            btn.textContent = `${this.t('upload.selected_image', '已选择图片：')}${lastValidFile.name}${this.t('upload.converted', '（已转换）')}`;
+        else if (input && input.id && input.id.startsWith('imageFile_')) {
+          // 检查是否有保存的图片文件信息
+          if (window.lastValidImageFiles && window.lastValidImageFiles[input.id]) {
+            const lastValidFile = window.lastValidImageFiles[input.id];
+            const displayName = lastValidFile.originalName || lastValidFile.name;
+            if (lastValidFile.isConverted) {
+              if (lastValidFile.isResized) {
+                btn.textContent = `${this.t('upload.selected_image', '已选择图片：')}${displayName}${this.t('upload.converted', '（已转换）')}${this.t('upload.resized', '（已调整大小）')}`;
+              } else {
+                btn.textContent = `${this.t('upload.selected_image', '已选择图片：')}${displayName}${this.t('upload.converted', '（已转换）')}`;
+              }
+            } else if (lastValidFile.isResized) {
+              btn.textContent = `${this.t('upload.selected_image', '已选择图片：')}${displayName}${this.t('upload.resized', '（已调整大小）')}`;
+            } else {
+              btn.textContent = `${this.t('upload.selected_image', '已选择图片：')}${displayName}`;
+            }
           } else {
-            btn.textContent = `${this.t('upload.selected_image', '已选择图片：')}${lastValidFile.name}`;
-          }
-        } else {
-            btn.textContent = this.t('upload.item_image', '选择物品展示图（不上传即为保持原版材质）');
-          }
-      }
+              btn.textContent = this.t('upload.item_image', '选择物品展示图（不上传即为保持原版材质）');
+            }
+        }
     });
     
     // 更新时长警告

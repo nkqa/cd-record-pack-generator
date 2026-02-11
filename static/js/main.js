@@ -1111,6 +1111,7 @@ imageFileInputs.forEach(inputInfo => {
                                     window.lastValidImageFiles[inputInfo.id] = {
                                         file: convertedFile,
                                         name: convertedFile.name,
+                                        originalName: file.name,
                                         preview: previewUrl,
                                         targetName: inputInfo.targetName,
                                         isConverted: true,
@@ -1176,6 +1177,7 @@ imageFileInputs.forEach(inputInfo => {
                                         window.lastValidImageFiles[inputInfo.id] = {
                                             file: resizedFile,
                                             name: resizedFile.name,
+                                            originalName: file.name,
                                             preview: previewUrl,
                                             targetName: inputInfo.targetName,
                                             isConverted: false,
@@ -1194,6 +1196,7 @@ imageFileInputs.forEach(inputInfo => {
                                 window.lastValidImageFiles[inputInfo.id] = {
                                     file: file,
                                     name: file.name,
+                                    originalName: file.name,
                                     preview: previewUrl,
                                     targetName: inputInfo.targetName,
                                     isConverted: false,
