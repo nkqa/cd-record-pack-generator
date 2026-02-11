@@ -1913,7 +1913,7 @@ function openDeleteModal(target, type) {
                 // 获取删除按钮
                 let deleteBtn = null;
                 try {
-                    deleteBtn = target.parentElement.querySelector('.delete-btn');
+                    deleteBtn = target.parentElement.parentElement.querySelector('.delete-btn');
                     if (deleteBtn) deleteBtn.style.display = 'none';
                 } catch (e) {
                     // 忽略错误
