@@ -13,6 +13,7 @@ _The downloaded resource pack can be uploaded to various forums and Minecraft we
 - Features:
   + Replace the original CDs with your own music
   + Customize the CD description name for easy identification
+  + Built-in format conversion functionality
 
 - [Create your own CD pack! > w <](https://www.mcneko.com/tools/cdpack/)
 
