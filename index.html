@@ -612,6 +612,18 @@
                     <label for="durationCheckToggle" class="toggle-label"></label>
                 </div>
             </div>
+            <div class="audio-processing-option">
+                <div>
+                    <span id="imageSizeText">启用物品展示图像素修改</span>
+                </div>
+                <div class="toggle-switch">
+                    <input type="checkbox" id="imageSizeToggle">
+                    <label for="imageSizeToggle" class="toggle-label"></label>
+                </div>
+            </div>
+            <div class="audio-processing-option" style="margin-left: 20px;">
+                <input type="number" id="imageSizeInput" placeholder="像素" value="32" min="1" max="1024" style="width: 100px; margin-left: 10px;">
+            </div>
         </div>
         
         <button class="btn" id="packBtn">生成mcpack文件</button>

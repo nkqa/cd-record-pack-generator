@@ -46,6 +46,8 @@
     "slow_conversion": "不建议，可能会导致唱片无声音，建议使用其它在线转换工具",
     "pack_success": "打包成功！",
     "duration_check": "启用音频时长检查",
+    "image_size_modify": "启用物品展示图像素修改",
+    "pixels": "像素",
     "pack_name": "音乐包名称",
     "pack_name_placeholder": "未输入则使用第一个上传文件的名字",
     "item_image": "选择物品展示图（不上传即为保持原版材质）",
@@ -55,7 +57,8 @@
     "selected_icon_converted": "已选择图标：{{filename}}（已转换）",
     "delete": "删除",
     "selected_audio": "已选择音频：",
-    "converted": "（已转换）"
+    "converted": "（已转换）",
+    "resized": "（已调整大小）"
   },
   "buttons": {
     "generate": "生成mcpack文件"

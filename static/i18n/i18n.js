@@ -452,6 +452,22 @@ const i18n = {
       durationCheckLabel.textContent = this.t('upload.duration_check', 'Enable audio duration check');
     }
     
+    // 更新物品展示图像素修改文本
+    const imageSizeLabel = document.getElementById('imageSizeText');
+    console.log('imageSizeLabel:', imageSizeLabel);
+    if (imageSizeLabel) {
+      console.log('Updating imageSizeLabel text');
+      imageSizeLabel.textContent = this.t('upload.image_size_modify', '启用物品展示图像素修改');
+    }
+    
+    // 更新像素输入框占位符
+    const imageSizeInput = document.getElementById('imageSizeInput');
+    console.log('imageSizeInput:', imageSizeInput);
+    if (imageSizeInput) {
+      console.log('Updating imageSizeInput placeholder');
+      imageSizeInput.placeholder = this.t('upload.pixels', 'Pixels');
+    }
+    
     // 更新删除按钮文本
     const deleteBtns = document.querySelectorAll('.delete-btn');
     deleteBtns.forEach(btn => {

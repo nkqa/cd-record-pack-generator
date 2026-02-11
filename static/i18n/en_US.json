@@ -46,6 +46,8 @@
     "slow_conversion": "Not recommended, may cause records to have no sound, it is recommended to use other online conversion tools",
     "pack_success": "Packaging successful!",
     "duration_check": "Enable audio duration check",
+    "image_size_modify": "Enable item display image size modification",
+    "pixels": "Pixels",
     "pack_name": "Music Pack Name",
     "pack_name_placeholder": "If not entered, the name of the first uploaded file will be used",
     "item_image": "Select Item Display Image (Keep original texture if not uploaded)",
@@ -55,7 +57,8 @@
     "selected_icon_converted": "Selected Icon: {{filename}} (Converted)",
     "delete": "Delete",
     "selected_audio": "Selected Audio:",
-    "converted": "(Converted)"
+    "converted": "(Converted)",
+    "resized": "(Resized)"
   },
   "buttons": {
     "generate": "Generate mcpack file"
