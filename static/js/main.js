@@ -1115,7 +1115,7 @@ imageFileInputs.forEach(inputInfo => {
                                         preview: previewUrl,
                                         targetName: inputInfo.targetName,
                                         isConverted: true,
-                                        isResized: isImageSizeEnabled
+                                        isResized: false
                                     };
                                     
                                     let statusText = '';
