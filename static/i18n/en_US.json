@@ -43,7 +43,7 @@
     "select_icon": "Select Icon",
     "auto_convert": "Enable automatic image format conversion",
     "audio_conversion": "Enable audio format conversion",
-    "slow_conversion": "Relatively slow, it is recommended to use other online conversion tools",
+    "slow_conversion": "Not recommended, may cause records to have no sound, it is recommended to use other online conversion tools",
     "pack_success": "Packaging successful!",
     "duration_check": "Enable audio duration check",
     "pack_name": "Music Pack Name",
