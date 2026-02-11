@@ -351,13 +351,7 @@ const i18n = {
             const lastValidFile = window.lastValidImageFiles[input.id];
             const displayName = lastValidFile.originalName || lastValidFile.name;
             if (lastValidFile.isConverted) {
-              if (lastValidFile.isResized) {
-                btn.textContent = `${this.t('upload.selected_image', '已选择图片：')}${displayName}${this.t('upload.converted', '（已转换）')}${this.t('upload.resized', '（已调整大小）')}`;
-              } else {
-                btn.textContent = `${this.t('upload.selected_image', '已选择图片：')}${displayName}${this.t('upload.converted', '（已转换）')}`;
-              }
-            } else if (lastValidFile.isResized) {
-              btn.textContent = `${this.t('upload.selected_image', '已选择图片：')}${displayName}${this.t('upload.resized', '（已调整大小）')}`;
+              btn.textContent = `${this.t('upload.selected_image', '已选择图片：')}${displayName}${this.t('upload.converted', '（已转换）')}`;
             } else {
               btn.textContent = `${this.t('upload.selected_image', '已选择图片：')}${displayName}`;
             }

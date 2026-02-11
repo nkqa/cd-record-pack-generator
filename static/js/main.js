@@ -1119,11 +1119,7 @@ imageFileInputs.forEach(inputInfo => {
                                     };
                                     
                                     let statusText = '';
-                                    if (isImageSizeEnabled) {
-                                        statusText = `${i18n.t('upload.converted', '（已转换）')}${i18n.t('upload.resized', '（已调整大小）')}`;
-                                    } else {
-                                        statusText = i18n.t('upload.converted', '（已转换）');
-                                    }
+                                    statusText = i18n.t('upload.converted', '（已转换）');
                                     btnText.textContent = `${i18n.t('upload.selected_image', '已选择图片：')}${file.name}${statusText}`;
                                     if (deleteBtn) {
                                         deleteBtn.style.display = 'block';
@@ -1727,7 +1723,7 @@ if (packBtn) {
                         const resizedFile = await resizeImage(imageFile, maxSize);
                         zip.file(`textures/items/${targetName}`, resizedFile);
                     } else {
-                        // 直接使用原始文件
+                        // 直接使用原始文件，不调整像素
                         zip.file(`textures/items/${targetName}`, imageFile);
                     }
                 }
