@@ -468,6 +468,14 @@ const i18n = {
       imageSizeInput.placeholder = this.t('upload.pixels', 'Pixels');
     }
     
+    // 更新像素文本
+    const pixelsTextElements = document.querySelectorAll('.audio-processing-option span');
+    pixelsTextElements.forEach(element => {
+      if (element.textContent === '像素' || element.textContent === 'Pixels' || element.textContent === 'ピクセル') {
+        element.textContent = this.t('upload.pixels', 'Pixels');
+      }
+    });
+    
     // 更新删除按钮文本
     const deleteBtns = document.querySelectorAll('.delete-btn');
     deleteBtns.forEach(btn => {
