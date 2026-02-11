@@ -63,7 +63,8 @@
   "notices": {
     "title": "Notes",
     "notice1": "Each music selection button has a duration limit indicated below it. If the uploaded music exceeds the limit, it will be forcibly stopped by the game",
-    "notice2": "Some browsers will add .zip to the end of the file name. If this happens, you need to remove it manually"
+    "notice2": "Some browsers will add .zip to the end of the file name. If this happens, you need to remove it manually",
+    "slow_conversion": "The built-in audio format conversion tool will be relatively slow"
   },
   "tools": {
     "title": "Format Conversion Tools",

@@ -403,6 +403,9 @@ const i18n = {
       if (noticeItems[1]) {
         noticeItems[1].textContent = this.t('notices.notice2', 'Some browsers will add .zip to the end of the file name. If this happens, you need to remove it manually');
       }
+      if (noticeItems[2]) {
+        noticeItems[2].textContent = this.t('notices.slow_conversion', '内置的音频格式转换工具会比较慢');
+      }
     }
     
     // 更新转换工具部分
