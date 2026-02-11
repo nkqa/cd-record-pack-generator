@@ -1070,36 +1070,17 @@ imageFileInputs.forEach(inputInfo => {
                                 }
                             }, 100);
                             
-                            // 使用Canvas转换为png并处理像素修改
+                            // 使用Canvas转换为png，像素调整将在打包时进行
                             const img = new Image();
                             img.onload = function() {
-                                // 检查是否启用像素修改
-                                const imageSizeToggle = document.getElementById('imageSizeToggle');
-                                const isImageSizeEnabled = imageSizeToggle ? imageSizeToggle.checked : false;
-                                const imageSizeInput = document.getElementById('imageSizeInput');
-                                const maxSize = isImageSizeEnabled && imageSizeInput ? parseInt(imageSizeInput.value) || 32 : null;
-                                
-                                // 创建Canvas
+                                // 创建Canvas，保持原始尺寸
                                 const canvas = document.createElement('canvas');
-                                
-                                // 计算新的尺寸
-                                let newWidth = img.width;
-                                let newHeight = img.height;
-                                
-                                if (maxSize && (newWidth > maxSize || newHeight > maxSize)) {
-                                    // 计算缩放比例
-                                    const scale = maxSize / Math.max(newWidth, newHeight);
-                                    newWidth = Math.round(newWidth * scale);
-                                    newHeight = Math.round(newHeight * scale);
-                                }
-                                
-                                // 设置Canvas尺寸
-                                canvas.width = newWidth;
-                                canvas.height = newHeight;
+                                canvas.width = img.width;
+                                canvas.height = img.height;
                                 
                                 // 绘制图片
                                 const ctx = canvas.getContext('2d');
-                                ctx.drawImage(img, 0, 0, newWidth, newHeight);
+                                ctx.drawImage(img, 0, 0, img.width, img.height);
                                 
                                 canvas.toBlob(function(blob) {
                                     const convertedFile = new File([blob], inputInfo.targetName, {
