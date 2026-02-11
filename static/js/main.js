@@ -1137,76 +1137,20 @@ imageFileInputs.forEach(inputInfo => {
                             };
                             img.src = previewUrl;
                         } else {
-                            // 检查是否启用像素修改
-                            const imageSizeToggle = document.getElementById('imageSizeToggle');
-                            const isImageSizeEnabled = imageSizeToggle ? imageSizeToggle.checked : false;
-                            const imageSizeInput = document.getElementById('imageSizeInput');
-                            const maxSize = isImageSizeEnabled && imageSizeInput ? parseInt(imageSizeInput.value) || 32 : null;
+                            // 直接使用原始文件，像素调整将在打包时进行
+                            window.lastValidImageFiles[inputInfo.id] = {
+                                file: file,
+                                name: file.name,
+                                originalName: file.name,
+                                preview: previewUrl,
+                                targetName: inputInfo.targetName,
+                                isConverted: false,
+                                isResized: false
+                            };
                             
-                            if (isImageSizeEnabled && maxSize) {
-                                // 使用Canvas处理像素修改
-                                const img = new Image();
-                                img.onload = function() {
-                                    // 计算新的尺寸
-                                    let newWidth = img.width;
-                                    let newHeight = img.height;
-                                    
-                                    if (newWidth > maxSize || newHeight > maxSize) {
-                                        // 计算缩放比例
-                                        const scale = maxSize / Math.max(newWidth, newHeight);
-                                        newWidth = Math.round(newWidth * scale);
-                                        newHeight = Math.round(newHeight * scale);
-                                    }
-                                    
-                                    // 创建Canvas
-                                    const canvas = document.createElement('canvas');
-                                    canvas.width = newWidth;
-                                    canvas.height = newHeight;
-                                    
-                                    // 绘制图片
-                                    const ctx = canvas.getContext('2d');
-                                    ctx.drawImage(img, 0, 0, newWidth, newHeight);
-                                    
-                                    canvas.toBlob(function(blob) {
-                                        const resizedFile = new File([blob], inputInfo.targetName, {
-                                            type: 'image/png',
-                                            lastModified: Date.now()
-                                        });
-                                        
-                                        // 保存当前有效的图片信息
-                                        window.lastValidImageFiles[inputInfo.id] = {
-                                            file: resizedFile,
-                                            name: resizedFile.name,
-                                            originalName: file.name,
-                                            preview: previewUrl,
-                                            targetName: inputInfo.targetName,
-                                            isConverted: false,
-                                            isResized: true
-                                        };
-                                        
-                                        btnText.textContent = `${i18n.t('upload.selected_image', '已选择图片：')}${file.name}${i18n.t('upload.resized', '（已调整大小）')}`;
-                                        if (deleteBtn) {
-                                            deleteBtn.style.display = 'block';
-                                        }
-                                    }, 'image/png');
-                                };
-                                img.src = previewUrl;
-                            } else {
-                                // 直接使用原始文件
-                                window.lastValidImageFiles[inputInfo.id] = {
-                                    file: file,
-                                    name: file.name,
-                                    originalName: file.name,
-                                    preview: previewUrl,
-                                    targetName: inputInfo.targetName,
-                                    isConverted: false,
-                                    isResized: false
-                                };
-                                
-                                btnText.textContent = `${i18n.t('upload.selected_image', '已选择图片：')}${file.name}`;
-                                if (deleteBtn) {
-                                    deleteBtn.style.display = 'block';
-                                }
+                            btnText.textContent = `${i18n.t('upload.selected_image', '已选择图片：')}${file.name}`;
+                            if (deleteBtn) {
+                                deleteBtn.style.display = 'block';
                             }
                         }
                     };
@@ -1724,15 +1668,70 @@ if (packBtn) {
                 zip.file(`sounds/music/game/records/${targetName}`, file);
             });
             
+            // 图片像素调整函数
+            function resizeImage(imageFile, maxSize) {
+                return new Promise((resolve) => {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const img = new Image();
+                        img.onload = function() {
+                            // 计算新的尺寸
+                            let newWidth = img.width;
+                            let newHeight = img.height;
+                            
+                            if (newWidth > maxSize || newHeight > maxSize) {
+                                // 计算缩放比例
+                                const scale = maxSize / Math.max(newWidth, newHeight);
+                                newWidth = Math.round(newWidth * scale);
+                                newHeight = Math.round(newHeight * scale);
+                            }
+                            
+                            // 创建Canvas
+                            const canvas = document.createElement('canvas');
+                            canvas.width = newWidth;
+                            canvas.height = newHeight;
+                            
+                            // 绘制图片
+                            const ctx = canvas.getContext('2d');
+                            ctx.drawImage(img, 0, 0, newWidth, newHeight);
+                            
+                            canvas.toBlob(function(blob) {
+                                const resizedFile = new File([blob], imageFile.name, {
+                                    type: 'image/png',
+                                    lastModified: Date.now()
+                                });
+                                resolve(resizedFile);
+                            }, 'image/png');
+                        };
+                        img.src = e.target.result;
+                    };
+                    reader.readAsDataURL(imageFile);
+                });
+            }
+            
             // 添加图片文件到压缩包
-            imageFileInputs.forEach(inputInfo => {
+            for (const inputInfo of imageFileInputs) {
                 const inputId = inputInfo.id;
                 if (window.lastValidImageFiles[inputId]) {
                     const imageFile = window.lastValidImageFiles[inputId].file;
                     const targetName = window.lastValidImageFiles[inputId].targetName;
-                    zip.file(`textures/items/${targetName}`, imageFile);
+                    
+                    // 检查是否启用像素修改
+                    const imageSizeToggle = document.getElementById('imageSizeToggle');
+                    const isImageSizeEnabled = imageSizeToggle ? imageSizeToggle.checked : true; // 默认打开
+                    const imageSizeInput = document.getElementById('imageSizeInput');
+                    const maxSize = isImageSizeEnabled && imageSizeInput ? parseInt(imageSizeInput.value) || 32 : 32;
+                    
+                    if (isImageSizeEnabled) {
+                        // 调整图片像素
+                        const resizedFile = await resizeImage(imageFile, maxSize);
+                        zip.file(`textures/items/${targetName}`, resizedFile);
+                    } else {
+                        // 直接使用原始文件
+                        zip.file(`textures/items/${targetName}`, imageFile);
+                    }
                 }
-            });
+            }
             
             // 添加pack_icon.png（如果有，否则使用默认图标）
             if (window.lastValidIconFile) {
