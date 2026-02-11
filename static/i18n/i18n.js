@@ -49,6 +49,8 @@ const i18n = {
   
   // 更新UI
   updateUI() {
+    console.log('i18n updateUI called');
+    
     // 更新页面标题
     document.title = this.t('title', 'Minecraft Music Disc Replacement Tool');
     
@@ -316,11 +318,45 @@ const i18n = {
       
       // 识别音频选择按钮
       if (input && input.id && input.id.startsWith('oggFile_')) {
-        btn.textContent = this.t('upload.select_audio', 'Select audio');
+        // 检查是否有保存的音频文件信息
+        if (window.lastValidAudioFiles && window.lastValidAudioFiles[input.id]) {
+          const lastValidFile = window.lastValidAudioFiles[input.id];
+          if (lastValidFile.isConverted) {
+            btn.textContent = `${this.t('upload.selected_audio', '已选择音频：')}${lastValidFile.name}${this.t('upload.converted', '（已转换）')}`;
+          } else {
+            btn.textContent = `${this.t('upload.selected_audio', '已选择音频：')}${lastValidFile.name}`;
+          }
+        } else {
+          btn.textContent = this.t('upload.select_audio', '选择音频（不上传即为保持原版音乐）');
+        }
       }
       // 识别图标选择按钮
       else if (input && input.id === 'iconFile') {
-        btn.textContent = this.t('upload.select_icon', 'Select icon');
+        // 检查是否有保存的图标文件信息
+        if (window.lastValidIconFile) {
+          const lastValidIconName = window.lastValidIconFile.name || 'pack_icon.png';
+          if (window.lastValidIconFile.isConverted) {
+            btn.textContent = `${this.t('upload.selected_icon', '已选择图标：')}${lastValidIconName}${this.t('upload.converted', '（已转换）')}`;
+          } else {
+            btn.textContent = `${this.t('upload.selected_icon', '已选择图标：')}${lastValidIconName}`;
+          }
+        } else {
+          btn.textContent = this.t('upload.select_icon', '选择图标');
+        }
+      }
+      // 识别物品展示图按钮
+      else if (input && input.id && input.id.startsWith('imageFile_')) {
+        // 检查是否有保存的图片文件信息
+        if (window.lastValidImageFiles && window.lastValidImageFiles[input.id]) {
+          const lastValidFile = window.lastValidImageFiles[input.id];
+          if (lastValidFile.isConverted) {
+            btn.textContent = `${this.t('upload.selected_image', '已选择图片：')}${lastValidFile.name}${this.t('upload.converted', '（已转换）')}`;
+          } else {
+            btn.textContent = `${this.t('upload.selected_image', '已选择图片：')}${lastValidFile.name}`;
+          }
+        } else {
+            btn.textContent = this.t('upload.item_image', '选择物品展示图（不上传即为保持原版材质）');
+          }
       }
     });
     
@@ -387,6 +423,59 @@ const i18n = {
     const backgroundNotice = document.querySelector('.background-notice p');
     if (backgroundNotice) {
       backgroundNotice.textContent = this.t('background.notice', 'Background image source: Internet. If there is any infringement, please visit my personal website to get contact email');
+    }
+    
+    // 更新自动转换开关标签
+    const autoConvertLabel = document.getElementById('autoConvertText');
+    console.log('autoConvertLabel:', autoConvertLabel);
+    if (autoConvertLabel) {
+      console.log('Updating autoConvertLabel text');
+      autoConvertLabel.textContent = this.t('upload.auto_convert', 'Enable automatic format conversion');
+    }
+    
+    // 更新音频处理开关标签
+    const audioProcessingLabel = document.getElementById('audioConversionText');
+    console.log('audioProcessingLabel:', audioProcessingLabel);
+    if (audioProcessingLabel) {
+      console.log('Updating audioProcessingLabel text');
+      audioProcessingLabel.textContent = `${this.t('upload.audio_conversion', 'Enable audio format conversion')}（${this.t('upload.slow_conversion', '比较慢，建议使用其它在线转换工具')}）`;
+    }
+    
+    // 更新音频时长检查开关标签
+    const durationCheckLabel = document.getElementById('durationCheckText');
+    console.log('durationCheckLabel:', durationCheckLabel);
+    if (durationCheckLabel) {
+      console.log('Updating durationCheckLabel text');
+      durationCheckLabel.textContent = this.t('upload.duration_check', 'Enable audio duration check');
+    }
+    
+    // 更新删除按钮文本
+    const deleteBtns = document.querySelectorAll('.delete-btn');
+    deleteBtns.forEach(btn => {
+      btn.textContent = this.t('upload.delete', 'Delete');
+    });
+    
+    // 更新音频转换弹窗
+    const conversionModal = document.getElementById('conversionModal');
+    if (conversionModal) {
+      // 更新标题
+      const conversionTitle = conversionModal.querySelector('h3');
+      if (conversionTitle) {
+        conversionTitle.textContent = this.t('modal.conversion.title', 'Audio Conversion');
+      }
+      
+      // 更新取消按钮
+      const cancelBtn = document.getElementById('cancelConversionBtn');
+      if (cancelBtn) {
+        cancelBtn.textContent = this.t('modal.conversion.cancel', 'Cancel Conversion');
+      }
+    }
+    
+    // 更新状态消息
+    const status = document.getElementById('status');
+    if (status && status.classList.contains('success')) {
+      // 如果状态元素存在且显示的是成功消息，则更新它
+      status.textContent = this.t('upload.pack_success', '打包成功！');
     }
   }
 };

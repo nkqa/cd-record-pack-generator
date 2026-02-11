@@ -7,6 +7,8 @@
     <title>我的世界音乐唱片替换工具（基岩版）</title>
     <script src="./static/jszip/jszip.min.js"></script>
     <script src="./static/jszip/FileSaver.min.js"></script>
+    <script src="./static/i18n/i18n.js"></script>
+
     <script>
          var link = document.createElement('link');
          link.rel = 'stylesheet';
@@ -21,49 +23,6 @@
             y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
         })(window, document, "clarity", "script", "o11hourj5x");
     </script>
-    <script>
-        // 平滑滚动到指定元素
-        function smoothScroll(elementId) {
-            // 确保信息部分已展开
-            const infoContent = document.querySelector('.info-content');
-            if (infoContent && infoContent.style.display === 'none') {
-                infoContent.style.display = 'block';
-                const icon = document.querySelector('.toggle-icon');
-                if (icon) {
-                    icon.style.transform = 'rotate(180deg)';
-                }
-            }
-
-            const element = document.getElementById(elementId);
-            if (element) {
-                // 自定义平滑滚动实现（强制使用，不依赖浏览器支持）
-                const targetPosition = element.getBoundingClientRect().top + window.pageYOffset;
-                const startPosition = window.pageYOffset;
-                const distance = targetPosition - startPosition;
-                const duration = 1000; // 滚动持续时间（毫秒）
-                let startTime = null;
-
-                function animation(currentTime) {
-                    if (startTime === null) startTime = currentTime;
-                    const timeElapsed = currentTime - startTime;
-                    const run = ease(timeElapsed, startPosition, distance, duration);
-                    window.scrollTo(0, run);
-                    if (timeElapsed < duration) requestAnimationFrame(animation);
-                }
-
-                // 缓动函数，使滚动更自然
-                function ease(t, b, c, d) {
-                    t /= d / 2;
-                    if (t < 1) return c / 2 * t * t + b;
-                    t--;
-                    return -c / 2 * (t * (t - 2) - 1) + b;
-                }
-
-                requestAnimationFrame(animation);
-            }
-        }
-    </script>
-    <script src="./static/i18n/i18n.js"></script>
 </head>
 <body>
     <!-- 加载遮罩层 -->
@@ -72,6 +31,10 @@
             <div id="loadingBar" style="width: 0%; height: 100%; background-color: #4CAF50; transition: width 0.3s ease;"></div>
         </div>
         <div style="margin-top: 20px; font-size: 16px; color: #333;">Loading...</div>
+        <div id="ffmpegLoading" style="margin-top: 10px; font-size: 14px; color: #666; display: none;">正在加载FFmpeg库...</div>
+        <div style="width: 300px; height: 2px; background-color: #f0f0f0; border-radius: 1px; overflow: hidden; margin-top: 5px; display: none;">
+            <div id="ffmpegLoadingBar" style="width: 0%; height: 100%; background-color: #2196F3; transition: width 0.1s ease;"></div>
+        </div>
     </div>
     
     <div class="container">
@@ -108,9 +71,23 @@
             
             <div class="file-input">
                 <label>11.ogg</label>
+                <!-- 图片上传区域 -->
+                <div class="image-upload-section">
+                    <div class="image-preview-container">
+                        <div id="imagePreview_11" class="image-preview"></div>
+                    </div>
+                    <div class="image-upload-button">
+                        <div class="custom-file-upload">
+                            <input type="file" id="imageFile_11" accept="image/*">
+                            <div class="custom-btn" id="imageBtnText_11">选择物品展示图（不上传即为保持原版材质）</div>
+                        </div>
+                        <button class="delete-btn" onclick="openDeleteModal(document.getElementById('imageFile_11'), 'image')" style="display: none;">删除</button>
+                    </div>
+                </div>
                 <div class="custom-file-upload">
-                    <input type="file" id="oggFile_11">
+                    <input type="file" id="oggFile_11" accept="audio/*">
                     <div class="custom-btn" id="fileBtnText_11">选择音频（不上传即为保持原版音乐）</div>
+                    <button class="delete-btn" onclick="openDeleteModal(document.getElementById('oggFile_11'), 'audio')" style="display: none;">删除</button>
                 </div>
                 <div class="duration-warning">此名字的乐曲对应时长不能超过 1:10</div>
                 <input type="text" id="desc_11" placeholder="自定义描述（默认自动填入文件名）" style="margin-top: 5px;">
@@ -118,9 +95,23 @@
             
             <div class="file-input">
                 <label>13.ogg</label>
+                <!-- 图片上传区域 -->
+                <div class="image-upload-section">
+                    <div class="image-preview-container">
+                        <div id="imagePreview_13" class="image-preview"></div>
+                    </div>
+                    <div class="image-upload-button">
+                        <div class="custom-file-upload">
+                            <input type="file" id="imageFile_13" accept="image/*">
+                            <div class="custom-btn" id="imageBtnText_13">选择物品展示图（不上传即为保持原版材质）</div>
+                        </div>
+                        <button class="delete-btn" onclick="openDeleteModal(document.getElementById('imageFile_13'), 'image')" style="display: none;">删除</button>
+                    </div>
+                </div>
                 <div class="custom-file-upload">
-                    <input type="file" id="oggFile_13">
+                    <input type="file" id="oggFile_13" accept="audio/*">
                     <div class="custom-btn" id="fileBtnText_13">选择音频（不上传即为保持原版音乐）</div>
+                    <button class="delete-btn" onclick="openDeleteModal(document.getElementById('oggFile_13'), 'audio')" style="display: none;">删除</button>
                 </div>
                 <div class="duration-warning">此名字的乐曲对应时长不能超过 2:55</div>
                 <input type="text" id="desc_13" placeholder="自定义描述（默认自动填入文件名）" style="margin-top: 5px;">
@@ -128,9 +119,23 @@
             
             <div class="file-input">
                 <label>5.ogg</label>
+                <!-- 图片上传区域 -->
+                <div class="image-upload-section">
+                    <div class="image-preview-container">
+                        <div id="imagePreview_5" class="image-preview"></div>
+                    </div>
+                    <div class="image-upload-button">
+                        <div class="custom-file-upload">
+                            <input type="file" id="imageFile_5" accept="image/*">
+                            <div class="custom-btn" id="imageBtnText_5">选择物品展示图（不上传即为保持原版材质）</div>
+                        </div>
+                        <button class="delete-btn" onclick="openDeleteModal(document.getElementById('imageFile_5'), 'image')" style="display: none;">删除</button>
+                    </div>
+                </div>
                 <div class="custom-file-upload">
-                    <input type="file" id="oggFile_5">
+                    <input type="file" id="oggFile_5" accept="audio/*">
                     <div class="custom-btn" id="fileBtnText_5">选择音频（不上传即为保持原版音乐）</div>
+                    <button class="delete-btn" onclick="openDeleteModal(document.getElementById('oggFile_5'), 'audio')" style="display: none;">删除</button>
                 </div>
                 <div class="duration-warning">此名字的乐曲对应时长不能超过 3:00</div>
                 <input type="text" id="desc_5" placeholder="自定义描述（默认自动填入文件名）" style="margin-top: 5px;">
@@ -138,9 +143,23 @@
             
             <div class="file-input">
                 <label>blocks.ogg</label>
+                <!-- 图片上传区域 -->
+                <div class="image-upload-section">
+                    <div class="image-preview-container">
+                        <div id="imagePreview_blocks" class="image-preview"></div>
+                    </div>
+                    <div class="image-upload-button">
+                        <div class="custom-file-upload">
+                            <input type="file" id="imageFile_blocks" accept="image/*">
+                            <div class="custom-btn" id="imageBtnText_blocks">选择物品展示图（不上传即为保持原版材质）</div>
+                        </div>
+                        <button class="delete-btn" onclick="openDeleteModal(document.getElementById('imageFile_blocks'), 'image')" style="display: none;">删除</button>
+                    </div>
+                </div>
                 <div class="custom-file-upload">
-                    <input type="file" id="oggFile_blocks">
+                    <input type="file" id="oggFile_blocks" accept="audio/*">
                     <div class="custom-btn" id="fileBtnText_blocks">选择音频（不上传即为保持原版音乐）</div>
+                    <button class="delete-btn" onclick="openDeleteModal(document.getElementById('oggFile_blocks'), 'audio')" style="display: none;">删除</button>
                 </div>
                 <div class="duration-warning">此名字的乐曲对应时长不能超过 5:40</div>
                 <input type="text" id="desc_blocks" placeholder="自定义描述（默认自动填入文件名）" style="margin-top: 5px;">
@@ -148,9 +167,23 @@
             
             <div class="file-input">
                 <label>cat.ogg</label>
+                <!-- 图片上传区域 -->
+                <div class="image-upload-section">
+                    <div class="image-preview-container">
+                        <div id="imagePreview_cat" class="image-preview"></div>
+                    </div>
+                    <div class="image-upload-button">
+                        <div class="custom-file-upload">
+                            <input type="file" id="imageFile_cat" accept="image/*">
+                            <div class="custom-btn" id="imageBtnText_cat">选择物品展示图（不上传即为保持原版材质）</div>
+                        </div>
+                        <button class="delete-btn" onclick="openDeleteModal(document.getElementById('imageFile_cat'), 'image')" style="display: none;">删除</button>
+                    </div>
+                </div>
                 <div class="custom-file-upload">
-                    <input type="file" id="oggFile_cat">
+                    <input type="file" id="oggFile_cat" accept="audio/*">
                     <div class="custom-btn" id="fileBtnText_cat">选择音频（不上传即为保持原版音乐）</div>
+                    <button class="delete-btn" onclick="openDeleteModal(document.getElementById('oggFile_cat'), 'audio')" style="display: none;">删除</button>
                 </div>
                 <div class="duration-warning">此名字的乐曲对应时长不能超过 3:00</div>
                 <input type="text" id="desc_cat" placeholder="自定义描述（默认自动填入文件名）" style="margin-top: 5px;">
@@ -158,9 +191,23 @@
             
             <div class="file-input">
                 <label>creator.ogg</label>
+                <!-- 图片上传区域 -->
+                <div class="image-upload-section">
+                    <div class="image-preview-container">
+                        <div id="imagePreview_creator" class="image-preview"></div>
+                    </div>
+                    <div class="image-upload-button">
+                        <div class="custom-file-upload">
+                            <input type="file" id="imageFile_creator" accept="image/*">
+                            <div class="custom-btn" id="imageBtnText_creator">选择物品展示图（不上传即为保持原版材质）</div>
+                        </div>
+                        <button class="delete-btn" onclick="openDeleteModal(document.getElementById('imageFile_creator'), 'image')" style="display: none;">删除</button>
+                    </div>
+                </div>
                 <div class="custom-file-upload">
-                    <input type="file" id="oggFile_creator">
+                    <input type="file" id="oggFile_creator" accept="audio/*">
                     <div class="custom-btn" id="fileBtnText_creator">选择音频（不上传即为保持原版音乐）</div>
+                    <button class="delete-btn" onclick="openDeleteModal(document.getElementById('oggFile_creator'), 'audio')" style="display: none;">删除</button>
                 </div>
                 <div class="duration-warning">此名字的乐曲对应时长不能超过 2:50</div>
                 <input type="text" id="desc_creator" placeholder="自定义描述（默认自动填入文件名）" style="margin-top: 5px;">
@@ -168,9 +215,23 @@
             
             <div class="file-input">
                 <label>creator_music_box.ogg</label>
+                <!-- 图片上传区域 -->
+                <div class="image-upload-section">
+                    <div class="image-preview-container">
+                        <div id="imagePreview_creator_music_box" class="image-preview"></div>
+                    </div>
+                    <div class="image-upload-button">
+                        <div class="custom-file-upload">
+                            <input type="file" id="imageFile_creator_music_box" accept="image/*">
+                            <div class="custom-btn" id="imageBtnText_creator_music_box">选择物品展示图（不上传即为保持原版材质）</div>
+                        </div>
+                        <button class="delete-btn" onclick="openDeleteModal(document.getElementById('imageFile_creator_music_box'), 'image')" style="display: none;">删除</button>
+                    </div>
+                </div>
                 <div class="custom-file-upload">
-                    <input type="file" id="oggFile_creator_music_box">
+                    <input type="file" id="oggFile_creator_music_box" accept="audio/*">
                     <div class="custom-btn" id="fileBtnText_creator_music_box">选择音频（不上传即为保持原版音乐）</div>
+                    <button class="delete-btn" onclick="openDeleteModal(document.getElementById('oggFile_creator_music_box'), 'audio')" style="display: none;">删除</button>
                 </div>
                 <div class="duration-warning">此名字的乐曲对应时长不能超过 1:10</div>
                 <input type="text" id="desc_creator_music_box" placeholder="自定义描述（默认自动填入文件名）" style="margin-top: 5px;">
@@ -178,9 +239,23 @@
             
             <div class="file-input">
                 <label>mall.ogg</label>
+                <!-- 图片上传区域 -->
+                <div class="image-upload-section">
+                    <div class="image-preview-container">
+                        <div id="imagePreview_mall" class="image-preview"></div>
+                    </div>
+                    <div class="image-upload-button">
+                        <div class="custom-file-upload">
+                            <input type="file" id="imageFile_mall" accept="image/*">
+                            <div class="custom-btn" id="imageBtnText_mall">选择物品展示图（不上传即为保持原版材质）</div>
+                        </div>
+                        <button class="delete-btn" onclick="openDeleteModal(document.getElementById('imageFile_mall'), 'image')" style="display: none;">删除</button>
+                    </div>
+                </div>
                 <div class="custom-file-upload">
-                    <input type="file" id="oggFile_mall">
+                    <input type="file" id="oggFile_mall" accept="audio/*">
                     <div class="custom-btn" id="fileBtnText_mall">选择音频（不上传即为保持原版音乐）</div>
+                    <button class="delete-btn" onclick="openDeleteModal(document.getElementById('oggFile_mall'), 'audio')" style="display: none;">删除</button>
                 </div>
                 <div class="duration-warning">此名字的乐曲对应时长不能超过 3:15</div>
                 <input type="text" id="desc_mall" placeholder="自定义描述（默认自动填入文件名）" style="margin-top: 5px;">
@@ -188,9 +263,23 @@
             
             <div class="file-input">
                 <label>mellohi.ogg</label>
+                <!-- 图片上传区域 -->
+                <div class="image-upload-section">
+                    <div class="image-preview-container">
+                        <div id="imagePreview_mellohi" class="image-preview"></div>
+                    </div>
+                    <div class="image-upload-button">
+                        <div class="custom-file-upload">
+                            <input type="file" id="imageFile_mellohi" accept="image/*">
+                            <div class="custom-btn" id="imageBtnText_mellohi">选择物品展示图（不上传即为保持原版材质）</div>
+                        </div>
+                        <button class="delete-btn" onclick="openDeleteModal(document.getElementById('imageFile_mellohi'), 'image')" style="display: none;">删除</button>
+                    </div>
+                </div>
                 <div class="custom-file-upload">
-                    <input type="file" id="oggFile_mellohi">
+                    <input type="file" id="oggFile_mellohi" accept="audio/*">
                     <div class="custom-btn" id="fileBtnText_mellohi">选择音频（不上传即为保持原版音乐）</div>
+                    <button class="delete-btn" onclick="openDeleteModal(document.getElementById('oggFile_mellohi'), 'audio')" style="display: none;">删除</button>
                 </div>
                 <div class="duration-warning">此名字的乐曲对应时长不能超过 1:36</div>
                 <input type="text" id="desc_mellohi" placeholder="自定义描述（默认自动填入文件名）" style="margin-top: 5px;">
@@ -198,9 +287,23 @@
             
             <div class="file-input">
                 <label>otherside.ogg</label>
+                <!-- 图片上传区域 -->
+                <div class="image-upload-section">
+                    <div class="image-preview-container">
+                        <div id="imagePreview_otherside" class="image-preview"></div>
+                    </div>
+                    <div class="image-upload-button">
+                        <div class="custom-file-upload">
+                            <input type="file" id="imageFile_otherside" accept="image/*">
+                            <div class="custom-btn" id="imageBtnText_otherside">选择物品展示图（不上传即为保持原版材质）</div>
+                        </div>
+                        <button class="delete-btn" onclick="openDeleteModal(document.getElementById('imageFile_otherside'), 'image')" style="display: none;">删除</button>
+                    </div>
+                </div>
                 <div class="custom-file-upload">
-                    <input type="file" id="oggFile_otherside">
+                    <input type="file" id="oggFile_otherside" accept="audio/*">
                     <div class="custom-btn" id="fileBtnText_otherside">选择音频（不上传即为保持原版音乐）</div>
+                    <button class="delete-btn" onclick="openDeleteModal(document.getElementById('oggFile_otherside'), 'audio')" style="display: none;">删除</button>
                 </div>
                 <div class="duration-warning">此名字的乐曲对应时长不能超过 3:16</div>
                 <input type="text" id="desc_otherside" placeholder="自定义描述（默认自动填入文件名）" style="margin-top: 5px;">
@@ -208,9 +311,23 @@
             
             <div class="file-input">
                 <label>pigstep_master.ogg</label>
+                <!-- 图片上传区域 -->
+                <div class="image-upload-section">
+                    <div class="image-preview-container">
+                        <div id="imagePreview_pigstep_master" class="image-preview"></div>
+                    </div>
+                    <div class="image-upload-button">
+                        <div class="custom-file-upload">
+                            <input type="file" id="imageFile_pigstep_master" accept="image/*">
+                            <div class="custom-btn" id="imageBtnText_pigstep_master">选择物品展示图（不上传即为保持原版材质）</div>
+                        </div>
+                        <button class="delete-btn" onclick="openDeleteModal(document.getElementById('imageFile_pigstep_master'), 'image')" style="display: none;">删除</button>
+                    </div>
+                </div>
                 <div class="custom-file-upload">
-                    <input type="file" id="oggFile_pigstep_master">
+                    <input type="file" id="oggFile_pigstep_master" accept="audio/*">
                     <div class="custom-btn" id="fileBtnText_pigstep_master">选择音频（不上传即为保持原版音乐）</div>
+                    <button class="delete-btn" onclick="openDeleteModal(document.getElementById('oggFile_pigstep_master'), 'audio')" style="display: none;">删除</button>
                 </div>
                 <div class="duration-warning">此名字的乐曲对应时长不能超过 2:28</div>
                 <input type="text" id="desc_pigstep_master" placeholder="自定义描述（默认自动填入文件名）" style="margin-top: 5px;">
@@ -218,9 +335,23 @@
             
             <div class="file-input">
                 <label>precipice.ogg</label>
+                <!-- 图片上传区域 -->
+                <div class="image-upload-section">
+                    <div class="image-preview-container">
+                        <div id="imagePreview_precipice" class="image-preview"></div>
+                    </div>
+                    <div class="image-upload-button">
+                        <div class="custom-file-upload">
+                            <input type="file" id="imageFile_precipice" accept="image/*">
+                            <div class="custom-btn" id="imageBtnText_precipice">选择物品展示图（不上传即为保持原版材质）</div>
+                        </div>
+                        <button class="delete-btn" onclick="openDeleteModal(document.getElementById('imageFile_precipice'), 'image')" style="display: none;">删除</button>
+                    </div>
+                </div>
                 <div class="custom-file-upload">
-                    <input type="file" id="oggFile_precipice">
+                    <input type="file" id="oggFile_precipice" accept="audio/*">
                     <div class="custom-btn" id="fileBtnText_precipice">选择音频（不上传即为保持原版音乐）</div>
+                    <button class="delete-btn" onclick="openDeleteModal(document.getElementById('oggFile_precipice'), 'audio')" style="display: none;">删除</button>
                 </div>
                 <div class="duration-warning">此名字的乐曲对应时长不能超过 4:59</div>
                 <input type="text" id="desc_precipice" placeholder="自定义描述（默认自动填入文件名）" style="margin-top: 5px;">
@@ -228,9 +359,23 @@
             
             <div class="file-input">
                 <label>relic.ogg</label>
+                <!-- 图片上传区域 -->
+                <div class="image-upload-section">
+                    <div class="image-preview-container">
+                        <div id="imagePreview_relic" class="image-preview"></div>
+                    </div>
+                    <div class="image-upload-button">
+                        <div class="custom-file-upload">
+                            <input type="file" id="imageFile_relic" accept="image/*">
+                            <div class="custom-btn" id="imageBtnText_relic">选择物品展示图（不上传即为保持原版材质）</div>
+                        </div>
+                        <button class="delete-btn" onclick="openDeleteModal(document.getElementById('imageFile_relic'), 'image')" style="display: none;">删除</button>
+                    </div>
+                </div>
                 <div class="custom-file-upload">
-                    <input type="file" id="oggFile_relic">
+                    <input type="file" id="oggFile_relic" accept="audio/*">
                     <div class="custom-btn" id="fileBtnText_relic">选择音频（不上传即为保持原版音乐）</div>
+                    <button class="delete-btn" onclick="openDeleteModal(document.getElementById('oggFile_relic'), 'audio')" style="display: none;">删除</button>
                 </div>
                 <div class="duration-warning">此名字的乐曲对应时长不能超过 3:39</div>
                 <input type="text" id="desc_relic" placeholder="自定义描述（默认自动填入文件名）" style="margin-top: 5px;">
@@ -238,9 +383,23 @@
             
             <div class="file-input">
                 <label>stal.ogg</label>
+                <!-- 图片上传区域 -->
+                <div class="image-upload-section">
+                    <div class="image-preview-container">
+                        <div id="imagePreview_stal" class="image-preview"></div>
+                    </div>
+                    <div class="image-upload-button">
+                        <div class="custom-file-upload">
+                            <input type="file" id="imageFile_stal" accept="image/*">
+                            <div class="custom-btn" id="imageBtnText_stal">选择物品展示图（不上传即为保持原版材质）</div>
+                        </div>
+                        <button class="delete-btn" onclick="openDeleteModal(document.getElementById('imageFile_stal'), 'image')" style="display: none;">删除</button>
+                    </div>
+                </div>
                 <div class="custom-file-upload">
-                    <input type="file" id="oggFile_stal">
+                    <input type="file" id="oggFile_stal" accept="audio/*">
                     <div class="custom-btn" id="fileBtnText_stal">选择音频（不上传即为保持原版音乐）</div>
+                    <button class="delete-btn" onclick="openDeleteModal(document.getElementById('oggFile_stal'), 'audio')" style="display: none;">删除</button>
                 </div>
                 <div class="duration-warning">此名字的乐曲对应时长不能超过 2:31</div>
                 <input type="text" id="desc_stal" placeholder="自定义描述（默认自动填入文件名）" style="margin-top: 5px;">
@@ -248,9 +407,23 @@
             
             <div class="file-input">
                 <label>strad.ogg</label>
+                <!-- 图片上传区域 -->
+                <div class="image-upload-section">
+                    <div class="image-preview-container">
+                        <div id="imagePreview_strad" class="image-preview"></div>
+                    </div>
+                    <div class="image-upload-button">
+                        <div class="custom-file-upload">
+                            <input type="file" id="imageFile_strad" accept="image/*">
+                            <div class="custom-btn" id="imageBtnText_strad">选择物品展示图（不上传即为保持原版材质）</div>
+                        </div>
+                        <button class="delete-btn" onclick="openDeleteModal(document.getElementById('imageFile_strad'), 'image')" style="display: none;">删除</button>
+                    </div>
+                </div>
                 <div class="custom-file-upload">
-                    <input type="file" id="oggFile_strad">
+                    <input type="file" id="oggFile_strad" accept="audio/*">
                     <div class="custom-btn" id="fileBtnText_strad">选择音频（不上传即为保持原版音乐）</div>
+                    <button class="delete-btn" onclick="openDeleteModal(document.getElementById('oggFile_strad'), 'audio')" style="display: none;">删除</button>
                 </div>
                 <div class="duration-warning">此名字的乐曲对应时长不能超过 3:08</div>
                 <input type="text" id="desc_strad" placeholder="自定义描述（默认自动填入文件名）" style="margin-top: 5px;">
@@ -258,9 +431,23 @@
             
             <div class="file-input">
                 <label>wait.ogg</label>
+                <!-- 图片上传区域 -->
+                <div class="image-upload-section">
+                    <div class="image-preview-container">
+                        <div id="imagePreview_wait" class="image-preview"></div>
+                    </div>
+                    <div class="image-upload-button">
+                        <div class="custom-file-upload">
+                            <input type="file" id="imageFile_wait" accept="image/*">
+                            <div class="custom-btn" id="imageBtnText_wait">选择物品展示图（不上传即为保持原版材质）</div>
+                        </div>
+                        <button class="delete-btn" onclick="openDeleteModal(document.getElementById('imageFile_wait'), 'image')" style="display: none;">删除</button>
+                    </div>
+                </div>
                 <div class="custom-file-upload">
-                    <input type="file" id="oggFile_wait">
+                    <input type="file" id="oggFile_wait" accept="audio/*">
                     <div class="custom-btn" id="fileBtnText_wait">选择音频（不上传即为保持原版音乐）</div>
+                    <button class="delete-btn" onclick="openDeleteModal(document.getElementById('oggFile_wait'), 'audio')" style="display: none;">删除</button>
                 </div>
                 <div class="duration-warning">此名字的乐曲对应时长不能超过 3:58</div>
                 <input type="text" id="desc_wait" placeholder="自定义描述（默认自动填入文件名）" style="margin-top: 5px;">
@@ -268,9 +455,23 @@
             
             <div class="file-input">
                 <label>ward.ogg</label>
+                <!-- 图片上传区域 -->
+                <div class="image-upload-section">
+                    <div class="image-preview-container">
+                        <div id="imagePreview_ward" class="image-preview"></div>
+                    </div>
+                    <div class="image-upload-button">
+                        <div class="custom-file-upload">
+                            <input type="file" id="imageFile_ward" accept="image/*">
+                            <div class="custom-btn" id="imageBtnText_ward">选择物品展示图（不上传即为保持原版材质）</div>
+                        </div>
+                        <button class="delete-btn" onclick="openDeleteModal(document.getElementById('imageFile_ward'), 'image')" style="display: none;">删除</button>
+                    </div>
+                </div>
                 <div class="custom-file-upload">
-                    <input type="file" id="oggFile_ward">
+                    <input type="file" id="oggFile_ward" accept="audio/*">
                     <div class="custom-btn" id="fileBtnText_ward">选择音频（不上传即为保持原版音乐）</div>
+                    <button class="delete-btn" onclick="openDeleteModal(document.getElementById('oggFile_ward'), 'audio')" style="display: none;">删除</button>
                 </div>
                 <div class="duration-warning">此名字的乐曲对应时长不能超过 4:11</div>
                 <input type="text" id="desc_ward" placeholder="自定义描述（默认自动填入文件名）" style="margin-top: 5px;">
@@ -278,9 +479,23 @@
             
             <div class="file-input">
                 <label>chirp.ogg</label>
+                <!-- 图片上传区域 -->
+                <div class="image-upload-section">
+                    <div class="image-preview-container">
+                        <div id="imagePreview_chirp" class="image-preview"></div>
+                    </div>
+                    <div class="image-upload-button">
+                        <div class="custom-file-upload">
+                            <input type="file" id="imageFile_chirp" accept="image/*">
+                            <div class="custom-btn" id="imageBtnText_chirp">选择物品展示图（不上传即为保持原版材质）</div>
+                        </div>
+                        <button class="delete-btn" onclick="openDeleteModal(document.getElementById('imageFile_chirp'), 'image')" style="display: none;">删除</button>
+                    </div>
+                </div>
                 <div class="custom-file-upload">
-                    <input type="file" id="oggFile_chirp">
+                    <input type="file" id="oggFile_chirp" accept="audio/*">
                     <div class="custom-btn" id="fileBtnText_chirp">选择音频（不上传即为保持原版音乐）</div>
+                    <button class="delete-btn" onclick="openDeleteModal(document.getElementById('oggFile_chirp'), 'audio')" style="display: none;">删除</button>
                 </div>
                 <div class="duration-warning">此名字的乐曲对应时长不能超过 3:05</div>
                 <input type="text" id="desc_chirp" placeholder="自定义描述（默认自动填入文件名）" style="margin-top: 5px;">
@@ -288,9 +503,23 @@
             
             <div class="file-input">
                 <label>far.ogg</label>
+                <!-- 图片上传区域 -->
+                <div class="image-upload-section">
+                    <div class="image-preview-container">
+                        <div id="imagePreview_far" class="image-preview"></div>
+                    </div>
+                    <div class="image-upload-button">
+                        <div class="custom-file-upload">
+                            <input type="file" id="imageFile_far" accept="image/*">
+                            <div class="custom-btn" id="imageBtnText_far">选择物品展示图（不上传即为保持原版材质）</div>
+                        </div>
+                        <button class="delete-btn" onclick="openDeleteModal(document.getElementById('imageFile_far'), 'image')" style="display: none;">删除</button>
+                    </div>
+                </div>
                 <div class="custom-file-upload">
-                    <input type="file" id="oggFile_far">
+                    <input type="file" id="oggFile_far" accept="audio/*">
                     <div class="custom-btn" id="fileBtnText_far">选择音频（不上传即为保持原版音乐）</div>
+                    <button class="delete-btn" onclick="openDeleteModal(document.getElementById('oggFile_far'), 'audio')" style="display: none;">删除</button>
                 </div>
                 <div class="duration-warning">此名字的乐曲对应时长不能超过 2:50</div>
                 <input type="text" id="desc_far" placeholder="自定义描述（默认自动填入文件名）" style="margin-top: 5px;">
@@ -298,9 +527,23 @@
             
             <div class="file-input">
                 <label>tears.ogg</label>
+                <!-- 图片上传区域 -->
+                <div class="image-upload-section">
+                    <div class="image-preview-container">
+                        <div id="imagePreview_tears" class="image-preview"></div>
+                    </div>
+                    <div class="image-upload-button">
+                        <div class="custom-file-upload">
+                            <input type="file" id="imageFile_tears" accept="image/*">
+                            <div class="custom-btn" id="imageBtnText_tears">选择物品展示图（不上传即为保持原版材质）</div>
+                        </div>
+                        <button class="delete-btn" onclick="openDeleteModal(document.getElementById('imageFile_tears'), 'image')" style="display: none;">删除</button>
+                    </div>
+                </div>
                 <div class="custom-file-upload">
-                    <input type="file" id="oggFile_tears">
+                    <input type="file" id="oggFile_tears" accept="audio/*">
                     <div class="custom-btn" id="fileBtnText_tears">选择音频（不上传即为保持原版音乐）</div>
+                    <button class="delete-btn" onclick="openDeleteModal(document.getElementById('oggFile_tears'), 'audio')" style="display: none;">删除</button>
                 </div>
                 <div class="duration-warning">此名字的乐曲对应时长不能超过 2:55</div>
                 <input type="text" id="desc_tears" placeholder="自定义描述（默认自动填入文件名）" style="margin-top: 5px;">
@@ -308,9 +551,23 @@
             
             <div class="file-input">
                 <label>lava_chicken.ogg</label>
+                <!-- 图片上传区域 -->
+                <div class="image-upload-section">
+                    <div class="image-preview-container">
+                        <div id="imagePreview_lava_chicken" class="image-preview"></div>
+                    </div>
+                    <div class="image-upload-button">
+                        <div class="custom-file-upload">
+                            <input type="file" id="imageFile_lava_chicken" accept="image/*">
+                            <div class="custom-btn" id="imageBtnText_lava_chicken">选择物品展示图（不上传即为保持原版材质）</div>
+                        </div>
+                        <button class="delete-btn" onclick="openDeleteModal(document.getElementById('imageFile_lava_chicken'), 'image')" style="display: none;">删除</button>
+                    </div>
+                </div>
                 <div class="custom-file-upload">
-                    <input type="file" id="oggFile_lava_chicken">
+                    <input type="file" id="oggFile_lava_chicken" accept="audio/*">
                     <div class="custom-btn" id="fileBtnText_lava_chicken">选择音频（不上传即为保持原版音乐）</div>
+                    <button class="delete-btn" onclick="openDeleteModal(document.getElementById('oggFile_lava_chicken'), 'audio')" style="display: none;">删除</button>
                 </div>
                 <div class="duration-warning">此名字的乐曲对应时长不能超过 2:15</div>
                 <input type="text" id="desc_lava_chicken" placeholder="自定义描述（默认自动填入文件名）" style="margin-top: 5px;">
@@ -319,15 +576,41 @@
             <div class="file-input">
                 <label>音乐包图标</label>
                 <div class="custom-file-upload">
-                    <input type="file" id="iconFile">
+                    <input type="file" id="iconFile" accept="image/*">
                     <div class="custom-btn" id="iconBtnText">选择图标</div>
                 </div>
                 <div id="iconPreview" class="icon-preview"></div>
+                <div id="conversionProgress" class="conversion-progress" style="display: none;">
+                    <div class="progress-bar"></div>
+                    <div class="progress-text">0%</div>
+                </div>
             </div>
             
             <div class="file-input">
                 <label for="zipNameInput">音乐包名称</label>
                 <input type="text" id="zipNameInput" placeholder="未输入则使用第一个上传文件的名字">
+            </div>
+            
+            <div class="icon-conversion-option">
+                <span id="autoConvertText">启用自动转换图片格式</span>
+                <div class="toggle-switch">
+                    <input type="checkbox" id="autoConvertToggle" checked>
+                    <label for="autoConvertToggle" class="toggle-label"></label>
+                </div>
+            </div>
+            <div class="audio-processing-option">
+                <span id="audioConversionText">启用音频格式转换</span>
+                <div class="toggle-switch">
+                    <input type="checkbox" id="audioProcessingToggle">
+                    <label for="audioProcessingToggle" class="toggle-label"></label>
+                </div>
+            </div>
+            <div class="audio-processing-option">
+                <span id="durationCheckText">启用音频时长检查</span>
+                <div class="toggle-switch">
+                    <input type="checkbox" id="durationCheckToggle" checked>
+                    <label for="durationCheckToggle" class="toggle-label"></label>
+                </div>
             </div>
         </div>
         
@@ -395,743 +678,136 @@
         </div>
     </div>
     
-    <script>
-        // 加载进度条逻辑
-        let progress = 0;
-        const loadingOverlay = document.getElementById('loadingOverlay');
-        const loadingBar = document.getElementById('loadingBar');
-        let loadInterval = null;
-        let timeoutId = null;
-        
-        // 模拟加载进度
-        function startLoading() {
-            progress = 0;
-            loadInterval = setInterval(function() {
-                progress += 5;
-                if (progress <= 90) { // 只加载到90%，剩下的10%等所有资源加载完成后再加载
-                    loadingBar.style.width = progress + '%';
-                }
-            }, 100);
-            
-            // 添加超时机制，最多加载5秒
-            timeoutId = setTimeout(function() {
-                completeLoading();
-            }, 5000);
-        }
-        
-        // 完成加载
-        function completeLoading() {
-            if (loadInterval) {
-                clearInterval(loadInterval);
-            }
-            if (timeoutId) {
-                clearTimeout(timeoutId);
-            }
-            // 加载到100%
-            loadingBar.style.width = '100%';
-            // 延迟一点时间再隐藏，让用户看到100%的状态
-            setTimeout(function() {
-                loadingOverlay.style.display = 'none';
-            }, 500);
-        }
-        
-        // 启动加载
-        startLoading();
-        
-        // 监听所有资源加载完成
-        window.onload = function() {
-            completeLoading();
-        };
-        
-        // 监听错误，即使有资源加载失败也继续
-        window.onerror = function() {
-            // 不做特殊处理，让加载继续
-        };
-        
-        // 切换介绍部分的显示/隐藏
-        function toggleInfo() {
-            const content = document.querySelector('.info-content');
-            const icon = document.querySelector('.toggle-icon');
-            
-            if (content.style.display === 'none') {
-                content.style.display = 'block';
-                icon.style.transform = 'rotate(180deg)';
-            } else {
-                content.style.display = 'none';
-                icon.style.transform = 'rotate(0deg)';
-            }
-        }
-        
-        // 平滑滚动到指定元素
-        function smoothScroll(elementId) {
-            // 确保信息部分已展开
-            const infoContent = document.querySelector('.info-content');
-            if (infoContent && infoContent.style.display === 'none') {
-                infoContent.style.display = 'block';
-                const icon = document.querySelector('.toggle-icon');
-                if (icon) {
-                    icon.style.transform = 'rotate(180deg)';
-                }
-            }
-
-            const element = document.getElementById(elementId);
-            if (element) {
-                // 自定义平滑滚动实现（强制使用，不依赖浏览器支持）
-                const targetPosition = element.getBoundingClientRect().top + window.pageYOffset;
-                const startPosition = window.pageYOffset;
-                const distance = targetPosition - startPosition;
-                const duration = 1000; // 滚动持续时间（毫秒）
-                let startTime = null;
-
-                function animation(currentTime) {
-                    if (startTime === null) startTime = currentTime;
-                    const timeElapsed = currentTime - startTime;
-                    const run = ease(timeElapsed, startPosition, distance, duration);
-                    window.scrollTo(0, run);
-                    if (timeElapsed < duration) requestAnimationFrame(animation);
-                }
-
-                // 缓动函数，使滚动更自然
-                function ease(t, b, c, d) {
-                    t /= d / 2;
-                    if (t < 1) return c / 2 * t * t + b;
-                    t--;
-                    return -c / 2 * (t * (t - 2) - 1) + b;
-                }
-
-                requestAnimationFrame(animation);
-            }
-        }
-        
-        // 根据窗口宽高比设置背景图片
-        function setBackgroundByAspectRatio() {
-            const width = window.innerWidth;
-            const height = window.innerHeight;
-            const aspectRatio = width / height;
-            
-            // 如果宽大于高，使用桌面版背景，否则使用移动版背景
-            if (aspectRatio > 1) {
-                document.body.style.backgroundImage = "url('static/img/bg/pc.webp')";
-            } else {
-                document.body.style.backgroundImage = "url('static/img/bg/mobile.webp')";
-            }
-        }
-        
-        // 页面加载时设置背景
-        window.onload = function() {
-            setBackgroundByAspectRatio();
-        };
-        
-        // 窗口大小改变时重新设置背景
-        window.onresize = function() {
-            setBackgroundByAspectRatio();
-        };
-        
-        // 生成UUID函数
-        function generateUUID() {
-            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-                var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-                return v.toString(16);
-            });
-        }
-        
-        // 为每个文件上传按钮添加事件监听器
-        const fileInputs = [
-            { id: 'oggFile_11', btnId: 'fileBtnText_11', targetName: '11.ogg' },
-            { id: 'oggFile_13', btnId: 'fileBtnText_13', targetName: '13.ogg' },
-            { id: 'oggFile_5', btnId: 'fileBtnText_5', targetName: '5.ogg' },
-            { id: 'oggFile_blocks', btnId: 'fileBtnText_blocks', targetName: 'blocks.ogg' },
-            { id: 'oggFile_cat', btnId: 'fileBtnText_cat', targetName: 'cat.ogg' },
-            { id: 'oggFile_creator', btnId: 'fileBtnText_creator', targetName: 'creator.ogg' },
-            { id: 'oggFile_creator_music_box', btnId: 'fileBtnText_creator_music_box', targetName: 'creator_music_box.ogg' },
-            { id: 'oggFile_mall', btnId: 'fileBtnText_mall', targetName: 'mall.ogg' },
-            { id: 'oggFile_mellohi', btnId: 'fileBtnText_mellohi', targetName: 'mellohi.ogg' },
-            { id: 'oggFile_otherside', btnId: 'fileBtnText_otherside', targetName: 'otherside.ogg' },
-            { id: 'oggFile_pigstep_master', btnId: 'fileBtnText_pigstep_master', targetName: 'pigstep_master.ogg' },
-            { id: 'oggFile_precipice', btnId: 'fileBtnText_precipice', targetName: 'precipice.ogg' },
-            { id: 'oggFile_relic', btnId: 'fileBtnText_relic', targetName: 'relic.ogg' },
-            { id: 'oggFile_stal', btnId: 'fileBtnText_stal', targetName: 'stal.ogg' },
-            { id: 'oggFile_strad', btnId: 'fileBtnText_strad', targetName: 'strad.ogg' },
-            { id: 'oggFile_wait', btnId: 'fileBtnText_wait', targetName: 'wait.ogg' },
-            { id: 'oggFile_ward', btnId: 'fileBtnText_ward', targetName: 'ward.ogg' },
-            { id: 'oggFile_chirp', btnId: 'fileBtnText_chirp', targetName: 'chirp.ogg' },
-            { id: 'oggFile_far', btnId: 'fileBtnText_far', targetName: 'far.ogg' },
-            { id: 'oggFile_tears', btnId: 'fileBtnText_tears', targetName: 'tears.ogg' },
-            { id: 'oggFile_lava_chicken', btnId: 'fileBtnText_lava_chicken', targetName: 'lava_chicken.ogg' }
-        ];
-        
-        // 保存每个音频文件的上一次成功上传信息
-        const lastValidAudioFiles = {};
-        
-        // 当前要删除的元素信息
-        let currentDeleteTarget = null;
-        let currentDeleteType = null;
-        
-        // 打开删除弹窗
-        function openDeleteModal(target, type, name) {
-            currentDeleteTarget = target;
-            currentDeleteType = type;
-            const modal = document.getElementById('deleteModal');
-            const message = document.getElementById('deleteMessage');
-            
-            if (type === 'audio') {
-                message.textContent = `确认删除 ${name} 吗？`;
-            } else if (type === 'icon') {
-                message.textContent = '确认删除图标吗？';
-            }
-            
-            modal.style.display = 'block';
-        }
-        
-        // 关闭删除弹窗
-        function closeModal() {
-            const modal = document.getElementById('deleteModal');
-            modal.style.display = 'none';
-            currentDeleteTarget = null;
-            currentDeleteType = null;
-        }
-        
-        // 确认删除
-        function confirmDelete() {
-            if (currentDeleteType === 'audio') {
-                // 重置音频文件输入
-                const fileInput = currentDeleteTarget;
-                const btnText = document.getElementById(currentDeleteTarget.id.replace('oggFile_', 'fileBtnText_'));
-                const errorDiv = fileInput.parentElement.parentElement.querySelector('.format-error');
-                const deleteBtn = fileInput.parentElement.parentElement.querySelector('.delete-btn');
-                const recordKey = currentDeleteTarget.id.replace('oggFile_', '');
-                const descInput = document.getElementById(`desc_${recordKey}`);
-                
-                // 重置文件输入
-                fileInput.value = '';
-                btnText.textContent = '选择音频（不上传即为保持原版音乐）';
-                if (errorDiv) {
-                    errorDiv.style.display = 'none';
-                }
-                if (deleteBtn) {
-                    deleteBtn.style.display = 'none'; // 删除后隐藏删除按钮
-                }
-                if (descInput) {
-                    descInput.value = ''; // 删除后清空描述输入框
-                }
-                
-                // 从lastValidAudioFiles中删除对应的条目
-                delete lastValidAudioFiles[fileInput.id];
-            } else if (currentDeleteType === 'icon') {
-                // 重置图标文件输入
-                const iconFileInput = document.getElementById('iconFile');
-                const iconBtnText = document.getElementById('iconBtnText');
-                const iconPreview = document.getElementById('iconPreview');
-                const iconErrorDiv = iconFileInput.parentElement.parentElement.querySelector('.format-error');
-                const iconDeleteBtn = iconFileInput.parentElement.parentElement.querySelector('.delete-btn');
-                
-                // 重置文件输入和状态
-                iconFileInput.value = '';
-                iconBtnText.textContent = '选择图标';
-                iconPreview.innerHTML = '';
-                if (iconErrorDiv) {
-                    iconErrorDiv.style.display = 'none';
-                }
-                if (iconDeleteBtn) {
-                    iconDeleteBtn.style.display = 'none'; // 删除后隐藏删除按钮
-                }
-                lastValidIconFile = null;
-                lastValidIconPreview = '';
-                lastValidIconName = '';
-            }
-            
-            closeModal();
-        }
-        
-        // 点击弹窗外部关闭
-        window.onclick = function(event) {
-            const modal = document.getElementById('deleteModal');
-            if (event.target == modal) {
-                closeModal();
-            }
-        }
-        
-        fileInputs.forEach(input => {
-            const fileInput = document.getElementById(input.id);
-            const btnText = document.getElementById(input.btnId);
-            const customUpload = fileInput.parentElement;
-            
-            // 创建按钮容器
-            const btnContainer = document.createElement('div');
-            btnContainer.className = 'btn-container';
-            
-            // 创建新的自定义上传区域，只包含文件输入和选择按钮
-            const newCustomUpload = document.createElement('div');
-            newCustomUpload.className = 'custom-file-upload';
-            
-            // 移动现有元素到新的上传区域中
-            while (customUpload.firstChild) {
-                newCustomUpload.appendChild(customUpload.firstChild);
-            }
-            
-            // 创建删除按钮
-            const deleteBtn = document.createElement('button');
-            deleteBtn.className = 'delete-btn';
-            deleteBtn.textContent = '删除';
-            deleteBtn.onclick = function() {
-                openDeleteModal(fileInput, 'audio', input.targetName);
-            };
-            deleteBtn.style.display = 'none'; // 默认隐藏删除按钮
-            
-            // 将新的上传区域和删除按钮添加到按钮容器
-            btnContainer.appendChild(newCustomUpload);
-            btnContainer.appendChild(deleteBtn);
-            
-            // 将按钮容器添加到原始上传区域
-            customUpload.appendChild(btnContainer);
-            
-            // 添加错误提示区域
-            const errorDiv = document.createElement('div');
-            errorDiv.className = 'format-error';
-            errorDiv.style.display = 'none';
-            customUpload.appendChild(errorDiv); // 将错误提示添加到上传区域的最下方
-            
-            fileInput.addEventListener('change', function() {
-                const status = document.getElementById('status');
-                const oggFile = this.files[0];
-                const deleteBtn = this.parentElement.parentElement.querySelector('.delete-btn');
-                const recordKey = input.id.replace('oggFile_', '');
-                const descInput = document.getElementById(`desc_${recordKey}`);
-                
-                // 隐藏全局错误提示
-                status.textContent = '';
-                status.className = 'status';
-                
-                // 隐藏当前文件的错误提示
-                errorDiv.style.display = 'none';
-                
-                if (oggFile) {
-                    if (!oggFile.name.endsWith('.ogg')) {
-                        // 显示红色框警告提示
-                        errorDiv.textContent = '错误：格式必须为 .ogg';
-                        errorDiv.style.display = 'block';
-                        
-                        // 保持上一次成功上传的音频
-                        if (lastValidAudioFiles[input.id]) {
-                            const lastValidFile = lastValidAudioFiles[input.id];
-                            btnText.textContent = `已选择文件：${lastValidFile.name}`;
-                            deleteBtn.style.display = 'block'; // 有有效音频时显示删除按钮
-                            
-                            // 保持上一次的描述
-                            if (descInput) {
-                                descInput.value = lastValidFile.description;
-                            }
-                        } else {
-                            btnText.textContent = '选择音频（不上传即为保持原版音乐）';
-                            deleteBtn.style.display = 'none'; // 无有效音频时隐藏删除按钮
-                            
-                            // 清空描述输入框
-                            if (descInput) {
-                                descInput.value = '';
-                            }
-                        }
-                    } else {
-                        // 保存当前有效的音频信息
-                        const fileNameWithoutExt = oggFile.name.replace('.ogg', '');
-                        lastValidAudioFiles[input.id] = {
-                            file: oggFile,
-                            name: oggFile.name,
-                            description: fileNameWithoutExt
-                        };
-                        
-                        btnText.textContent = `已选择文件：${oggFile.name}`;
-                        deleteBtn.style.display = 'block'; // 选择文件后显示删除按钮
-                        
-                        // 自动填入文件名（不含扩展名）到描述输入框
-                        if (descInput) {
-                            descInput.value = fileNameWithoutExt;
-                        }
-                    }
-                } else {
-                    // 如果用户取消选择文件，保持上一次成功上传的音频
-                    if (lastValidAudioFiles[input.id]) {
-                        const lastValidFile = lastValidAudioFiles[input.id];
-                        btnText.textContent = `已选择文件：${lastValidFile.name}`;
-                        deleteBtn.style.display = 'block'; // 有有效音频时显示删除按钮
-                        
-                        // 保持上一次的描述
-                        if (descInput) {
-                            descInput.value = lastValidFile.description;
-                        }
-                    } else {
-                        btnText.textContent = '选择音频（不上传即为保持原版音乐）';
-                        deleteBtn.style.display = 'none'; // 未选择文件时隐藏删除按钮
-                        
-                        // 清空描述输入框
-                        if (descInput) {
-                            descInput.value = '';
-                        }
-                    }
-                }
-            });
-        });
-        
-        // 图标上传事件监听器
-        const iconFileInput = document.getElementById('iconFile');
-        const iconBtnText = document.getElementById('iconBtnText');
-        const iconPreview = document.getElementById('iconPreview');
-        const iconCustomUpload = iconFileInput.parentElement;
-        
-        // 创建按钮容器
-        const iconBtnContainer = document.createElement('div');
-        iconBtnContainer.className = 'btn-container';
-        
-        // 创建新的自定义上传区域，只包含文件输入和选择按钮
-        const newIconCustomUpload = document.createElement('div');
-        newIconCustomUpload.className = 'custom-file-upload';
-        
-        // 移动现有元素到新的上传区域中
-        while (iconCustomUpload.firstChild) {
-            newIconCustomUpload.appendChild(iconCustomUpload.firstChild);
-        }
-        
-        // 创建删除按钮
-        const iconDeleteBtn = document.createElement('button');
-        iconDeleteBtn.className = 'delete-btn';
-        iconDeleteBtn.textContent = '删除';
-        iconDeleteBtn.onclick = function() {
-            openDeleteModal(iconFileInput, 'icon');
-        };
-        iconDeleteBtn.style.display = 'none'; // 默认隐藏删除按钮
-        
-        // 将新的上传区域和删除按钮添加到按钮容器
-        iconBtnContainer.appendChild(newIconCustomUpload);
-        iconBtnContainer.appendChild(iconDeleteBtn);
-        
-        // 将按钮容器添加到原始上传区域
-        iconCustomUpload.appendChild(iconBtnContainer);
-        
-        // 添加图标错误提示区域
-        const iconErrorDiv = document.createElement('div');
-        iconErrorDiv.className = 'format-error';
-        iconErrorDiv.style.display = 'none';
-        iconCustomUpload.appendChild(iconErrorDiv); // 将错误提示添加到上传区域的最下方
-        
-        // 保存上一次成功上传的图标信息
-        let lastValidIconFile = null;
-        let lastValidIconPreview = '';
-        let lastValidIconName = '';
-        
-        iconFileInput.addEventListener('change', function() {
-            const status = document.getElementById('status');
-            const iconFile = this.files[0];
-            const iconDeleteBtn = this.parentElement.parentElement.querySelector('.delete-btn');
-            
-            // 隐藏全局错误提示
-            status.textContent = '';
-            status.className = 'status';
-            
-            // 隐藏图标错误提示
-            iconErrorDiv.style.display = 'none';
-            
-            if (iconFile) {
-                if (!iconFile.name.endsWith('.png')) {
-                    // 显示红色框警告提示
-                    iconErrorDiv.textContent = '错误：格式必须为 .png';
-                    iconErrorDiv.style.display = 'block';
-                    
-                    // 保持上一次成功上传的图标
-                    if (lastValidIconFile) {
-                        iconBtnText.textContent = `已选择图标：${lastValidIconName}`;
-                        iconPreview.innerHTML = lastValidIconPreview;
-                        iconDeleteBtn.style.display = 'block'; // 有有效图标时显示删除按钮
-                    } else {
-                        iconBtnText.textContent = '选择图标';
-                        iconPreview.innerHTML = '';
-                        iconDeleteBtn.style.display = 'none'; // 无有效图标时隐藏删除按钮
-                    }
-                } else {
-                    // 保存当前有效的图标信息
-                    lastValidIconFile = iconFile;
-                    lastValidIconName = iconFile.name;
-                    
-                    iconBtnText.textContent = `已选择图标：${iconFile.name}`;
-                    iconDeleteBtn.style.display = 'block'; // 选择图标后显示删除按钮
-                    
-                    // 预览图标
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        const previewHTML = `<img src="${e.target.result}" alt="图标预览">`;
-                        iconPreview.innerHTML = previewHTML;
-                        lastValidIconPreview = previewHTML;
-                    };
-                    reader.readAsDataURL(iconFile);
-                }
-            } else {
-                // 如果用户取消选择文件，保持上一次成功上传的图标
-                if (lastValidIconFile) {
-                    iconBtnText.textContent = `已选择图标：${lastValidIconName}`;
-                    iconPreview.innerHTML = lastValidIconPreview;
-                    iconDeleteBtn.style.display = 'block'; // 有有效图标时显示删除按钮
-                } else {
-                    iconBtnText.textContent = '选择图标';
-                    iconPreview.innerHTML = '';
-                    iconDeleteBtn.style.display = 'none'; // 无有效图标时隐藏删除按钮
-                }
-            }
-        });
-        
-        // 打包压缩功能
-        document.getElementById('packBtn').addEventListener('click', async function() {
-            const status = document.getElementById('status');
-            status.textContent = '';
-            status.className = 'status';
-            
-            try {
-                // 收集所有上传的文件
-                const uploadedFiles = [];
-                fileInputs.forEach(input => {
-                    let file = null;
-                    
-                    // 优先使用lastValidAudioFiles中保存的有效文件
-                    if (lastValidAudioFiles[input.id]) {
-                        file = lastValidAudioFiles[input.id].file;
-                    } else {
-                        const fileInput = document.getElementById(input.id);
-                        file = fileInput.files[0];
-                    }
-                    
-                    if (file) {
-                        if (!file.name.endsWith('.ogg')) {
-                            throw new Error(`上传失败，${input.targetName} 的文件格式必须是.ogg`);
-                        }
-                        uploadedFiles.push({ file, targetName: input.targetName });
-                    }
-                });
-                
-                // 验证至少上传了一个文件
-                if (uploadedFiles.length === 0) {
-                    throw new Error('请至少上传一个 .ogg 格式文件');
-                }
-                
-                // 获取用户输入的音乐包名称，如果未输入则使用第一个上传文件对应的自定义描述
-                let defaultPackName = '音乐唱片';
-                let defaultZipName = '音乐唱片';
-                if (uploadedFiles.length > 0) {
-                    // 找到第一个上传文件对应的fileInput
-                    const firstUploadedFile = uploadedFiles[0];
-                    const firstFileInput = fileInputs.find(input => input.targetName === firstUploadedFile.targetName);
-                    
-                    if (firstFileInput) {
-                        // 获取对应的描述输入框ID
-                        const recordKey = firstFileInput.id.replace('oggFile_', '');
-                        const descInput = document.getElementById(`desc_${recordKey}`);
-                        
-                        if (descInput && descInput.value.trim()) {
-                            // 使用自定义描述作为默认名称
-                            defaultPackName = descInput.value.trim();
-                            defaultZipName = descInput.value.trim();
-                        } else {
-                            // 如果没有自定义描述，使用文件名
-                            defaultPackName = firstUploadedFile.file.name;
-                            defaultZipName = firstUploadedFile.file.name.replace('.ogg', '');
-                        }
-                    } else {
-                        // 如果找不到对应的fileInput，使用文件名
-                        defaultPackName = firstUploadedFile.file.name;
-                        defaultZipName = firstUploadedFile.file.name.replace('.ogg', '');
-                    }
-                }
-                const packName = document.getElementById('zipNameInput').value || defaultPackName;
-                const zipName = document.getElementById('zipNameInput').value || defaultZipName;
-                
-                // 创建JSZip实例
-                const zip = new JSZip();
-                
-                // 处理图标文件
-                const iconFile = document.getElementById('iconFile').files[0];
-                if (lastValidIconFile) {
-                    // 使用上一次成功上传的图标
-                    zip.file('pack_icon.png', lastValidIconFile);
-                } else if (iconFile && iconFile.name.endsWith('.png')) {
-                    // 如果没有上一次成功上传的图标，但当前选择的是有效图标
-                    zip.file('pack_icon.png', iconFile);
-                } else {
-                    // 使用默认图标
-                    try {
-                        // 由于浏览器安全限制，我们无法直接读取本地文件
-                        // 但我们可以使用fetch从服务器获取默认图标
-                        const response = await fetch('static/img/pack/pack_icon.png');
-                        const blob = await response.blob();
-                        zip.file('pack_icon.png', blob);
-                    } catch (error) {
-                        console.error('获取默认图标失败:', error);
-                    }
-                }
-                
-                // 创建manifest.json文件
-                const manifest = {
-                    "format_version": 1,
-                    "header": {
-                        "description": "音乐唱片包",
-                        "name": packName,
-                        "uuid": generateUUID(),
-                        "version": [1, 0, 0]
-                    },
-                    "modules": [
-                        {
-                            "description": "音乐唱片资源",
-                            "type": "resources",
-                            "uuid": generateUUID(),
-                            "version": [1, 0, 0]
-                        }
-                    ]
-                };
-                zip.file('manifest.json', JSON.stringify(manifest, null, 2));
-                
-                // 创建texts文件夹和多语言文件
-                const texts = zip.folder('texts');
-                
-                // 生成描述文本
-                let langContent = '';
-                
-                // 为每个音乐唱片生成描述
-                uploadedFiles.forEach(item => {
-                    const targetName = item.targetName;
-                    const recordKey = targetName.replace('.ogg', '');
-                    const descInput = document.getElementById(`desc_${recordKey}`);
-                    
-                    // 获取用户输入的描述，如果没有则使用文件名（不含扩展名）
-                    let description = descInput ? descInput.value.trim() : '';
-                    if (!description) {
-                        description = item.file.name.replace('.ogg', '');
-                    }
-                    
-                    // 添加到lang文件内容，只添加带有.desc的条目
-                    langContent += `item.record_${recordKey}.desc=${description}\n`;
-                });
-                
-                // 添加多个语言文件，内容相同
-                texts.file('zh_CN.lang', langContent);
-                texts.file('zh_TW.lang', langContent);
-                texts.file('en_US.lang', langContent);
-                texts.file('en_GB.lang', langContent);
-                texts.file('ja_JP.lang', langContent);
-                texts.file('ko_KR.lang', langContent);
-                texts.file('id_ID.lang', langContent);
-                texts.file('da_DK.lang', langContent);
-                texts.file('de_DE.lang', langContent);
-                texts.file('es_ES.lang', langContent);
-                texts.file('es_MX.lang', langContent);
-                texts.file('fr_CA.lang', langContent);
-                texts.file('fr_FR.lang', langContent);
-                texts.file('it_IT.lang', langContent);
-                texts.file('hu_HU.lang', langContent);
-                texts.file('nl_NL.lang', langContent);
-                texts.file('nb_NO.lang', langContent);
-                texts.file('pl_PL.lang', langContent);
-                texts.file('pt_BR.lang', langContent);
-                texts.file('pt_PT.lang', langContent);
-                texts.file('sk_SK.lang', langContent);
-                texts.file('fi_FI.lang', langContent);
-                texts.file('sv_SE.lang', langContent);
-                texts.file('tr_TR.lang', langContent);
-                texts.file('cs_CZ.lang', langContent);
-                texts.file('el_GR.lang', langContent);
-                texts.file('bg_BG.lang', langContent);
-                texts.file('ru_RU.lang', langContent);
-                texts.file('uk_UA.lang', langContent);
-                
-                // 创建sounds/music/game/records文件夹并添加用户上传的.ogg文件
-                const sounds = zip.folder('sounds');
-                const music = sounds.folder('music');
-                const game = music.folder('game');
-                const records = game.folder('records');
-                
-                // 添加所有上传的文件
-                uploadedFiles.forEach(item => {
-                    records.file(item.targetName, item.file);
-                });
-                
-                // 创建textures文件夹结构
-                const textures = zip.folder('textures');
-                const items = textures.folder('items');
-                
-                // 创建文件列表
-                const filePaths = [];
-                
-                // 添加基本文件路径
-                filePaths.push('manifest.json');
-                filePaths.push('texts/zh_CN.lang');
-                filePaths.push('texts/zh_TW.lang');
-                filePaths.push('texts/en_US.lang');
-                filePaths.push('texts/en_GB.lang');
-                filePaths.push('texts/ja_JP.lang');
-                filePaths.push('texts/ko_KR.lang');
-                filePaths.push('texts/id_ID.lang');
-                filePaths.push('texts/da_DK.lang');
-                filePaths.push('texts/de_DE.lang');
-                filePaths.push('texts/es_ES.lang');
-                filePaths.push('texts/es_MX.lang');
-                filePaths.push('texts/fr_CA.lang');
-                filePaths.push('texts/fr_FR.lang');
-                filePaths.push('texts/it_IT.lang');
-                filePaths.push('texts/hu_HU.lang');
-                filePaths.push('texts/nl_NL.lang');
-                filePaths.push('texts/nb_NO.lang');
-                filePaths.push('texts/pl_PL.lang');
-                filePaths.push('texts/pt_BR.lang');
-                filePaths.push('texts/pt_PT.lang');
-                filePaths.push('texts/sk_SK.lang');
-                filePaths.push('texts/fi_FI.lang');
-                filePaths.push('texts/sv_SE.lang');
-                filePaths.push('texts/tr_TR.lang');
-                filePaths.push('texts/cs_CZ.lang');
-                filePaths.push('texts/el_GR.lang');
-                filePaths.push('texts/bg_BG.lang');
-                filePaths.push('texts/ru_RU.lang');
-                filePaths.push('texts/uk_UA.lang');
-                filePaths.push('pack_icon.png');
-                
-                // 添加上传的文件路径
-                uploadedFiles.forEach(item => {
-                    filePaths.push(`sounds/music/game/records/${item.targetName}`);
-                });
-                
-                // 添加textures目录结构到文件列表
-                filePaths.push('textures/items/apple_golden.png');
-                filePaths.push('textures/items/record_11.png');
-                filePaths.push('textures/items/record_13.png');
-                filePaths.push('textures/items/record_5.png');
-                filePaths.push('textures/items/record_blocks.png');
-                filePaths.push('textures/items/record_cat.png');
-                
-                // 创建filelist.txt
-                const fileListContent = filePaths.sort().join('\n');
-                zip.file('filelist.txt', fileListContent);
-                
-                // 生成压缩包
-                const content = await zip.generateAsync({ type: 'blob' });
-                
-                // 下载压缩包
-                saveAs(content, `${zipName}.mcpack`);
-                
-                // 显示成功信息
-                status.textContent = 'mcpack文件已成功生成并开始下载';
-                status.className = 'status success';
-                
-            } catch (error) {
-                // 显示错误信息
-                status.textContent = '错误: ' + error.message;
-                status.className = 'status error';
-            }
-        });
-    </script>
-    
-    <!-- 删除确认弹窗 -->
-    <div id="deleteModal" class="modal">
+    <!-- 删除确认模态框 -->
+    <div id="deleteModal" class="modal" style="z-index: 1001;">
         <div class="modal-content">
-            <p id="deleteMessage">确认删除？</p>
+            <h3 id="modalTitle">确认删除</h3>
+            <p>确定要删除此文件吗？</p>
             <div class="modal-buttons">
-                <button class="cancel-btn" onclick="closeModal()">不删除</button>
-                <button class="confirm-btn" onclick="confirmDelete()">确认删除</button>
+                <button id="confirmDeleteBtn" class="btn confirm">确认</button>
+                <button id="cancelDeleteBtn" class="btn cancel">取消</button>
             </div>
         </div>
     </div>
+    
+    <!-- 错误提示模态框 -->
+    <div id="errorModal" class="modal">
+        <div class="modal-content">
+            <h3>错误</h3>
+            <p id="errorMessage"></p>
+            <div class="modal-buttons">
+                <button id="closeErrorBtn" class="btn error">确定</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 音频转换进度模态框 -->
+    <div id="conversionModal" class="modal">
+        <div class="modal-content">
+            <h3>音频转换</h3>
+            <p id="conversionMessage">正在转换音频文件...</p>
+            <div class="conversion-progress" style="margin: 20px 0;">
+                <div class="progress-bar" style="width: 0%; height: 10px; background-color: #4CAF50; border-radius: 5px; transition: width 0.3s ease;"></div>
+            </div>
+            <div style="text-align: center; margin-top: 20px;">
+                <button id="cancelConversionBtn" class="cancel-btn" style="background-color: #f44336; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; margin: 0 5px;">取消转换</button>
+            </div>
+        </div>
+    </div>
+    
+    <style>
+        /* 模态框样式 */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+        
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 400px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        
+        .modal-buttons {
+            margin-top: 20px;
+        }
+        
+        .modal-buttons .btn {
+            margin: 0 10px;
+            padding: 8px 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .modal-buttons .btn:hover {
+            background-color: #45a049;
+        }
+        
+        /* 删除按钮样式 */
+        .delete-btn {
+            margin-top: 5px;
+            padding: 5px 10px;
+            background-color: #f44336;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .delete-btn:hover {
+            background-color: #d32f2f;
+        }
+        
+        /* 音频处理选项样式 */
+        .audio-processing-option {
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        /* 弹窗按钮样式 */
+        .modal-buttons .btn.confirm {
+            background-color: #4CAF50;
+        }
+        
+        .modal-buttons .btn.confirm:hover {
+            background-color: #45a049;
+        }
+        
+        .modal-buttons .btn.cancel {
+            background-color: #f44336;
+        }
+        
+        .modal-buttons .btn.cancel:hover {
+            background-color: #d32f2f;
+        }
+        
+        .modal-buttons .btn.error {
+            background-color: #ff9800;
+        }
+        
+        .modal-buttons .btn.error:hover {
+            background-color: #f57c00;
+        }
+    </style>
+    
+    <script src="./static/js/main.js"></script>
 </body>
 </html>

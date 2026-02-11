@@ -41,8 +41,21 @@
     "custom_desc": "カスタム説明（デフォルトでファイル名が自動入力されます）",
     "icon_label": "音楽パックアイコン",
     "select_icon": "アイコンを選択",
+    "auto_convert": "自動画像形式変換を有効にする",
+    "audio_conversion": "オーディオ形式変換を有効にする",
+    "slow_conversion": "比較的遅いです、他のオンライン変換ツールの使用をお勧めします",
+    "pack_success": "パッケージ化に成功しました！",
+    "duration_check": "オーディオ再生時間チェックを有効にする",
     "pack_name": "音楽パック名",
-    "pack_name_placeholder": "入力しない場合は、最初にアップロードされたファイルの名前が使用されます"
+    "pack_name_placeholder": "入力しない場合は、最初にアップロードされたファイルの名前が使用されます",
+    "item_image": "アイテム表示画像を選択（アップロードしない場合は元のテクスチャを保持）",
+    "selected_image": "選択した画像：",
+    "selected_image_converted": "選択した画像：{{filename}}（変換済み）",
+    "selected_icon": "選択したアイコン：",
+    "selected_icon_converted": "選択したアイコン：{{filename}}（変換済み）",
+    "delete": "削除",
+    "selected_audio": "選択したオーディオ：",
+    "converted": "（変換済み）"
   },
   "buttons": {
     "generate": "mcpackファイルを生成"
@@ -61,13 +74,35 @@
   },
   "errors": {
     "ogg_format": "エラー：形式は.oggでなければなりません",
+    "ogg_format_disabled": "エラー：.ogg形式ではない（\"オーディオ形式変換を有効にする\"スイッチがオンになっていません）",
     "png_format": "エラー：形式は.pngでなければなりません",
-    "no_files": "少なくとも1つの.ogg形式のファイルをアップロードしてください"
+    "duration_exceeded": "エラー：オーディオの長さは",
+    "no_files": "少なくとも1つの.ogg形式のファイルをアップロードしてください",
+    "error": "エラー",
+    "must_be_image": "選択したファイルは画像でなければなりません",
+    "must_be_png": "形式はpngでなければなりません",
+    "browser_not_support_conversion": "ブラウザがオーディオ変換をサポートしていません。元のファイルをそのまま使用します",
+    "audio_conversion_failed": "オーディオ変換に失敗しました。有効なオーディオファイルをアップロードしていることを確認してください",
+    "file_processing_failed": "ファイルの処理に失敗しました。もう一度お試しください",
+    "image_loading_failed": "画像の読み込みに失敗しました",
+    "image_processing_failed": "画像の処理に失敗しました。もう一度お試しください",
+    "image_format_not_supported": "画像形式がサポートされていません",
+    "please_upload_image": "画像ファイルをアップロードしてください"
   },
   "modal": {
     "confirm_delete": "削除を確認",
     "confirm_delete_icon": "アイコンを削除しますか？",
-    "cancel": "キャンセル"
+    "confirm_delete_message": "このファイルを削除してもよろしいですか？",
+    "confirm_cancel": "キャンセルを確認",
+    "confirm_cancel_message": "現在のオーディオ変換をキャンセルしてもよろしいですか？",
+    "confirm": "確認",
+    "cancel": "キャンセル",
+    "conversion": {
+      "title": "オーディオ変換",
+      "cancel": "変換をキャンセル",
+      "processing": "変換中: ",
+      "to": " → "
+    }
   },
   "language": {
     "zh": "中文",

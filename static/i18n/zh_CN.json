@@ -41,8 +41,21 @@
     "custom_desc": "自定义描述（默认自动填入文件名）",
     "icon_label": "音乐包图标",
     "select_icon": "选择图标",
+    "auto_convert": "启用自动转换图片格式",
+    "audio_conversion": "启用音频格式转换",
+    "slow_conversion": "比较慢，建议使用其它在线转换工具",
+    "pack_success": "打包成功！",
+    "duration_check": "启用音频时长检查",
     "pack_name": "音乐包名称",
-    "pack_name_placeholder": "未输入则使用第一个上传文件的名字"
+    "pack_name_placeholder": "未输入则使用第一个上传文件的名字",
+    "item_image": "选择物品展示图（不上传即为保持原版材质）",
+    "selected_image": "已选择图片：",
+    "selected_image_converted": "已选择图片：{{filename}}（已转换）",
+    "selected_icon": "已选择图标：",
+    "selected_icon_converted": "已选择图标：{{filename}}（已转换）",
+    "delete": "删除",
+    "selected_audio": "已选择音频：",
+    "converted": "（已转换）"
   },
   "buttons": {
     "generate": "生成mcpack文件"
@@ -61,13 +74,35 @@
   },
   "errors": {
     "ogg_format": "错误：格式必须为 .ogg",
+    "ogg_format_disabled": "错误：非ogg格式（未开启\"启用音频格式转换\"的开关）",
     "png_format": "错误：格式必须为 .png",
-    "no_files": "请至少上传一个 .ogg 格式文件"
+    "duration_exceeded": "错误：音频时长不能超过",
+    "no_files": "请至少上传一个 .ogg 格式文件",
+    "error": "错误",
+    "must_be_image": "选择的必须是图片",
+    "must_be_png": "格式必须是png",
+    "browser_not_support_conversion": "浏览器不支持音频转换，将直接使用原始文件",
+    "audio_conversion_failed": "音频转换失败，请确保上传的是有效的音频文件",
+    "file_processing_failed": "文件处理失败，请重试",
+    "image_loading_failed": "图片加载失败",
+    "image_processing_failed": "图片处理失败，请重试",
+    "image_format_not_supported": "图片格式不支持",
+    "please_upload_image": "请上传图片文件"
   },
   "modal": {
     "confirm_delete": "确认删除",
     "confirm_delete_icon": "确认删除图标吗？",
-    "cancel": "取消"
+    "confirm_delete_message": "确定要删除此文件吗？",
+    "confirm_cancel": "确认取消",
+    "confirm_cancel_message": "确定要取消当前的音频转换吗？",
+    "confirm": "确认",
+    "cancel": "取消",
+    "conversion": {
+      "title": "音频转换",
+      "cancel": "取消转换",
+      "processing": "正在将",
+      "to": "转换成"
+    }
   },
   "language": {
     "zh": "中文",
