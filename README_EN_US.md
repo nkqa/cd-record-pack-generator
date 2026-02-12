@@ -14,6 +14,7 @@ _The downloaded resource pack can be uploaded to various forums and Minecraft we
   + Replace the original CDs with your own music
   + Customize the CD description name for easy identification
   + Built-in format conversion functionality
+  + Automatically resize image pixels to prevent game lag and oversized items
 
 - [Create your own CD pack! > w <](https://www.mcneko.com/tools/cdpack/)
 
