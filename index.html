@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="我的世界基岩版音乐唱片替换工具，支持上传ogg格式音频和PNG格式图片，生成mcpack资源包">
+    <meta name="keywords" content="Minecraft,我的世界,基岩版,Bedrock,音乐,唱片,替换,工具,mcpack,资源包,音乐包">
     <link rel="icon" href="./favicon.ico" type="image/x-icon">
     <title>我的世界音乐唱片替换工具（基岩版）</title>
     <script src="./static/jszip/jszip.min.js"></script>
@@ -725,6 +727,20 @@
             </div>
             <div style="text-align: center; margin-top: 20px;">
                 <button id="cancelConversionBtn" class="cancel-btn" style="background-color: #f44336; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; margin: 0 5px;">取消转换</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 图片裁剪模态框 -->
+    <div id="cropModal" class="crop-modal">
+        <div class="crop-modal-content">
+            <h3 id="cropModalTitle">裁剪图片</h3>
+            <div class="crop-container">
+                <img id="cropImage" class="crop-image" src="" alt="裁剪图片">
+            </div>
+            <div class="crop-actions">
+                <button id="cancelCropBtn" class="btn" style="background-color: #6c757d;">取消</button>
+                <button id="confirmCropBtn" class="btn" style="background-color: #007bff;">确认裁剪</button>
             </div>
         </div>
     </div>

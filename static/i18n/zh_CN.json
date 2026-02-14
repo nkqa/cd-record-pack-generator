@@ -43,7 +43,7 @@
     "select_icon": "选择图标",
     "auto_convert": "启用自动转换图片格式",
     "audio_conversion": "启用音频格式转换",
-    "slow_conversion": "不建议，可能会导致唱片无声音，建议使用其它在线转换工具",
+    "slow_conversion": "不可用，请使用其它在线转换工具",
     "pack_success": "打包成功！",
     "duration_check": "启用音频时长检查",
     "image_size_modify": "启用物品展示图像素修改",
@@ -56,9 +56,11 @@
     "selected_icon": "已选择图标：",
     "selected_icon_converted": "已选择图标：{{filename}}（已转换）",
     "delete": "删除",
+    "edit": "编辑",
     "selected_audio": "已选择音频：",
     "converted": "（已转换）",
-    "resized": "（已调整大小）"
+    "resized": "（已调整大小）",
+    "audio_conversion_not_available": "该功能目前有问题，目前无法使用"
   },
   "buttons": {
     "generate": "生成mcpack文件"
@@ -78,7 +80,7 @@
   },
   "errors": {
     "ogg_format": "错误：格式必须为 .ogg",
-    "ogg_format_disabled": "错误：非ogg格式（未开启\"启用音频格式转换\"的开关）",
+    "ogg_format_disabled": "错误：非ogg格式",
     "png_format": "错误：格式必须为 .png",
     "duration_exceeded": "错误：音频时长不能超过",
     "no_files": "请至少上传一个 .ogg 格式文件",
@@ -106,6 +108,10 @@
       "cancel": "取消转换",
       "processing": "正在将",
       "to": "转换成"
+    },
+    "crop": {
+      "title": "裁剪图片",
+      "confirm": "确认裁剪"
     }
   },
   "language": {

@@ -483,6 +483,12 @@ const i18n = {
       btn.textContent = this.t('upload.delete', 'Delete');
     });
     
+    // 更新编辑按钮文本
+    const editBtns = document.querySelectorAll('.edit-btn');
+    editBtns.forEach(btn => {
+      btn.textContent = this.t('upload.edit', 'Edit');
+    });
+    
     // 更新音频转换弹窗
     const conversionModal = document.getElementById('conversionModal');
     if (conversionModal) {
@@ -504,6 +510,20 @@ const i18n = {
     if (status && status.classList.contains('success')) {
       // 如果状态元素存在且显示的是成功消息，则更新它
       status.textContent = this.t('upload.pack_success', '打包成功！');
+    }
+    
+    // 更新裁剪模态框文本
+    const cropModalTitle = document.getElementById('cropModalTitle');
+    if (cropModalTitle) {
+      cropModalTitle.textContent = this.t('modal.crop.title', 'Crop Image');
+    }
+    const cancelCropBtn = document.getElementById('cancelCropBtn');
+    if (cancelCropBtn) {
+      cancelCropBtn.textContent = this.t('modal.cancel', 'Cancel');
+    }
+    const confirmCropBtn = document.getElementById('confirmCropBtn');
+    if (confirmCropBtn) {
+      confirmCropBtn.textContent = this.t('modal.crop.confirm', 'Confirm Crop');
     }
   }
 };

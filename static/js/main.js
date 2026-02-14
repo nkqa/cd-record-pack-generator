@@ -756,7 +756,7 @@ fileInputs.forEach(inputInfo => {
                     } else {
                         // 音频转换开关关闭，直接使用原始文件
                         if (!file.name.endsWith('.ogg')) {
-                            showErrorModal(i18n.t('errors.ogg_format_disabled', '错误：非ogg格式（未开启"启用音频格式转换"的开关）'));
+                            showErrorModal(i18n.t('errors.ogg_format_disabled', '错误：非ogg格式'));
                             
                             // 重置文件输入元素的值，确保不保留错误文件的信息
                             input.value = '';
@@ -880,25 +880,25 @@ fileInputs.forEach(inputInfo => {
 
 // 图片文件输入信息
 const imageFileInputs = [
-    { id: 'imageFile_11', btnId: 'imageBtnText_11', previewId: 'imagePreview_11', targetName: 'music_disc_11.png' },
-    { id: 'imageFile_13', btnId: 'imageBtnText_13', previewId: 'imagePreview_13', targetName: 'music_disc_13.png' },
+    { id: 'imageFile_11', btnId: 'imageBtnText_11', previewId: 'imagePreview_11', targetName: 'record_11.png' },
+    { id: 'imageFile_13', btnId: 'imageBtnText_13', previewId: 'imagePreview_13', targetName: 'record_13.png' },
     { id: 'imageFile_5', btnId: 'imageBtnText_5', previewId: 'imagePreview_5', targetName: 'music_disc_5.png' },
-    { id: 'imageFile_blocks', btnId: 'imageBtnText_blocks', previewId: 'imagePreview_blocks', targetName: 'music_disc_blocks.png' },
-    { id: 'imageFile_cat', btnId: 'imageBtnText_cat', previewId: 'imagePreview_cat', targetName: 'music_disc_cat.png' },
+    { id: 'imageFile_blocks', btnId: 'imageBtnText_blocks', previewId: 'imagePreview_blocks', targetName: 'record_blocks.png' },
+    { id: 'imageFile_cat', btnId: 'imageBtnText_cat', previewId: 'imagePreview_cat', targetName: 'record_cat.png' },
     { id: 'imageFile_creator', btnId: 'imageBtnText_creator', previewId: 'imagePreview_creator', targetName: 'music_disc_creator.png' },
     { id: 'imageFile_creator_music_box', btnId: 'imageBtnText_creator_music_box', previewId: 'imagePreview_creator_music_box', targetName: 'music_disc_creator_music_box.png' },
-    { id: 'imageFile_mall', btnId: 'imageBtnText_mall', previewId: 'imagePreview_mall', targetName: 'music_disc_mall.png' },
-    { id: 'imageFile_mellohi', btnId: 'imageBtnText_mellohi', previewId: 'imagePreview_mellohi', targetName: 'music_disc_mellohi.png' },
+    { id: 'imageFile_mall', btnId: 'imageBtnText_mall', previewId: 'imagePreview_mall', targetName: 'record_mall.png' },
+    { id: 'imageFile_mellohi', btnId: 'imageBtnText_mellohi', previewId: 'imagePreview_mellohi', targetName: 'record_mellohi.png' },
     { id: 'imageFile_otherside', btnId: 'imageBtnText_otherside', previewId: 'imagePreview_otherside', targetName: 'music_disc_otherside.png' },
     { id: 'imageFile_pigstep_master', btnId: 'imageBtnText_pigstep_master', previewId: 'imagePreview_pigstep_master', targetName: 'music_disc_pigstep.png' },
     { id: 'imageFile_precipice', btnId: 'imageBtnText_precipice', previewId: 'imagePreview_precipice', targetName: 'music_disc_precipice.png' },
     { id: 'imageFile_relic', btnId: 'imageBtnText_relic', previewId: 'imagePreview_relic', targetName: 'music_disc_relic.png' },
-    { id: 'imageFile_stal', btnId: 'imageBtnText_stal', previewId: 'imagePreview_stal', targetName: 'music_disc_stal.png' },
-    { id: 'imageFile_strad', btnId: 'imageBtnText_strad', previewId: 'imagePreview_strad', targetName: 'music_disc_strad.png' },
-    { id: 'imageFile_wait', btnId: 'imageBtnText_wait', previewId: 'imagePreview_wait', targetName: 'music_disc_wait.png' },
-    { id: 'imageFile_ward', btnId: 'imageBtnText_ward', previewId: 'imagePreview_ward', targetName: 'music_disc_ward.png' },
-    { id: 'imageFile_chirp', btnId: 'imageBtnText_chirp', previewId: 'imagePreview_chirp', targetName: 'music_disc_chirp.png' },
-    { id: 'imageFile_far', btnId: 'imageBtnText_far', previewId: 'imagePreview_far', targetName: 'music_disc_far.png' },
+    { id: 'imageFile_stal', btnId: 'imageBtnText_stal', previewId: 'imagePreview_stal', targetName: 'record_stal.png' },
+    { id: 'imageFile_strad', btnId: 'imageBtnText_strad', previewId: 'imagePreview_strad', targetName: 'record_strad.png' },
+    { id: 'imageFile_wait', btnId: 'imageBtnText_wait', previewId: 'imagePreview_wait', targetName: 'record_wait.png' },
+    { id: 'imageFile_ward', btnId: 'imageBtnText_ward', previewId: 'imagePreview_ward', targetName: 'record_ward.png' },
+    { id: 'imageFile_chirp', btnId: 'imageBtnText_chirp', previewId: 'imagePreview_chirp', targetName: 'record_chirp.png' },
+    { id: 'imageFile_far', btnId: 'imageBtnText_far', previewId: 'imagePreview_far', targetName: 'record_far.png' },
     { id: 'imageFile_tears', btnId: 'imageBtnText_tears', previewId: 'imagePreview_tears', targetName: 'music_disc_tears.png' },
     { id: 'imageFile_lava_chicken', btnId: 'imageBtnText_lava_chicken', previewId: 'imagePreview_lava_chicken', targetName: 'music_disc_lava_chicken.png' }
 ];
@@ -910,6 +910,27 @@ window.lastValidImageFiles = {};
 // 保存每个图片文件输入的上一次选择的文件信息
 const lastSelectedImageFiles = {};
 
+// 辅助函数：同时显示/隐藏删除和编辑按钮
+function toggleImageButtons(inputInfo, show) {
+    try {
+        const input = document.getElementById(inputInfo.id);
+        if (!input) return;
+        
+        const deleteBtn = input.parentElement.parentElement.querySelector('.delete-btn');
+        const editBtn = document.getElementById('editBtn_' + inputInfo.id);
+        
+        if (show) {
+            if (deleteBtn) deleteBtn.style.display = 'block';
+            if (editBtn) editBtn.style.display = 'inline-block';
+        } else {
+            if (deleteBtn) deleteBtn.style.display = 'none';
+            if (editBtn) editBtn.style.display = 'none';
+        }
+    } catch (e) {
+        // 忽略错误
+    }
+}
+
 // 为每个图片文件输入添加事件监听器
 imageFileInputs.forEach(inputInfo => {
     const input = document.getElementById(inputInfo.id);
@@ -920,6 +941,7 @@ imageFileInputs.forEach(inputInfo => {
         input.addEventListener('change', function() {
             const file = this.files[0];
             const deleteBtn = this.parentElement.parentElement.querySelector('.delete-btn');
+            const editBtn = document.getElementById('editBtn_' + inputInfo.id);
             
             if (file) {
                 // 检查是否是新文件
@@ -963,9 +985,7 @@ imageFileInputs.forEach(inputInfo => {
                         if (window.lastValidImageFiles[inputInfo.id]) {
                             const lastValidFile = window.lastValidImageFiles[inputInfo.id];
                             btnText.textContent = `${i18n.t('upload.selected_image', '已选择图片：')}${lastValidFile.name}`;
-                            if (deleteBtn) {
-                                deleteBtn.style.display = 'block';
-                            }
+                            toggleImageButtons(inputInfo, true);
                             
                             // 显示上一次的预览
                             if (lastValidFile.preview) {
@@ -973,9 +993,7 @@ imageFileInputs.forEach(inputInfo => {
                             }
                         } else {
                             btnText.textContent = i18n.t('upload.item_image', '物品展示图');
-                            if (deleteBtn) {
-                                deleteBtn.style.display = 'none';
-                            }
+                            toggleImageButtons(inputInfo, false);
                             
                             // 清空预览
                             preview.innerHTML = '';
@@ -1000,9 +1018,7 @@ imageFileInputs.forEach(inputInfo => {
                         if (window.lastValidImageFiles[inputInfo.id]) {
                             const lastValidFile = window.lastValidImageFiles[inputInfo.id];
                             btnText.textContent = `${i18n.t('upload.selected_image', '已选择图片：')}${lastValidFile.name}`;
-                            if (deleteBtn) {
-                                deleteBtn.style.display = 'block';
-                            }
+                            toggleImageButtons(inputInfo, true);
                             
                             // 显示上一次的预览
                             if (lastValidFile.preview) {
@@ -1010,9 +1026,7 @@ imageFileInputs.forEach(inputInfo => {
                             }
                         } else {
                             btnText.textContent = i18n.t('upload.item_image', '物品展示图');
-                            if (deleteBtn) {
-                                deleteBtn.style.display = 'none';
-                            }
+                            toggleImageButtons(inputInfo, false);
                             
                             // 清空预览
                             preview.innerHTML = '';
@@ -1102,9 +1116,7 @@ imageFileInputs.forEach(inputInfo => {
                                     let statusText = '';
                                     statusText = i18n.t('upload.converted', '（已转换）');
                                     btnText.textContent = `${i18n.t('upload.selected_image', '已选择图片：')}${file.name}${statusText}`;
-                                    if (deleteBtn) {
-                                        deleteBtn.style.display = 'block';
-                                    }
+                                    toggleImageButtons(inputInfo, true);
                                     
                                     // 移除进度条
                                     setTimeout(() => {
@@ -1126,9 +1138,7 @@ imageFileInputs.forEach(inputInfo => {
                             };
                             
                             btnText.textContent = `${i18n.t('upload.selected_image', '已选择图片：')}${file.name}`;
-                            if (deleteBtn) {
-                                deleteBtn.style.display = 'block';
-                            }
+                            toggleImageButtons(inputInfo, true);
                         }
                     };
                     reader.onerror = function() {
@@ -1138,26 +1148,22 @@ imageFileInputs.forEach(inputInfo => {
                         input.value = '';
                         
                         // 保持上一次成功上传的图片
-                        if (window.lastValidImageFiles[inputInfo.id]) {
-                            const lastValidFile = window.lastValidImageFiles[inputInfo.id];
-                            btnText.textContent = `${i18n.t('upload.selected_image', '已选择图片：')}${lastValidFile.name}`;
-                            if (deleteBtn) {
-                                deleteBtn.style.display = 'block';
-                            }
-                            
-                            // 显示上一次的预览
-                            if (lastValidFile.preview) {
-                                preview.innerHTML = `<img src="${lastValidFile.preview}" style="width: 100%; height: 100%; object-fit: contain;">`;
-                            }
-                        } else {
-                            btnText.textContent = i18n.t('upload.item_image', '物品展示图');
-                            if (deleteBtn) {
-                                deleteBtn.style.display = 'none';
-                            }
-                            
-                            // 清空预览
-                            preview.innerHTML = '';
+                    if (window.lastValidImageFiles[inputInfo.id]) {
+                        const lastValidFile = window.lastValidImageFiles[inputInfo.id];
+                        btnText.textContent = `${i18n.t('upload.selected_image', '已选择图片：')}${lastValidFile.name}`;
+                        toggleImageButtons(inputInfo, true);
+                        
+                        // 显示上一次的预览
+                        if (lastValidFile.preview) {
+                            preview.innerHTML = `<img src="${lastValidFile.preview}" style="width: 100%; height: 100%; object-fit: contain;">`;
                         }
+                    } else {
+                        btnText.textContent = i18n.t('upload.item_image', '物品展示图');
+                        toggleImageButtons(inputInfo, false);
+                        
+                        // 清空预览
+                        preview.innerHTML = '';
+                    }
                     };
                     reader.readAsDataURL(file);
                 } catch (error) {
@@ -1171,9 +1177,7 @@ imageFileInputs.forEach(inputInfo => {
                     if (window.lastValidImageFiles[inputInfo.id]) {
                         const lastValidFile = window.lastValidImageFiles[inputInfo.id];
                         btnText.textContent = `${i18n.t('upload.selected_image', '已选择图片：')}${lastValidFile.name}`;
-                        if (deleteBtn) {
-                            deleteBtn.style.display = 'block';
-                        }
+                        toggleImageButtons(inputInfo, true);
                         
                         // 显示上一次的预览
                         if (lastValidFile.preview) {
@@ -1181,9 +1185,7 @@ imageFileInputs.forEach(inputInfo => {
                         }
                     } else {
                         btnText.textContent = i18n.t('upload.item_image', '物品展示图');
-                        if (deleteBtn) {
-                            deleteBtn.style.display = 'none';
-                        }
+                        toggleImageButtons(inputInfo, false);
                         
                         // 清空预览
                         preview.innerHTML = '';
@@ -1191,26 +1193,22 @@ imageFileInputs.forEach(inputInfo => {
                 }
             } else {
                 // 如果用户取消选择文件，保持上一次成功上传的图片
-                if (window.lastValidImageFiles[inputInfo.id]) {
-                    const lastValidFile = window.lastValidImageFiles[inputInfo.id];
-                    btnText.textContent = `${i18n.t('upload.selected_image', '已选择图片：')}${lastValidFile.name}`;
-                    if (deleteBtn) {
-                        deleteBtn.style.display = 'block';
-                    }
-                    
-                    // 显示上一次的预览
-                    if (lastValidFile.preview) {
-                        preview.innerHTML = `<img src="${lastValidFile.preview}" style="width: 100%; height: 100%; object-fit: contain;">`;
-                    }
-                } else {
-                    btnText.textContent = i18n.t('upload.item_image', '物品展示图');
-                    if (deleteBtn) {
-                        deleteBtn.style.display = 'none';
-                    }
-                    
-                    // 清空预览
-                    preview.innerHTML = '';
+            if (window.lastValidImageFiles[inputInfo.id]) {
+                const lastValidFile = window.lastValidImageFiles[inputInfo.id];
+                btnText.textContent = `${i18n.t('upload.selected_image', '已选择图片：')}${lastValidFile.name}`;
+                toggleImageButtons(inputInfo, true);
+                
+                // 显示上一次的预览
+                if (lastValidFile.preview) {
+                    preview.innerHTML = `<img src="${lastValidFile.preview}" style="width: 100%; height: 100%; object-fit: contain;">`;
                 }
+            } else {
+                btnText.textContent = i18n.t('upload.item_image', '物品展示图');
+                toggleImageButtons(inputInfo, false);
+                
+                // 清空预览
+                preview.innerHTML = '';
+            }
             }
         });
     }
@@ -1560,9 +1558,10 @@ if (autoConvertToggle) {
 const audioProcessingToggle = document.getElementById('audioProcessingToggle');
 if (audioProcessingToggle) {
     audioProcessingToggle.addEventListener('change', function() {
-        // 当开关状态变化时，不重新处理已上传的文件
-        // 只有在上传新文件时才根据开关状态进行处理
-        console.log('音频处理开关状态:', this.checked);
+        if (this.checked) {
+            showErrorModal(i18n.t('upload.audio_conversion_not_available', '该功能目前有问题，目前无法使用'));
+            this.checked = false;
+        }
     });
 }
 
@@ -1967,6 +1966,7 @@ function openDeleteModal(target, type) {
                 delete window.lastValidImageFiles[inputId];
                 delete lastSelectedImageFiles[inputId];
                 delete lastSelectedFiles[inputId];
+                delete lastCropStates[inputId];
                 
                 const btnText = document.getElementById(`imageBtnText_${inputId.replace('imageFile_', '')}`);
                 const preview = document.getElementById(`imagePreview_${inputId.replace('imageFile_', '')}`);
@@ -1974,11 +1974,14 @@ function openDeleteModal(target, type) {
                 if (btnText) btnText.textContent = i18n.t('upload.item_image', '物品展示图');
                 if (preview) preview.innerHTML = '';
                 
-                // 获取删除按钮
+                // 获取删除和编辑按钮
                 let deleteBtn = null;
+                let editBtn = null;
                 try {
                     deleteBtn = target.parentElement.parentElement.querySelector('.delete-btn');
+                    editBtn = document.getElementById('editBtn_' + inputId);
                     if (deleteBtn) deleteBtn.style.display = 'none';
+                    if (editBtn) editBtn.style.display = 'none';
                 } catch (e) {
                     // 忽略错误
                 }
@@ -2039,4 +2042,534 @@ window.addEventListener('click', function(event) {
     if (errorModal && event.target === errorModal) {
         errorModal.style.display = 'none';
     }
+});
+
+// 裁剪功能相关变量
+let cropSelection = null;
+let cropSelectionBox = null;
+let cropHandles = [];
+let isResizing = false;
+let isDragging = false;
+let currentHandle = null;
+let cropStartX = 0;
+let cropStartY = 0;
+let cropStartWidth = 0;
+let cropStartHeight = 0;
+let cropStartLeft = 0;
+let cropStartTop = 0;
+let currentCropImageFile = null;
+let currentCropPreviewId = null;
+let currentCropInputId = null;
+
+// 保存每个图片的上一次裁剪状态
+let lastCropStates = {};
+
+// 初始化裁剪功能
+// 关闭裁剪模态框并恢复页面滚动
+function closeCropModal() {
+    const cropModal = document.getElementById('cropModal');
+    if (cropModal) {
+        cropModal.style.display = 'none';
+    }
+    document.body.style.overflow = '';
+    document.removeEventListener('touchmove', preventBodyScroll);
+}
+
+function initCropModal() {
+    const cropModal = document.getElementById('cropModal');
+    const cropModalTitle = document.getElementById('cropModalTitle');
+    const cancelCropBtn = document.getElementById('cancelCropBtn');
+    const confirmCropBtn = document.getElementById('confirmCropBtn');
+
+    if (cropModalTitle) {
+        cropModalTitle.textContent = i18n.t('modal.crop.title', '裁剪图片');
+    }
+
+    if (cancelCropBtn) {
+        cancelCropBtn.textContent = i18n.t('modal.cancel', '取消');
+        cancelCropBtn.addEventListener('click', function() {
+            closeCropModal();
+        });
+    }
+
+    if (confirmCropBtn) {
+        confirmCropBtn.textContent = i18n.t('modal.crop.confirm', '确认裁剪');
+        confirmCropBtn.addEventListener('click', function() {
+            cropImageToCanvas();
+        });
+    }
+}
+
+// 创建裁剪选择框和八个调整手柄
+function createCropSelection() {
+    const cropContainer = document.querySelector('.crop-container');
+    if (!cropContainer) return;
+
+    cropSelectionBox = document.createElement('div');
+    cropSelectionBox.className = 'crop-selection';
+
+    cropSelectionBox.addEventListener('mousedown', function(e) {
+        if (e.target === cropSelectionBox) {
+            startDrag(e);
+        }
+    });
+
+    cropSelectionBox.addEventListener('touchstart', function(e) {
+        if (e.target === cropSelectionBox) {
+            e.preventDefault();
+            e.stopPropagation();
+            startDrag(e);
+        }
+    }, { passive: false });
+
+    const positions = ['nw', 'n', 'ne', 'w', 'e', 'sw', 's', 'se'];
+    cropHandles = [];
+
+    positions.forEach(pos => {
+        const handle = document.createElement('div');
+        handle.className = 'crop-handle ' + pos;
+        handle.dataset.position = pos;
+
+        handle.addEventListener('mousedown', function(e) {
+            startResize(e, pos);
+        });
+
+        handle.addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            startResize(e, pos);
+        }, { passive: false });
+
+        cropSelectionBox.appendChild(handle);
+        cropHandles.push(handle);
+    });
+
+    cropContainer.appendChild(cropSelectionBox);
+}
+
+// 获取事件坐标
+function getEventXY(e) {
+    if (e.touches && e.touches.length > 0) {
+        return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    }
+    return { x: e.clientX, y: e.clientY };
+}
+
+// 开始调整大小
+function startResize(e, handle) {
+    e.preventDefault();
+    e.stopPropagation();
+    isResizing = true;
+    currentHandle = handle;
+    
+    const pos = getEventXY(e);
+    cropStartX = pos.x;
+    cropStartY = pos.y;
+    
+    const rect = cropSelectionBox.getBoundingClientRect();
+    cropStartLeft = rect.left;
+    cropStartTop = rect.top;
+    cropStartWidth = rect.width;
+    cropStartHeight = rect.height;
+
+    document.addEventListener('mousemove', doResize);
+    document.addEventListener('mouseup', stopResize);
+    document.addEventListener('touchmove', doResize, { passive: false });
+    document.addEventListener('touchend', stopResize);
+}
+
+// 执行调整大小
+function doResize(e) {
+    if (!isResizing || !cropSelectionBox) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    const pos = getEventXY(e);
+    const dx = pos.x - cropStartX;
+    const dy = pos.y - cropStartY;
+
+    const cropContainer = document.querySelector('.crop-container');
+    const containerRect = cropContainer.getBoundingClientRect();
+    const imageDisplayRect = getImageDisplayRect();
+
+    if (!imageDisplayRect) return;
+
+    let newLeft = cropStartLeft - containerRect.left;
+    let newTop = cropStartTop - containerRect.top;
+    let newWidth = cropStartWidth;
+    let newHeight = cropStartHeight;
+
+    switch (currentHandle) {
+        case 'nw':
+            newLeft += dx;
+            newTop += dy;
+            newWidth -= dx;
+            newHeight -= dy;
+            break;
+        case 'n':
+            newTop += dy;
+            newHeight -= dy;
+            break;
+        case 'ne':
+            newTop += dy;
+            newWidth += dx;
+            newHeight -= dy;
+            break;
+        case 'w':
+            newLeft += dx;
+            newWidth -= dx;
+            break;
+        case 'e':
+            newWidth += dx;
+            break;
+        case 'sw':
+            newLeft += dx;
+            newWidth -= dx;
+            newHeight += dy;
+            break;
+        case 's':
+            newHeight += dy;
+            break;
+        case 'se':
+            newWidth += dx;
+            newHeight += dy;
+            break;
+    }
+
+    // 确保不小于最小尺寸
+    const minSize = 20;
+    if (newWidth < minSize) newWidth = minSize;
+    if (newHeight < minSize) newHeight = minSize;
+
+    // 确保在图片显示区域范围内
+    const maxLeft = imageDisplayRect.left;
+    const maxTop = imageDisplayRect.top;
+    const maxWidth = imageDisplayRect.left + imageDisplayRect.width;
+    const maxHeight = imageDisplayRect.top + imageDisplayRect.height;
+
+    if (newLeft < maxLeft) newLeft = maxLeft;
+    if (newTop < maxTop) newTop = maxTop;
+    if (newLeft + newWidth > maxWidth) newWidth = maxWidth - newLeft;
+    if (newTop + newHeight > maxHeight) newHeight = maxHeight - newTop;
+
+    cropSelectionBox.style.left = newLeft + 'px';
+    cropSelectionBox.style.top = newTop + 'px';
+    cropSelectionBox.style.width = newWidth + 'px';
+    cropSelectionBox.style.height = newHeight + 'px';
+}
+
+// 开始拖动
+function startDrag(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    isDragging = true;
+    
+    const pos = getEventXY(e);
+    cropStartX = pos.x;
+    cropStartY = pos.y;
+    
+    const rect = cropSelectionBox.getBoundingClientRect();
+    cropStartLeft = rect.left;
+    cropStartTop = rect.top;
+    cropStartWidth = rect.width;
+    cropStartHeight = rect.height;
+
+    document.addEventListener('mousemove', doDrag);
+    document.addEventListener('mouseup', stopDrag);
+    document.addEventListener('touchmove', doDrag, { passive: false });
+    document.addEventListener('touchend', stopDrag);
+}
+
+// 执行拖动
+function doDrag(e) {
+    if (!isDragging || !cropSelectionBox) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    const pos = getEventXY(e);
+    const dx = pos.x - cropStartX;
+    const dy = pos.y - cropStartY;
+
+    const cropContainer = document.querySelector('.crop-container');
+    const containerRect = cropContainer.getBoundingClientRect();
+    const imageDisplayRect = getImageDisplayRect();
+
+    if (!imageDisplayRect) return;
+
+    let newLeft = cropStartLeft - containerRect.left + dx;
+    let newTop = cropStartTop - containerRect.top + dy;
+
+    // 确保在图片显示区域范围内
+    const maxLeft = imageDisplayRect.left;
+    const maxTop = imageDisplayRect.top;
+    const maxRight = imageDisplayRect.left + imageDisplayRect.width - cropStartWidth;
+    const maxBottom = imageDisplayRect.top + imageDisplayRect.height - cropStartHeight;
+
+    if (newLeft < maxLeft) newLeft = maxLeft;
+    if (newTop < maxTop) newTop = maxTop;
+    if (newLeft > maxRight) newLeft = maxRight;
+    if (newTop > maxBottom) newTop = maxBottom;
+
+    cropSelectionBox.style.left = newLeft + 'px';
+    cropSelectionBox.style.top = newTop + 'px';
+}
+
+// 停止拖动
+function stopDrag() {
+    isDragging = false;
+    document.removeEventListener('mousemove', doDrag);
+    document.removeEventListener('mouseup', stopDrag);
+    document.removeEventListener('touchmove', doDrag);
+    document.removeEventListener('touchend', stopDrag);
+}
+
+// 停止调整大小
+function stopResize() {
+    isResizing = false;
+    currentHandle = null;
+    document.removeEventListener('mousemove', doResize);
+    document.removeEventListener('mouseup', stopResize);
+    document.removeEventListener('touchmove', doResize);
+    document.removeEventListener('touchend', stopResize);
+}
+
+// 阻止页面滚动
+function preventBodyScroll(e) {
+    e.preventDefault();
+    e.stopPropagation();
+}
+
+// 显示裁剪模态框
+function showCropModal(imageFile, previewId, inputId) {
+    const cropModal = document.getElementById('cropModal');
+    const cropModalTitle = document.getElementById('cropModalTitle');
+    const cropImage = document.getElementById('cropImage');
+    const cropContainer = document.querySelector('.crop-container');
+    const cancelCropBtn = document.getElementById('cancelCropBtn');
+    const confirmCropBtn = document.getElementById('confirmCropBtn');
+
+    if (!cropModal || !cropImage || !cropContainer) return;
+
+    currentCropImageFile = imageFile;
+    currentCropPreviewId = previewId;
+    currentCropInputId = inputId;
+
+    if (cropModalTitle) {
+        cropModalTitle.textContent = i18n.t('modal.crop.title', '裁剪图片');
+    }
+    if (cancelCropBtn) {
+        cancelCropBtn.textContent = i18n.t('modal.cancel', '取消');
+    }
+    if (confirmCropBtn) {
+        confirmCropBtn.textContent = i18n.t('modal.crop.confirm', '确认裁剪');
+    }
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        cropImage.src = e.target.result;
+        cropImage.onload = function() {
+            cropModal.style.display = 'block';
+
+            document.body.style.overflow = 'hidden';
+            document.addEventListener('touchmove', preventBodyScroll, { passive: false });
+
+            setTimeout(() => {
+                updateCropSelection();
+            }, 100);
+        };
+    };
+    reader.readAsDataURL(imageFile);
+}
+
+// 获取图片在容器内的实际显示区域
+function getImageDisplayRect() {
+    const cropImage = document.getElementById('cropImage');
+    const cropContainer = document.querySelector('.crop-container');
+    if (!cropImage || !cropContainer) return null;
+
+    const containerRect = cropContainer.getBoundingClientRect();
+    const imgRatio = cropImage.naturalWidth / cropImage.naturalHeight;
+    const containerRatio = containerRect.width / containerRect.height;
+
+    let displayWidth, displayHeight, displayLeft, displayTop;
+
+    if (imgRatio > containerRatio) {
+        // 图片比容器宽，宽度填满
+        displayWidth = containerRect.width;
+        displayHeight = containerRect.width / imgRatio;
+        displayLeft = 0;
+        displayTop = (containerRect.height - displayHeight) / 2;
+    } else {
+        // 图片比容器高，高度填满
+        displayHeight = containerRect.height;
+        displayWidth = containerRect.height * imgRatio;
+        displayTop = 0;
+        displayLeft = (containerRect.width - displayWidth) / 2;
+    }
+
+    return {
+        left: displayLeft,
+        top: displayTop,
+        width: displayWidth,
+        height: displayHeight
+    };
+}
+
+// 更新裁剪选择框
+function updateCropSelection() {
+    const cropContainer = document.querySelector('.crop-container');
+    const imageDisplayRect = getImageDisplayRect();
+    if (!cropContainer || !imageDisplayRect) return;
+
+    if (!cropSelectionBox) {
+        createCropSelection();
+    }
+
+    const containerRect = cropContainer.getBoundingClientRect();
+    let left, top, width, height;
+
+    // 检查是否有保存的裁剪状态
+    if (currentCropInputId && lastCropStates[currentCropInputId]) {
+        const savedState = lastCropStates[currentCropInputId];
+        left = imageDisplayRect.left + savedState.left * imageDisplayRect.width;
+        top = imageDisplayRect.top + savedState.top * imageDisplayRect.height;
+        width = savedState.width * imageDisplayRect.width;
+        height = savedState.height * imageDisplayRect.height;
+    } else {
+        // 默认选择完整一张图片
+        left = imageDisplayRect.left;
+        top = imageDisplayRect.top;
+        width = imageDisplayRect.width;
+        height = imageDisplayRect.height;
+    }
+
+    cropSelectionBox.style.left = left + 'px';
+    cropSelectionBox.style.top = top + 'px';
+    cropSelectionBox.style.width = width + 'px';
+    cropSelectionBox.style.height = height + 'px';
+    cropSelectionBox.style.display = 'block';
+}
+
+// 将裁剪图片到Canvas
+function cropImageToCanvas() {
+    const cropImage = document.getElementById('cropImage');
+    const cropContainer = document.querySelector('.crop-container');
+    const imageDisplayRect = getImageDisplayRect();
+
+    if (!cropImage || !cropContainer || !cropSelectionBox || !imageDisplayRect) return;
+
+    const containerRect = cropContainer.getBoundingClientRect();
+    const selectionRect = cropSelectionBox.getBoundingClientRect();
+
+    // 保存当前裁剪状态（相对于图片显示区域的位置）
+    if (currentCropInputId) {
+        lastCropStates[currentCropInputId] = {
+            left: (selectionRect.left - containerRect.left - imageDisplayRect.left) / imageDisplayRect.width,
+            top: (selectionRect.top - containerRect.top - imageDisplayRect.top) / imageDisplayRect.height,
+            width: selectionRect.width / imageDisplayRect.width,
+            height: selectionRect.height / imageDisplayRect.height
+        };
+    }
+
+    // 检查是否选择了完整图片
+    const selectionLeftRel = (selectionRect.left - containerRect.left - imageDisplayRect.left) / imageDisplayRect.width;
+    const selectionTopRel = (selectionRect.top - containerRect.top - imageDisplayRect.top) / imageDisplayRect.height;
+    const selectionWidthRel = selectionRect.width / imageDisplayRect.width;
+    const selectionHeightRel = selectionRect.height / imageDisplayRect.height;
+
+    // 如果选择了完整图片，直接使用原始文件
+    if (selectionLeftRel <= 0.01 && selectionTopRel <= 0.01 && 
+        selectionWidthRel >= 0.99 && selectionHeightRel >= 0.99) {
+        updateCroppedImage(currentCropImageFile);
+        return;
+    }
+
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+
+    const img = new Image();
+    img.onload = function() {
+        const cropX = selectionLeftRel * img.width;
+        const cropY = selectionTopRel * img.height;
+        const cropWidth = selectionWidthRel * img.width;
+        const cropHeight = selectionHeightRel * img.height;
+
+        canvas.width = cropWidth;
+        canvas.height = cropHeight;
+        ctx.drawImage(img, cropX, cropY, cropWidth, cropHeight, 0, 0, cropWidth, cropHeight);
+
+        canvas.toBlob(function(blob) {
+            const croppedFile = new File([blob], currentCropImageFile.name, {
+                type: 'image/png',
+                lastModified: Date.now()
+            });
+
+            updateCroppedImage(croppedFile);
+        }, 'image/png');
+    };
+    img.src = cropImage.src;
+}
+
+// 更新裁剪后的图片
+function updateCroppedImage(croppedFile) {
+    const preview = document.getElementById(currentCropPreviewId);
+    const input = document.getElementById(currentCropInputId);
+
+    if (!preview || !input) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const previewUrl = e.target.result;
+        if (preview) {
+            preview.innerHTML = `<img src="${previewUrl}" style="width: 100%; height: 100%; object-fit: contain;">`;
+        }
+
+        const originalName = window.lastValidImageFiles[currentCropInputId]?.name || croppedFile.name;
+        
+        window.lastValidImageFiles[currentCropInputId] = {
+            file: croppedFile,
+            name: originalName,
+            preview: previewUrl,
+            targetName: imageFileInputs.find(info => info.id === currentCropInputId)?.targetName
+        };
+
+        const btnText = document.getElementById(`imageBtnText_${currentCropInputId.replace('imageFile_', '')}`);
+        if (btnText) {
+            btnText.textContent = `${i18n.t('upload.selected_image', '已选择图片：')}${originalName}`;
+        }
+
+        closeCropModal();
+    };
+    reader.readAsDataURL(croppedFile);
+}
+
+// 为每个图片上传区域动态添加编辑按钮（删除按钮左边）
+imageFileInputs.forEach(inputInfo => {
+    const input = document.getElementById(inputInfo.id);
+    if (input) {
+        const parentElement = input.parentElement.parentElement;
+        if (parentElement) {
+            const deleteBtn = parentElement.querySelector('.delete-btn');
+            if (deleteBtn) {
+                const editBtn = document.createElement('button');
+                editBtn.className = 'edit-btn';
+                editBtn.id = 'editBtn_' + inputInfo.id;
+                editBtn.textContent = i18n.t('upload.edit', '编辑');
+                editBtn.style.display = 'none';
+                editBtn.onclick = function() {
+                    if (window.lastValidImageFiles[inputInfo.id] && window.lastValidImageFiles[inputInfo.id].file) {
+                        showCropModal(window.lastValidImageFiles[inputInfo.id].file, inputInfo.previewId, inputInfo.id);
+                    }
+                };
+                deleteBtn.parentNode.insertBefore(editBtn, deleteBtn);
+            }
+        }
+    }
+});
+
+// 初始化
+window.addEventListener('DOMContentLoaded', function() {
+    initCropModal();
 });

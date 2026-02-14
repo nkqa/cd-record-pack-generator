@@ -43,7 +43,7 @@
     "select_icon": "アイコンを選択",
     "auto_convert": "自動画像形式変換を有効にする",
     "audio_conversion": "オーディオ形式変換を有効にする",
-    "slow_conversion": "推奨されていません、レコードに音が出ない原因になる可能性があります、他のオンライン変換ツールの使用をお勧めします",
+    "slow_conversion": "使用不可、他のオンライン変換ツールを使用してください",
     "pack_success": "パッケージ化に成功しました！",
     "duration_check": "オーディオ再生時間チェックを有効にする",
     "image_size_modify": "アイテム表示画像サイズ変更を有効にする",
@@ -56,9 +56,11 @@
     "selected_icon": "選択したアイコン：",
     "selected_icon_converted": "選択したアイコン：{{filename}}（変換済み）",
     "delete": "削除",
+    "edit": "編集",
     "selected_audio": "選択したオーディオ：",
     "converted": "（変換済み）",
-    "resized": "（サイズ変更済み）"
+    "resized": "（サイズ変更済み）",
+    "audio_conversion_not_available": "この機能は現在使用できません"
   },
   "buttons": {
     "generate": "mcpackファイルを生成"
@@ -78,7 +80,7 @@
   },
   "errors": {
     "ogg_format": "エラー：形式は.oggでなければなりません",
-    "ogg_format_disabled": "エラー：.ogg形式ではない（\"オーディオ形式変換を有効にする\"スイッチがオンになっていません）",
+    "ogg_format_disabled": "エラー：.ogg形式ではない",
     "png_format": "エラー：形式は.pngでなければなりません",
     "duration_exceeded": "エラー：オーディオの長さは",
     "no_files": "少なくとも1つの.ogg形式のファイルをアップロードしてください",
@@ -106,6 +108,10 @@
       "cancel": "変換をキャンセル",
       "processing": "変換中: ",
       "to": " → "
+    },
+    "crop": {
+      "title": "画像を切り抜く",
+      "confirm": "切り抜きを確認"
     }
   },
   "language": {
