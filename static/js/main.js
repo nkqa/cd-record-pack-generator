@@ -2111,7 +2111,7 @@ function createCropSelection() {
         if (e.target === cropSelectionBox) {
             e.preventDefault();
             e.stopPropagation();
-            startDrag(e.touches[0]);
+            startDrag(e);
         }
     }, { passive: false });
 
@@ -2130,7 +2130,7 @@ function createCropSelection() {
         handle.addEventListener('touchstart', function(e) {
             e.preventDefault();
             e.stopPropagation();
-            startResize(e.touches[0], pos);
+            startResize(e, pos);
         }, { passive: false });
 
         cropSelectionBox.appendChild(handle);
@@ -2140,14 +2140,25 @@ function createCropSelection() {
     cropContainer.appendChild(cropSelectionBox);
 }
 
+// 获取事件坐标
+function getEventXY(e) {
+    if (e.touches && e.touches.length > 0) {
+        return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    }
+    return { x: e.clientX, y: e.clientY };
+}
+
 // 开始调整大小
 function startResize(e, handle) {
     e.preventDefault();
     e.stopPropagation();
     isResizing = true;
     currentHandle = handle;
-    cropStartX = e.clientX;
-    cropStartY = e.clientY;
+    
+    const pos = getEventXY(e);
+    cropStartX = pos.x;
+    cropStartY = pos.y;
+    
     const rect = cropSelectionBox.getBoundingClientRect();
     cropStartLeft = rect.left;
     cropStartTop = rect.top;
@@ -2167,11 +2178,9 @@ function doResize(e) {
     e.preventDefault();
     e.stopPropagation();
 
-    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-
-    const dx = clientX - cropStartX;
-    const dy = clientY - cropStartY;
+    const pos = getEventXY(e);
+    const dx = pos.x - cropStartX;
+    const dy = pos.y - cropStartY;
 
     const cropContainer = document.querySelector('.crop-container');
     const containerRect = cropContainer.getBoundingClientRect();
@@ -2248,8 +2257,11 @@ function startDrag(e) {
     e.preventDefault();
     e.stopPropagation();
     isDragging = true;
-    cropStartX = e.clientX;
-    cropStartY = e.clientY;
+    
+    const pos = getEventXY(e);
+    cropStartX = pos.x;
+    cropStartY = pos.y;
+    
     const rect = cropSelectionBox.getBoundingClientRect();
     cropStartLeft = rect.left;
     cropStartTop = rect.top;
@@ -2269,11 +2281,9 @@ function doDrag(e) {
     e.preventDefault();
     e.stopPropagation();
 
-    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-
-    const dx = clientX - cropStartX;
-    const dy = clientY - cropStartY;
+    const pos = getEventXY(e);
+    const dx = pos.x - cropStartX;
+    const dy = pos.y - cropStartY;
 
     const cropContainer = document.querySelector('.crop-container');
     const containerRect = cropContainer.getBoundingClientRect();

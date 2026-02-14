@@ -688,22 +688,24 @@ input:checked + .toggle-label:before {
 /* 裁剪调整手柄样式 */
 .crop-handle {
     position: absolute;
-    width: 24px;
-    height: 24px;
+    width: 40px;
+    height: 40px;
     background-color: #fff;
-    border: 2px solid #007bff;
+    border: 3px solid #007bff;
     border-radius: 50%;
     cursor: pointer;
     pointer-events: auto;
     z-index: 10;
     touch-action: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
 }
 
-.crop-handle.nw { top: -12px; left: -12px; cursor: nw-resize; }
-.crop-handle.n { top: -12px; left: 50%; transform: translateX(-50%); cursor: n-resize; }
-.crop-handle.ne { top: -12px; right: -12px; cursor: ne-resize; }
-.crop-handle.w { top: 50%; left: -12px; transform: translateY(-50%); cursor: w-resize; }
-.crop-handle.e { top: 50%; right: -12px; transform: translateY(-50%); cursor: e-resize; }
-.crop-handle.sw { bottom: -12px; left: -12px; cursor: sw-resize; }
-.crop-handle.s { bottom: -12px; left: 50%; transform: translateX(-50%); cursor: s-resize; }
-.crop-handle.se { bottom: -12px; right: -12px; cursor: se-resize; }
+.crop-handle.nw { top: -20px; left: -20px; cursor: nw-resize; }
+.crop-handle.n { top: -20px; left: 50%; transform: translateX(-50%); cursor: n-resize; }
+.crop-handle.ne { top: -20px; right: -20px; cursor: ne-resize; }
+.crop-handle.w { top: 50%; left: -20px; transform: translateY(-50%); cursor: w-resize; }
+.crop-handle.e { top: 50%; right: -20px; transform: translateY(-50%); cursor: e-resize; }
+.crop-handle.sw { bottom: -20px; left: -20px; cursor: sw-resize; }
+.crop-handle.s { bottom: -20px; left: 50%; transform: translateX(-50%); cursor: s-resize; }
+.crop-handle.se { bottom: -20px; right: -20px; cursor: se-resize; }
