@@ -43,7 +43,7 @@
     "select_icon": "Select Icon",
     "auto_convert": "Enable automatic image format conversion",
     "audio_conversion": "Enable audio format conversion",
-    "slow_conversion": "Not recommended, may cause records to have no sound, it is recommended to use other online conversion tools",
+    "slow_conversion": "Not available, please use other online conversion tools",
     "pack_success": "Packaging successful!",
     "duration_check": "Enable audio duration check",
     "image_size_modify": "Enable item display image size modification",
@@ -56,9 +56,11 @@
     "selected_icon": "Selected Icon:",
     "selected_icon_converted": "Selected Icon: {{filename}} (Converted)",
     "delete": "Delete",
+    "edit": "Edit",
     "selected_audio": "Selected Audio:",
     "converted": "(Converted)",
-    "resized": "(Resized)"
+    "resized": "(Resized)",
+    "audio_conversion_not_available": "This feature is currently not available"
   },
   "buttons": {
     "generate": "Generate mcpack file"
@@ -78,7 +80,7 @@
   },
   "errors": {
     "ogg_format": "Error: Format must be .ogg",
-    "ogg_format_disabled": "Error: Non-ogg format (\"Enable audio format conversion\" switch is not turned on)",
+    "ogg_format_disabled": "Error: Non-ogg format",
     "png_format": "Error: Format must be .png",
     "duration_exceeded": "Error: Audio duration cannot exceed",
     "no_files": "Please upload at least one .ogg format file",

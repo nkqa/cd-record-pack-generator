@@ -58,8 +58,8 @@ h1 {
 /* 自定义文件上传按钮样式 */
 .custom-file-upload {
     position: relative;
-    display: inline-block;
-    width: 100%;
+    flex: 1;
+    min-width: 0;
 }
 .custom-file-upload input[type="file"] {
     position: absolute;
@@ -375,6 +375,9 @@ h1 {
 .image-upload-button {
     flex: 1;
     min-width: 200px;
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
 }
 
 /* 按钮文字换行 */
@@ -592,3 +595,111 @@ input:checked + .toggle-label:before {
     background-color: #6c757d;
     color: white;
 }
+
+/* 图片裁剪模态框样式 */
+.crop-modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.crop-modal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    border-radius: 8px;
+    width: 80%;
+    max-width: 800px;
+}
+
+.crop-container {
+    position: relative;
+    width: 100%;
+    padding-top: 100%;
+    overflow: hidden;
+    margin: 20px 0;
+    border: 1px solid #ddd;
+}
+
+.crop-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    user-select: none;
+    pointer-events: none;
+}
+
+.crop-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    justify-content: flex-end;
+}
+
+/* 编辑按钮样式 */
+.edit-btn {
+    margin-left: 10px;
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    height: 38px;
+    align-self: center;
+    position: relative;
+    z-index: 10;
+}
+
+.edit-btn:hover {
+    background-color: #0069d9;
+}
+
+/* 按钮容器样式 */
+.button-container {
+    display: flex;
+    align-items: center;
+    margin-top: 5px;
+}
+
+/* 裁剪选择框样式 */
+.crop-selection {
+    position: absolute;
+    border: 2px dashed #007bff;
+    background-color: rgba(0, 123, 255, 0.1);
+    cursor: move;
+    pointer-events: auto;
+}
+
+/* 裁剪调整手柄样式 */
+.crop-handle {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    background-color: #fff;
+    border: 2px solid #007bff;
+    border-radius: 50%;
+    cursor: pointer;
+    pointer-events: auto;
+    z-index: 10;
+}
+
+.crop-handle.nw { top: -8px; left: -8px; cursor: nw-resize; }
+.crop-handle.n { top: -8px; left: 50%; transform: translateX(-50%); cursor: n-resize; }
+.crop-handle.ne { top: -8px; right: -8px; cursor: ne-resize; }
+.crop-handle.w { top: 50%; left: -8px; transform: translateY(-50%); cursor: w-resize; }
+.crop-handle.e { top: 50%; right: -8px; transform: translateY(-50%); cursor: e-resize; }
+.crop-handle.sw { bottom: -8px; left: -8px; cursor: sw-resize; }
+.crop-handle.s { bottom: -8px; left: 50%; transform: translateX(-50%); cursor: s-resize; }
+.crop-handle.se { bottom: -8px; right: -8px; cursor: se-resize; }
