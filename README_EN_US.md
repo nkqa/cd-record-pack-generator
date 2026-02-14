@@ -15,6 +15,7 @@ _The downloaded resource pack can be uploaded to various forums and Minecraft we
   + Customize the CD description name for easy identification
   + Built-in format conversion functionality
   + Automatically resize image pixels to prevent game lag and oversized items
+  + Crop item display image pixel size
 
 - [Create your own CD pack! > w <](https://www.mcneko.com/tools/cdpack/)
 
