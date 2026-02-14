@@ -108,6 +108,10 @@
       "cancel": "変換をキャンセル",
       "processing": "変換中: ",
       "to": " → "
+    },
+    "crop": {
+      "title": "画像を切り抜く",
+      "confirm": "切り抜きを確認"
     }
   },
   "language": {

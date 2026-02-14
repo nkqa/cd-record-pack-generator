@@ -2077,16 +2077,23 @@ function closeCropModal() {
 
 function initCropModal() {
     const cropModal = document.getElementById('cropModal');
+    const cropModalTitle = document.getElementById('cropModalTitle');
     const cancelCropBtn = document.getElementById('cancelCropBtn');
     const confirmCropBtn = document.getElementById('confirmCropBtn');
 
+    if (cropModalTitle) {
+        cropModalTitle.textContent = i18n.t('modal.crop.title', '裁剪图片');
+    }
+
     if (cancelCropBtn) {
+        cancelCropBtn.textContent = i18n.t('modal.cancel', '取消');
         cancelCropBtn.addEventListener('click', function() {
             closeCropModal();
         });
     }
 
     if (confirmCropBtn) {
+        confirmCropBtn.textContent = i18n.t('modal.crop.confirm', '确认裁剪');
         confirmCropBtn.addEventListener('click', function() {
             cropImageToCanvas();
         });
@@ -2337,14 +2344,27 @@ function preventBodyScroll(e) {
 // 显示裁剪模态框
 function showCropModal(imageFile, previewId, inputId) {
     const cropModal = document.getElementById('cropModal');
+    const cropModalTitle = document.getElementById('cropModalTitle');
     const cropImage = document.getElementById('cropImage');
     const cropContainer = document.querySelector('.crop-container');
+    const cancelCropBtn = document.getElementById('cancelCropBtn');
+    const confirmCropBtn = document.getElementById('confirmCropBtn');
 
     if (!cropModal || !cropImage || !cropContainer) return;
 
     currentCropImageFile = imageFile;
     currentCropPreviewId = previewId;
     currentCropInputId = inputId;
+
+    if (cropModalTitle) {
+        cropModalTitle.textContent = i18n.t('modal.crop.title', '裁剪图片');
+    }
+    if (cancelCropBtn) {
+        cancelCropBtn.textContent = i18n.t('modal.cancel', '取消');
+    }
+    if (confirmCropBtn) {
+        confirmCropBtn.textContent = i18n.t('modal.crop.confirm', '确认裁剪');
+    }
 
     const reader = new FileReader();
     reader.onload = function(e) {
