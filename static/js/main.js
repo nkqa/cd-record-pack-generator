@@ -2065,6 +2065,16 @@ let currentCropInputId = null;
 let lastCropStates = {};
 
 // 初始化裁剪功能
+// 关闭裁剪模态框并恢复页面滚动
+function closeCropModal() {
+    const cropModal = document.getElementById('cropModal');
+    if (cropModal) {
+        cropModal.style.display = 'none';
+    }
+    document.body.style.overflow = '';
+    document.removeEventListener('touchmove', preventBodyScroll);
+}
+
 function initCropModal() {
     const cropModal = document.getElementById('cropModal');
     const cancelCropBtn = document.getElementById('cancelCropBtn');
@@ -2072,7 +2082,7 @@ function initCropModal() {
 
     if (cancelCropBtn) {
         cancelCropBtn.addEventListener('click', function() {
-            cropModal.style.display = 'none';
+            closeCropModal();
         });
     }
 
@@ -2097,6 +2107,14 @@ function createCropSelection() {
         }
     });
 
+    cropSelectionBox.addEventListener('touchstart', function(e) {
+        if (e.target === cropSelectionBox) {
+            e.preventDefault();
+            e.stopPropagation();
+            startDrag(e.touches[0]);
+        }
+    }, { passive: false });
+
     const positions = ['nw', 'n', 'ne', 'w', 'e', 'sw', 's', 'se'];
     cropHandles = [];
 
@@ -2108,6 +2126,12 @@ function createCropSelection() {
         handle.addEventListener('mousedown', function(e) {
             startResize(e, pos);
         });
+
+        handle.addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            startResize(e.touches[0], pos);
+        }, { passive: false });
 
         cropSelectionBox.appendChild(handle);
         cropHandles.push(handle);
@@ -2132,14 +2156,22 @@ function startResize(e, handle) {
 
     document.addEventListener('mousemove', doResize);
     document.addEventListener('mouseup', stopResize);
+    document.addEventListener('touchmove', doResize, { passive: false });
+    document.addEventListener('touchend', stopResize);
 }
 
 // 执行调整大小
 function doResize(e) {
     if (!isResizing || !cropSelectionBox) return;
 
-    const dx = e.clientX - cropStartX;
-    const dy = e.clientY - cropStartY;
+    e.preventDefault();
+    e.stopPropagation();
+
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+    const dx = clientX - cropStartX;
+    const dy = clientY - cropStartY;
 
     const cropContainer = document.querySelector('.crop-container');
     const containerRect = cropContainer.getBoundingClientRect();
@@ -2226,14 +2258,22 @@ function startDrag(e) {
 
     document.addEventListener('mousemove', doDrag);
     document.addEventListener('mouseup', stopDrag);
+    document.addEventListener('touchmove', doDrag, { passive: false });
+    document.addEventListener('touchend', stopDrag);
 }
 
 // 执行拖动
 function doDrag(e) {
     if (!isDragging || !cropSelectionBox) return;
 
-    const dx = e.clientX - cropStartX;
-    const dy = e.clientY - cropStartY;
+    e.preventDefault();
+    e.stopPropagation();
+
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+    const dx = clientX - cropStartX;
+    const dy = clientY - cropStartY;
 
     const cropContainer = document.querySelector('.crop-container');
     const containerRect = cropContainer.getBoundingClientRect();
@@ -2264,6 +2304,8 @@ function stopDrag() {
     isDragging = false;
     document.removeEventListener('mousemove', doDrag);
     document.removeEventListener('mouseup', stopDrag);
+    document.removeEventListener('touchmove', doDrag);
+    document.removeEventListener('touchend', stopDrag);
 }
 
 // 停止调整大小
@@ -2272,6 +2314,14 @@ function stopResize() {
     currentHandle = null;
     document.removeEventListener('mousemove', doResize);
     document.removeEventListener('mouseup', stopResize);
+    document.removeEventListener('touchmove', doResize);
+    document.removeEventListener('touchend', stopResize);
+}
+
+// 阻止页面滚动
+function preventBodyScroll(e) {
+    e.preventDefault();
+    e.stopPropagation();
 }
 
 // 显示裁剪模态框
@@ -2291,6 +2341,9 @@ function showCropModal(imageFile, previewId, inputId) {
         cropImage.src = e.target.result;
         cropImage.onload = function() {
             cropModal.style.display = 'block';
+
+            document.body.style.overflow = 'hidden';
+            document.addEventListener('touchmove', preventBodyScroll, { passive: false });
 
             setTimeout(() => {
                 updateCropSelection();
@@ -2433,7 +2486,6 @@ function cropImageToCanvas() {
 function updateCroppedImage(croppedFile) {
     const preview = document.getElementById(currentCropPreviewId);
     const input = document.getElementById(currentCropInputId);
-    const cropModal = document.getElementById('cropModal');
 
     if (!preview || !input) return;
 
@@ -2458,9 +2510,7 @@ function updateCroppedImage(croppedFile) {
             btnText.textContent = `${i18n.t('upload.selected_image', '已选择图片：')}${originalName}`;
         }
 
-        if (cropModal) {
-            cropModal.style.display = 'none';
-        }
+        closeCropModal();
     };
     reader.readAsDataURL(croppedFile);
 }
