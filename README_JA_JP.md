@@ -1,6 +1,6 @@
 ### Minecraft ベッドロックエディション CD リマスターツール
 
-[简体中文（中国大陆）](https://github.com/nkqa/cd-record-pack-generator/blob/master/README.md)|[English（United States）](https://github.com/nkqa/cd-record-pack-generator/blob/master/README_EN_US.md)|にほんご（日本）
+[简体中文（中国大陆）](https://github.com/nkqa/cd-record-pack-generator/blob/master/README.md)|[繁體中文](https://github.com/nkqa/cd-record-pack-generator/blob/master/README_ZH_HANT.md)|[English（United States）](https://github.com/nkqa/cd-record-pack-generator/blob/master/README_EN_US.md)|にほんご（日本）
 
 _オリジナルCDを自分の音楽に簡単に置き換え可能_
 
