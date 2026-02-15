@@ -144,8 +144,11 @@ const i18n = {
           // 英文
           descText = descText.replace('click here', `<a href="#convert-tools" onclick="smoothScroll('convert-tools'); return false;">click here</a>`);
         } else if (descText.includes('点击这里')) {
-          // 中文
+          // 简体中文
           descText = descText.replace('点击这里', `<a href="#convert-tools" onclick="smoothScroll('convert-tools'); return false;">点击这里</a>`);
+        } else if (descText.includes('點擊這裡')) {
+          // 繁体中文
+          descText = descText.replace('點擊這裡', `<a href="#convert-tools" onclick="smoothScroll('convert-tools'); return false;">點擊這裡</a>`);
         } else if (descText.includes('ここをクリック')) {
           // 日文
           descText = descText.replace('ここをクリック', `<a href="#convert-tools" onclick="smoothScroll('convert-tools'); return false;">ここをクリック</a>`);
@@ -166,8 +169,11 @@ const i18n = {
           // 英文
           thanksText = thanksText.replace('this video', `<a href="https://www.bilibili.com/video/BV1DSBRYrE6N/" target="_blank" rel="nofollow">this video</a>`);
         } else if (thanksText.includes('此视频')) {
-          // 中文
+          // 简体中文
           thanksText = thanksText.replace('此视频', `<a href="https://www.bilibili.com/video/BV1DSBRYrE6N/" target="_blank" rel="nofollow">此视频</a>`);
+        } else if (thanksText.includes('此影片')) {
+          // 繁体中文
+          thanksText = thanksText.replace('此影片', `<a href="https://www.bilibili.com/video/BV1DSBRYrE6N/" target="_blank" rel="nofollow">此影片</a>`);
         } else if (thanksText.includes('この動画')) {
           // 日文
           thanksText = thanksText.replace('この動画', `<a href="https://www.bilibili.com/video/BV1DSBRYrE6N/" target="_blank" rel="nofollow">この動画</a>`);
@@ -188,8 +194,11 @@ const i18n = {
           // 英文
           faqText = faqText.replace(/Click here|click here/i, `<a href="#faq" onclick="smoothScroll('faq'); return false;">$&</a>`);
         } else if (faqText.includes('点击这里')) {
-          // 中文
+          // 简体中文
           faqText = faqText.replace('点击这里', `<a href="#faq" onclick="smoothScroll('faq'); return false;">点击这里</a>`);
+        } else if (faqText.includes('點擊這裡')) {
+          // 繁体中文
+          faqText = faqText.replace('點擊這裡', `<a href="#faq" onclick="smoothScroll('faq'); return false;">點擊這裡</a>`);
         } else if (faqText.includes('ここをクリック')) {
           // 日文
           faqText = faqText.replace('ここをクリック', `<a href="#faq" onclick="smoothScroll('faq'); return false;">ここをクリック</a>`);
