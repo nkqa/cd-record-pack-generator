@@ -1,6 +1,6 @@
 ### Minecraft Bedrock Edition CD Changer
 
-[简体中文（中国大陆）](https://github.com/nkqa/cd-record-pack-generator/blob/master/README.md)|English（United States）|[にほんご（日本）](https://github.com/nkqa/cd-record-pack-generator/blob/master/README_JA_JP.md)
+[简体中文（中国大陆）](https://github.com/nkqa/cd-record-pack-generator/blob/master/README.md)|[繁體中文](https://github.com/nkqa/cd-record-pack-generator/blob/master/README_ZH_HANT.md)|English（United States）|[にほんご（日本）](https://github.com/nkqa/cd-record-pack-generator/blob/master/README_JA_JP.md)
 
 _Easily replace the original CDs with your own music_
 
