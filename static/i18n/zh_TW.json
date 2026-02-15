@@ -1,0 +1,49 @@
+{
+  "title": "我的世界基岩版CD唱片更改工具",
+  "subtitle": "用簡單的方式將原版唱片換成您的音樂",
+  "description": "不用文件管理器進行繁瑣且重複的改名和替換操作",
+  "developer": "開發者: 喵可醬QAQ",
+  "features": {
+    "replace": "將原版唱片替換成您的音樂",
+    "customize": "自定義唱片描述名，便於區分",
+    "convert": "內置轉換格式的功能",
+    "resize": "自動縮小圖片像素，防止遊戲卡頓和物品過大",
+    "crop": "裁剪物品展示圖的像素大小"
+  },
+  "upload": {
+    "music": "選擇音樂文件",
+    "image": "選擇圖片文件",
+    "add_music": "添加音樂",
+    "add_image": "添加圖片",
+    "remove": "刪除",
+    "edit": "編輯",
+    "pack_success": "打包成功！",
+    "download": "下載mcpack",
+    "error": "請選擇有效的音樂文件！",
+    "format_error": "不支持的文件格式，請使用MP3、WAV、OGG格式",
+    "duration_warning": "警告：音樂時長超過15分鐘，可能導致遊戲卡頓"
+  },
+  "form": {
+    "name": "唱片名稱",
+    "description": "自定義描述（可選）"
+  },
+  "modal": {
+    "cancel": "取消",
+    "conversion": {
+      "title": "音頻轉換",
+      "cancel": "取消轉換",
+      "processing": "轉換中: ",
+      "to": " → "
+    },
+    "crop": {
+      "title": "裁剪圖片",
+      "confirm": "確認裁剪"
+    }
+  },
+  "language": {
+    "label": "語言",
+    "zh": "中文",
+    "en": "English",
+    "ja": "日本語"
+  }
+}

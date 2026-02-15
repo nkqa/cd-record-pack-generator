@@ -587,7 +587,8 @@ window.addEventListener('DOMContentLoaded', function() {
   
   // 语言选项
   const languages = [
-    { code: 'zh_CN', name: '中文' },
+    { code: 'zh_CN', name: '简体中文' },
+    { code: 'zh_TW', name: '繁體中文' },
     { code: 'en_US', name: 'English' },
     { code: 'ja_JP', name: '日本語' }
   ];
