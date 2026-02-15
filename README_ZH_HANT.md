@@ -1,4 +1,4 @@
-### Minecraft 基岩版 CD 替換唱片工具
+### Minecraft 基岩版替換唱片工具
 
 [简体中文（中国大陆）](https://github.com/nkqa/cd-record-pack-generator/blob/master/README.md)|繁體中文|[English（United States）](https://github.com/nkqa/cd-record-pack-generator/blob/master/README_EN_US.md)|[にほんご（日本）](https://github.com/nkqa/cd-record-pack-generator/blob/master/README_JA_JP.md)
 
