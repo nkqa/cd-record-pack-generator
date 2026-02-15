@@ -525,6 +525,14 @@ const i18n = {
     if (confirmCropBtn) {
       confirmCropBtn.textContent = this.t('modal.crop.confirm', 'Confirm Crop');
     }
+    
+    // 更新语言栏标签
+    const langLabels = document.querySelectorAll('.language-selector span');
+    langLabels.forEach(label => {
+      if (label.textContent.includes(':')) {
+        label.textContent = this.t('language.label', 'Language') + ': ';
+      }
+    });
   }
 };
 
@@ -570,7 +578,7 @@ window.addEventListener('DOMContentLoaded', function() {
   
   // 添加语言标签
   const langLabel = document.createElement('span');
-  langLabel.textContent = '语言: ';
+  langLabel.textContent = i18n.t('language.label', 'Language') + ': ';
   langLabel.style.cssText = `
     font-size: 14px;
     color: #666;
