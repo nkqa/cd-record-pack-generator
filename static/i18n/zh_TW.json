@@ -1,15 +1,15 @@
 {
-  "title": "我的世界音樂唱片替換工具（基岩版）",
+  "title": "麥塊唱片替換工具（基岩版）",
   "header": {
-    "title": "我的世界音樂唱片替換工具（基岩版）"
+    "title": "麥塊唱片替換工具（基岩版）"
   },
   "info": {
-    "toggle": "介紹資訊",
+    "toggle": "資訊",
     "developer": "開發者：",
     "community": "社區：",
     "source_code": "原始碼：",
     "what_is_this": "此網站用途？",
-    "what_is_this_desc": "這個網站提供生成我的世界基岩版唱片替換功能",
+    "what_is_this_desc": "這個網站提供生成麥塊基岩版唱片替換功能",
     "how_to_use": "如何使用該工具？",
     "how_to_use_desc": "只需要將ogg格式的音頻上傳即可，需要注意下面的最高支援時間",
     "why_cant_upload": "為什麼我無法上傳或下載？",
@@ -26,20 +26,20 @@
     "title": "常見問題",
     "zh_title": "中文",
     "zh_q1": "Q1：為什麼我在物品欄裡查了填入的自定義描述名查不到？",
-    "zh_a1": "A1：您需要輸入的是\"音樂唱片\"（英：Music Disc、日：レコード），然後才能查找。",
+    "zh_a1": "A1：您需要輸入的是\"唱片\"（英：Music Disc、日：レコード），然後才能查找。",
     "en_title": "English",
     "en_q1": "Q1: Why can't I find my custom description in the inventory search?",
     "en_a1": "A1: You need to search for \"Music Disc\" (Chinese: 音樂唱片, Japanese: レコード) first, then you can find it.",
     "ja_title": "日本語",
     "ja_q1": "Q1：なぜインベントリ検索でカスタム説明を見つけることができないのですか？",
-    "ja_a1": "A1：最初に\"レコード\"（中国語：音樂唱片、英語：Music Disc）を検索する必要があります。その後、見つけることができます。"
+    "ja_a1": "A1：最初に\"レコード\"（中国語：唱片、英語：Music Disc）を検索する必要があります。その後、見つけることができます。"
   },
   "upload": {
     "title": "上傳音樂文件",
     "select_audio": "選擇音頻（不上傳即為保持原版音樂）",
     "duration_warning": "此名字的樂曲對應時長不能超過",
     "custom_desc": "自定義描述（預設自動填入文件名）",
-    "icon_label": "音樂包圖標",
+    "icon_label": "唱片包圖標",
     "select_icon": "選擇圖標",
     "auto_convert": "啟用自動轉換圖片格式",
     "audio_conversion": "啟用音頻格式轉換",
@@ -48,7 +48,7 @@
     "duration_check": "啟用音頻時長檢查",
     "image_size_modify": "啟用物品展示圖像素修改",
     "pixels": "像素",
-    "pack_name": "音樂包名稱",
+    "pack_name": "唱片包名稱",
     "pack_name_placeholder": "未輸入則使用第一個上傳文件的名字",
     "item_image": "選擇物品展示圖（不上傳即為保持原版材質）",
     "selected_image": "已選擇圖片：",
