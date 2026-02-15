@@ -232,17 +232,21 @@ const i18n = {
       
       // 根据当前语言显示对应的FAQ区块
       const faqZh = document.querySelector('#faq-zh');
+      const faqZhTw = document.querySelector('#faq-zh-tw');
       const faqEn = document.querySelector('#faq-en');
       const faqJa = document.querySelector('#faq-ja');
       
       // 隐藏所有语言区块
       if (faqZh) faqZh.style.display = 'none';
+      if (faqZhTw) faqZhTw.style.display = 'none';
       if (faqEn) faqEn.style.display = 'none';
       if (faqJa) faqJa.style.display = 'none';
       
       // 根据当前语言显示对应的区块
       if (this.currentLang === 'zh_CN' && faqZh) {
         faqZh.style.display = 'block';
+      } else if (this.currentLang === 'zh_TW' && faqZhTw) {
+        faqZhTw.style.display = 'block';
       } else if (this.currentLang === 'en_US' && faqEn) {
         faqEn.style.display = 'block';
       } else if (this.currentLang === 'ja_JP' && faqJa) {
@@ -305,6 +309,26 @@ const i18n = {
           const a1 = faqJaItems[0].querySelector('p:nth-child(2)');
           if (a1) {
             a1.textContent = 'A1：最初に「レコード」（中国語：音乐唱片、英語：Music Disc）を検索する必要があります。その後、見つけることができます。';
+          }
+        }
+      }
+      
+      // 更新繁体中文FAQ
+      if (faqZhTw) {
+        const faqZhTwTitle = faqZhTw.querySelector('h4');
+        if (faqZhTwTitle) {
+          faqZhTwTitle.textContent = '繁體中文';
+        }
+        
+        const faqZhTwItems = faqZhTw.querySelectorAll('.faq-item');
+        if (faqZhTwItems[0]) {
+          const q1 = faqZhTwItems[0].querySelector('p:nth-child(1)');
+          if (q1) {
+            q1.innerHTML = `<strong>Q1：為什麼我在物品欄裡查了填入的自定義描述名查不到？</strong>`;
+          }
+          const a1 = faqZhTwItems[0].querySelector('p:nth-child(2)');
+          if (a1) {
+            a1.textContent = 'A1：您需要輸入的是「音樂唱片」（英：Music Disc、日：レコード），然後才能查找。';
           }
         }
       }
