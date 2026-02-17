@@ -16,6 +16,25 @@ window.onerror = function() {
     // 不做特殊处理，让加载继续
 };
 
+// 跟踪未保存的更改
+let hasUnsavedChanges = false;
+
+// 设置未保存更改状态
+function setUnsavedChanges(state) {
+    hasUnsavedChanges = state;
+}
+
+// 页面离开确认
+window.onbeforeunload = function(e) {
+    if (hasUnsavedChanges) {
+        // 标准方式
+        e.preventDefault();
+        e.returnValue = '';
+        // 某些浏览器需要返回字符串
+        return '你所做的更改可能未保存';
+    }
+};
+
 // 加载函数
 async function loadResources() {
     console.log('开始加载资源');
@@ -609,6 +628,9 @@ fileInputs.forEach(inputInfo => {
                     size: file.size,
                     lastModified: file.lastModified
                 };
+                
+                // 设置未保存更改状态
+                setUnsavedChanges(true);
                 try {
                     let finalFile = file;
                     let isConverted = false;
@@ -962,6 +984,9 @@ imageFileInputs.forEach(inputInfo => {
                     size: file.size,
                     lastModified: file.lastModified
                 };
+                
+                // 设置未保存更改状态
+                setUnsavedChanges(true);
                 
                 try {
                     // 检查自动转换图片格式开关
@@ -1884,6 +1909,9 @@ if (packBtn) {
                 status.textContent = i18n.t('upload.pack_success', '打包成功！');
                 status.className = 'status success';
             }
+            
+            // 重置未保存更改状态
+            setUnsavedChanges(false);
         } catch (error) {
             // 显示错误信息
             showErrorModal(error.message);
@@ -2019,6 +2047,9 @@ function openDeleteModal(target, type) {
                 // 忽略错误
             }
         }
+        
+        // 设置未保存更改状态
+        setUnsavedChanges(true);
         
         // 关闭模态框
         modal.style.display = 'none';
