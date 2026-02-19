@@ -1,0 +1,24 @@
+{
+  "name": "cd-record-pack-generator",
+  "version": "1.0.0",
+  "description": "Minecraft CD Record Pack Generator",
+  "main": "index.html",
+  "scripts": {
+    "dev": "python -m http.server 24567",
+    "build": "echo 'Build completed'"
+  },
+  "keywords": [
+    "minecraft",
+    "cd",
+    "record",
+    "pack",
+    "generator"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@ffmpeg/core": "0.12.10",
+    "@ffmpeg/ffmpeg": "0.12.7",
+    "@ffmpeg/util": "0.12.1"
+  }
+}

@@ -83,26 +83,39 @@
     "ogg_format_disabled": "Error: Non-ogg format",
     "png_format": "Error: Format must be .png",
     "duration_exceeded": "Error: Audio duration cannot exceed",
-    "no_files": "Please upload at least one .ogg format file",
+    "no_files": "Please upload audio first",
     "error": "Error",
     "must_be_image": "Selected file must be an image",
     "must_be_png": "Format must be png",
     "browser_not_support_conversion": "Browser does not support audio conversion, will use original file directly",
-    "audio_conversion_failed": "Audio conversion failed, please ensure you upload a valid audio file",
+    "audio_conversion_failed": "Audio conversion failed, please ensure you uploaded a valid audio file",
     "file_processing_failed": "File processing failed, please try again",
     "image_loading_failed": "Image loading failed",
     "image_processing_failed": "Image processing failed, please try again",
     "image_format_not_supported": "Image format not supported",
-    "please_upload_image": "Please upload an image file"
+    "please_upload_image": "Please upload an image file",
+    "audio_conversion_cannot_disable": "Audio format conversion function cannot be disabled"
   },
   "modal": {
     "confirm_delete": "Confirm deletion",
     "confirm_delete_icon": "Confirm deletion of icon?",
     "confirm_delete_message": "Are you sure you want to delete this file?",
+    "delete": {
+      "confirm_message": "Are you sure you want to delete this file?",
+      "note": "This operation will not delete any local files"
+    },
     "confirm_cancel": "Confirm cancellation",
     "confirm_cancel_message": "Are you sure you want to cancel the current audio conversion?",
     "confirm": "Confirm",
     "cancel": "Cancel",
+    "duration_check": {
+      "warning_title": "Warning",
+      "warning_message1": "Music longer than the time limit will be forced to stop when played directly with a jukebox",
+      "warning_message2": "You can only play longer durations when using commands",
+      "warning_message3": "You can only play longer durations when using commands. Are you sure you want to add it?",
+      "still_disable": "Still disable",
+      "still_select": "Still select"
+    },
     "conversion": {
       "title": "Audio Conversion",
       "cancel": "Cancel Conversion",
@@ -112,6 +125,38 @@
     "crop": {
       "title": "Crop Image",
       "confirm": "Confirm Crop"
+    },
+    "ffmpeg": {
+      "select_source": "Select FFmpeg Download Source",
+      "detecting_latency": "Detecting latency for each download source, please wait...",
+      "select_fastest": "Select Fastest Source",
+      "load_ffmpeg": "Load FFmpeg",
+      "downloading": "Downloading FFmpeg core files, please wait..."
+    }
+  },
+  "ffmpeg": {
+    "ready": "FFmpeg Ready",
+    "not_loaded": "FFmpeg Not Loaded",
+    "loading": "FFmpeg Loading...",
+    "loading_text": "Loading...",
+    "required_note": "Required for audio format conversion. If not downloaded, audio conversion will not be possible.",
+    "cdn": {
+      "available": "Available",
+      "unavailable": "Unavailable",
+      "select": "Select",
+      "download_source": "Download Source",
+      "latency": "Latency",
+      "status": "Status",
+      "action": "Action",
+      "all_unavailable": "All download sources are unavailable, please check your network connection",
+      "cannot_auto_select": "Cannot auto select, please manually select a download source",
+      "test_not_ready": "Test results are not ready, please try again later"
+    },
+    "error": {
+      "title": "FFmpeg Load Failed",
+      "message": "Please check your network connection and refresh the page",
+      "refresh": "Refresh Page",
+      "cancel": "Cancel"
     }
   },
   "language": {
@@ -120,5 +165,17 @@
     "zh_TW": "繁體中文",
     "en": "English",
     "ja": "日本語"
+  },
+  "command": {
+    "title": "Play Command Generation",
+    "play": "Play Command",
+    "stop": "Stop Command",
+    "placeholder": "Commands will be displayed here...",
+    "generate": "Generate Commands",
+    "copy": "Copy Commands",
+    "error": {
+      "no_audio": "Please upload audio files first"
+    },
+    "copied": "Commands copied to clipboard!"
   }
 }

@@ -1,7 +1,7 @@
 {
-  "title": "Minecraft 音楽ディスク置換ツール（ベッドロックエディション）",
+  "title": "Minecraft 音楽レコード置換ツール（ベッドロックエディション）",
   "header": {
-    "title": "Minecraft 音楽ディスク置換ツール（ベッドロックエディション）"
+    "title": "Minecraft 音楽レコード置換ツール（ベッドロックエディション）"
   },
   "info": {
     "toggle": "情報",
@@ -9,7 +9,7 @@
     "community": "コミュニティ：",
     "source_code": "ソースコード:",
     "what_is_this": "このウェブサイトの目的は何ですか？",
-    "what_is_this_desc": "このウェブサイトは、Minecraft ベッドロックエディションのディスク置換機能を生成します",
+    "what_is_this_desc": "このウェブサイトは、Minecraft ベッドロックエディションのレコード置換機能を生成します",
     "how_to_use": "このツールの使い方は？",
     "how_to_use_desc": "ogg形式のオーディオをアップロードするだけです。以下の最大サポート時間に注意してください",
     "why_cant_upload": "なぜアップロードまたはダウンロードできないのですか？",
@@ -83,7 +83,7 @@
     "ogg_format_disabled": "エラー：.ogg形式ではない",
     "png_format": "エラー：形式は.pngでなければなりません",
     "duration_exceeded": "エラー：オーディオの長さは",
-    "no_files": "少なくとも1つの.ogg形式のファイルをアップロードしてください",
+    "no_files": "まずオーディオをアップロードしてください",
     "error": "エラー",
     "must_be_image": "選択したファイルは画像でなければなりません",
     "must_be_png": "形式はpngでなければなりません",
@@ -93,16 +93,29 @@
     "image_loading_failed": "画像の読み込みに失敗しました",
     "image_processing_failed": "画像の処理に失敗しました。もう一度お試しください",
     "image_format_not_supported": "画像形式がサポートされていません",
-    "please_upload_image": "画像ファイルをアップロードしてください"
+    "please_upload_image": "画像ファイルをアップロードしてください",
+    "audio_conversion_cannot_disable": "オーディオ形式変換機能を無効にすることはできません"
   },
   "modal": {
     "confirm_delete": "削除を確認",
     "confirm_delete_icon": "アイコンを削除しますか？",
     "confirm_delete_message": "このファイルを削除してもよろしいですか？",
+    "delete": {
+      "confirm_message": "このファイルを削除してもよろしいですか？",
+      "note": "この操作でローカルのファイルは削除されません"
+    },
     "confirm_cancel": "キャンセルを確認",
     "confirm_cancel_message": "現在のオーディオ変換をキャンセルしてもよろしいですか？",
     "confirm": "確認",
     "cancel": "キャンセル",
+    "duration_check": {
+      "warning_title": "警告",
+      "warning_message1": "時間制限を超える音楽は、ジュークボックスで直接再生した場合に強制的に停止されます",
+      "warning_message2": "コマンドを使用する場合にのみ、より長い再生時間を使用することができます",
+      "warning_message3": "コマンドを使用する場合にのみ、より長い再生時間を使用することができます。追加してもよろしいですか？",
+      "still_disable": "無効にする",
+      "still_select": "選択する"
+    },
     "conversion": {
       "title": "オーディオ変換",
       "cancel": "変換をキャンセル",
@@ -112,6 +125,38 @@
     "crop": {
       "title": "画像を切り抜く",
       "confirm": "切り抜きを確認"
+    },
+    "ffmpeg": {
+      "select_source": "FFmpegダウンロードソースを選択",
+      "detecting_latency": "各ダウンロードソースのレイテンシーを検出中、お待ちください...",
+      "select_fastest": "最速のソースを選択",
+      "load_ffmpeg": "FFmpegをロード",
+      "downloading": "FFmpegコアファイルをダウンロード中、お待ちください..."
+    }
+  },
+  "ffmpeg": {
+    "ready": "FFmpeg準備完了",
+    "not_loaded": "FFmpegがロードされていません",
+    "loading": "FFmpegロード中...",
+    "loading_text": "読み込み中...",
+    "required_note": "オーディオ形式変換に必要です。ダウンロードしないとオーディオ変換はできません。",
+    "cdn": {
+      "available": "利用可能",
+      "unavailable": "利用不可",
+      "select": "選択",
+      "download_source": "ダウンロードソース",
+      "latency": "レイテンシー",
+      "status": "ステータス",
+      "action": "アクション",
+      "all_unavailable": "すべてのダウンロードソースが利用できません。ネットワーク接続を確認してください",
+      "cannot_auto_select": "自動選択できません。手動でダウンロードソースを選択してください",
+      "test_not_ready": "テスト結果が準備できていません。後でもう一度お試しください"
+    },
+    "error": {
+      "title": "FFmpegのロードに失敗しました",
+      "message": "ネットワーク接続を確認してページを更新してください",
+      "refresh": "ページを更新",
+      "cancel": "キャンセル"
     }
   },
   "language": {
@@ -120,5 +165,17 @@
     "zh_TW": "繁體中文",
     "en": "English",
     "ja": "日本語"
+  },
+  "command": {
+    "title": "再生コマンド生成",
+    "play": "再生コマンド",
+    "stop": "停止コマンド",
+    "placeholder": "コマンドがここに表示されます...",
+    "generate": "コマンドを生成",
+    "copy": "コマンドをコピー",
+    "error": {
+      "no_audio": "まずオーディオファイルをアップロードしてください"
+    },
+    "copied": "コマンドがクリップボードにコピーされました！"
   }
 }

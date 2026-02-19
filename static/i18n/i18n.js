@@ -337,7 +337,7 @@ const i18n = {
           }
           const a1 = faqZhTwItems[0].querySelector('p:nth-child(2)');
           if (a1) {
-            a1.textContent = 'A1：您需要輸入的是「音樂唱片」（英：Music Disc、日：レコード），然後才能查找。';
+            a1.textContent = 'A1：您需要輸入的是「唱片」（英：Music Disc、日：レコード），然後才能查找。';
           }
         }
       }
@@ -475,7 +475,7 @@ const i18n = {
     console.log('audioProcessingLabel:', audioProcessingLabel);
     if (audioProcessingLabel) {
       console.log('Updating audioProcessingLabel text');
-      audioProcessingLabel.textContent = `${this.t('upload.audio_conversion', 'Enable audio format conversion')}（${this.t('upload.slow_conversion', '比较慢，建议使用其它在线转换工具')}）`;
+      audioProcessingLabel.textContent = this.t('upload.audio_conversion', 'Enable audio format conversion');
     }
     
     // 更新音频时长检查开关标签
@@ -510,11 +510,62 @@ const i18n = {
       }
     });
     
+    // 更新播放指令生成部分
+    const commandSection = document.querySelector('.command-section');
+    if (commandSection) {
+      // 更新标题
+      const commandTitle = commandSection.querySelector('h3');
+      if (commandTitle) {
+        commandTitle.textContent = this.t('command.title', '播放指令生成');
+      }
+      
+      // 更新单选按钮标签
+      const playRadioLabel = commandSection.querySelector('label:nth-child(1)');
+      if (playRadioLabel) {
+        playRadioLabel.innerHTML = `<input type="radio" name="commandType" value="play" checked> ${this.t('command.play', '播放指令')}`;
+      }
+      
+      const stopRadioLabel = commandSection.querySelector('label:nth-child(2)');
+      if (stopRadioLabel) {
+        stopRadioLabel.innerHTML = `<input type="radio" name="commandType" value="stop"> ${this.t('command.stop', '停止播放指令')}`;
+      }
+      
+      // 更新文本域占位符
+      const commandOutput = document.getElementById('commandOutput');
+      if (commandOutput) {
+        commandOutput.placeholder = this.t('command.placeholder', '指令将显示在这里...');
+      }
+      
+      // 更新按钮文本
+      const generateBtn = document.getElementById('generateCommandsBtn');
+      if (generateBtn) {
+        generateBtn.textContent = this.t('command.generate', '生成指令');
+      }
+      
+      const copyBtn = document.getElementById('copyCommandsBtn');
+      if (copyBtn) {
+        copyBtn.textContent = this.t('command.copy', '复制指令');
+      }
+    }
+    
     // 更新删除按钮文本
     const deleteBtns = document.querySelectorAll('.delete-btn');
     deleteBtns.forEach(btn => {
       btn.textContent = this.t('upload.delete', 'Delete');
     });
+    
+    // 更新删除确认模态框文本
+    const deleteModal = document.getElementById('deleteModal');
+    if (deleteModal) {
+      const deleteMessage = document.getElementById('deleteConfirmMessage');
+      if (deleteMessage) {
+        deleteMessage.textContent = this.t('modal.delete.confirm_message', '确定要删除此文件吗？');
+      }
+      const deleteNote = document.getElementById('deleteNote');
+      if (deleteNote) {
+        deleteNote.textContent = this.t('modal.delete.note', '此操作不会删除本地任何文件');
+      }
+    }
     
     // 更新编辑按钮文本
     const editBtns = document.querySelectorAll('.edit-btn');
@@ -557,6 +608,35 @@ const i18n = {
     const confirmCropBtn = document.getElementById('confirmCropBtn');
     if (confirmCropBtn) {
       confirmCropBtn.textContent = this.t('modal.crop.confirm', 'Confirm Crop');
+    }
+    
+    // 更新FFmpeg状态文本
+    const ffmpegStatusText = document.getElementById('ffmpegStatusText');
+    if (ffmpegStatusText) {
+      // 根据当前状态更新文本
+      const statusDot = document.getElementById('ffmpegStatusDot');
+      if (statusDot) {
+        if (statusDot.classList.contains('ready')) {
+          ffmpegStatusText.textContent = this.t('ffmpeg.ready', 'FFmpeg已就绪');
+        } else if (statusDot.classList.contains('error')) {
+          ffmpegStatusText.textContent = this.t('ffmpeg.not_loaded', 'FFmpeg未加载');
+        } else if (statusDot.classList.contains('checking')) {
+          ffmpegStatusText.textContent = this.t('ffmpeg.loading', 'FFmpeg加载中...');
+        }
+      }
+    }
+    
+    // 更新FFmpeg下载弹窗
+    const ffmpegDownloadModal = document.getElementById('ffmpegDownloadModal');
+    if (ffmpegDownloadModal) {
+      const h3 = ffmpegDownloadModal.querySelector('h3');
+      if (h3) {
+        h3.textContent = this.t('modal.ffmpeg.load_ffmpeg', '加载FFmpeg');
+      }
+      const p = ffmpegDownloadModal.querySelector('p');
+      if (p) {
+        p.textContent = this.t('modal.ffmpeg.downloading', '正在下载FFmpeg核心文件，请稍候...');
+      }
     }
     
     // 更新语言栏标签

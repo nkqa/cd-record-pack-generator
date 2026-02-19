@@ -83,26 +83,39 @@
     "ogg_format_disabled": "錯誤：非ogg格式",
     "png_format": "錯誤：格式必須為 .png",
     "duration_exceeded": "錯誤：音頻時長不能超過",
-    "no_files": "請至少上傳一個 .ogg 格式文件",
+    "no_files": "請先上傳音頻",
     "error": "錯誤",
     "must_be_image": "選擇的必須是圖片",
     "must_be_png": "格式必須是png",
-    "browser_not_support_conversion": "瀏覽器不支援音頻轉換，將直接使用原始文件",
+    "browser_not_support_conversion": "瀏覽器不支持音頻轉換，將直接使用原始文件",
     "audio_conversion_failed": "音頻轉換失敗，請確保上傳的是有效的音頻文件",
     "file_processing_failed": "文件處理失敗，請重試",
-    "image_loading_failed": "圖片載入失敗",
+    "image_loading_failed": "圖片加載失敗",
     "image_processing_failed": "圖片處理失敗，請重試",
-    "image_format_not_supported": "圖片格式不支援",
-    "please_upload_image": "請上傳圖片文件"
+    "image_format_not_supported": "圖片格式不支持",
+    "please_upload_image": "請上傳圖片文件",
+    "audio_conversion_cannot_disable": "音頻格式轉換功能不能關閉"
   },
   "modal": {
     "confirm_delete": "確認刪除",
     "confirm_delete_icon": "確認刪除圖標嗎？",
     "confirm_delete_message": "確定要刪除此文件嗎？",
+    "delete": {
+      "confirm_message": "確定要刪除此文件嗎？",
+      "note": "此操作不會刪除本地任何文件"
+    },
     "confirm_cancel": "確認取消",
     "confirm_cancel_message": "確定要取消當前的音頻轉換嗎？",
     "confirm": "確認",
     "cancel": "取消",
+    "duration_check": {
+      "warning_title": "警告",
+      "warning_message1": "直接使用唱片机播放超過時間的音樂時將會被強制停止播放",
+      "warning_message2": "只有用指令播放時才可以播放更長的時長",
+      "warning_message3": "只有用指令播放時才可以播放更長的時長，確定要添加嗎？",
+      "still_disable": "仍要關閉",
+      "still_select": "仍要選擇"
+    },
     "conversion": {
       "title": "音頻轉換",
       "cancel": "取消轉換",
@@ -112,6 +125,38 @@
     "crop": {
       "title": "裁剪圖片",
       "confirm": "確認裁剪"
+    },
+    "ffmpeg": {
+      "select_source": "選擇FFmpeg下載源",
+      "detecting_latency": "正在檢測各下載源的延遲，請稍候...",
+      "select_fastest": "選擇最快源",
+      "load_ffmpeg": "載入FFmpeg",
+      "downloading": "正在下載FFmpeg核心文件，請稍候..."
+    }
+  },
+  "ffmpeg": {
+    "ready": "FFmpeg已就緒",
+    "not_loaded": "FFmpeg未載入",
+    "loading": "FFmpeg載入中...",
+    "loading_text": "載入中...",
+    "required_note": "轉換音頻格式必須的東西，如果不下載將無法轉換音頻格式",
+    "cdn": {
+      "available": "可用",
+      "unavailable": "不可用",
+      "select": "選擇",
+      "download_source": "下載源",
+      "latency": "延遲",
+      "status": "狀態",
+      "action": "操作",
+      "all_unavailable": "所有下載源都不可用，請檢查網路連接",
+      "cannot_auto_select": "無法自動選擇，請手動選擇一個下載源",
+      "test_not_ready": "測試結果尚未就緒，請稍後再試"
+    },
+    "error": {
+      "title": "FFmpeg載入失敗",
+      "message": "請確認網路暢通並重新整理頁面",
+      "refresh": "重新整理頁面",
+      "cancel": "取消"
     }
   },
   "language": {
@@ -120,5 +165,17 @@
     "zh_TW": "繁體中文",
     "en": "English",
     "ja": "日本語"
+  },
+  "command": {
+    "title": "播放指令生成",
+    "play": "播放指令",
+    "stop": "停止播放指令",
+    "placeholder": "指令將顯示在這裡...",
+    "generate": "生成指令",
+    "copy": "複製指令",
+    "error": {
+      "no_audio": "請先上傳音頻文件"
+    },
+    "copied": "指令已複製到剪貼板！"
   }
 }

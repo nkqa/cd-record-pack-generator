@@ -43,7 +43,6 @@
     "select_icon": "选择图标",
     "auto_convert": "启用自动转换图片格式",
     "audio_conversion": "启用音频格式转换",
-    "slow_conversion": "不可用，请使用其它在线转换工具",
     "pack_success": "打包成功！",
     "duration_check": "启用音频时长检查",
     "image_size_modify": "启用物品展示图像素修改",
@@ -83,7 +82,7 @@
     "ogg_format_disabled": "错误：非ogg格式",
     "png_format": "错误：格式必须为 .png",
     "duration_exceeded": "错误：音频时长不能超过",
-    "no_files": "请至少上传一个 .ogg 格式文件",
+    "no_files": "请先上传音频",
     "error": "错误",
     "must_be_image": "选择的必须是图片",
     "must_be_png": "格式必须是png",
@@ -93,16 +92,29 @@
     "image_loading_failed": "图片加载失败",
     "image_processing_failed": "图片处理失败，请重试",
     "image_format_not_supported": "图片格式不支持",
-    "please_upload_image": "请上传图片文件"
+    "please_upload_image": "请上传图片文件",
+    "audio_conversion_cannot_disable": "音频格式转换功能不能关闭"
   },
   "modal": {
     "confirm_delete": "确认删除",
     "confirm_delete_icon": "确认删除图标吗？",
     "confirm_delete_message": "确定要删除此文件吗？",
+    "delete": {
+      "confirm_message": "确定要删除此文件吗？",
+      "note": "此操作不会删除本地任何文件"
+    },
     "confirm_cancel": "确认取消",
     "confirm_cancel_message": "确定要取消当前的音频转换吗？",
     "confirm": "确认",
     "cancel": "取消",
+    "duration_check": {
+      "warning_title": "警告",
+      "warning_message1": "直接使用唱片机播放超过时间的音乐时将会被强制停止播放",
+      "warning_message2": "只有用指令播放时才可以播放更长的时长",
+      "warning_message3": "只有用指令播放时才可以播放更长的时长，确定要添加吗？",
+      "still_disable": "仍要关闭",
+      "still_select": "仍要选择"
+    },
     "conversion": {
       "title": "音频转换",
       "cancel": "取消转换",
@@ -112,6 +124,38 @@
     "crop": {
       "title": "裁剪图片",
       "confirm": "确认裁剪"
+    },
+    "ffmpeg": {
+      "select_source": "选择FFmpeg下载源",
+      "detecting_latency": "正在检测各下载源的延迟，请稍候...",
+      "select_fastest": "选择最快源",
+      "load_ffmpeg": "加载FFmpeg",
+      "downloading": "正在下载FFmpeg核心文件，请稍候..."
+    }
+  },
+  "ffmpeg": {
+    "ready": "FFmpeg已就绪",
+    "not_loaded": "FFmpeg未加载",
+    "loading": "FFmpeg加载中...",
+    "loading_text": "加载中...",
+    "required_note": "转换音频格式必须的东西，如果不下载将无法转换音频格式",
+    "cdn": {
+      "available": "可用",
+      "unavailable": "不可用",
+      "select": "选择",
+      "download_source": "下载源",
+      "latency": "延迟",
+      "status": "状态",
+      "action": "操作",
+      "all_unavailable": "所有下载源都不可用，请检查网络连接",
+      "cannot_auto_select": "无法自动选择，请手动选择一个下载源",
+      "test_not_ready": "测试结果尚未就绪，请稍后再试"
+    },
+    "error": {
+      "title": "FFmpeg加载失败",
+      "message": "请确认网络通畅并刷新页面",
+      "refresh": "刷新页面",
+      "cancel": "取消"
     }
   },
   "language": {
@@ -120,5 +164,17 @@
     "zh_TW": "繁體中文",
     "en": "English",
     "ja": "日本語"
+  },
+  "command": {
+    "title": "播放指令生成",
+    "play": "播放指令",
+    "stop": "停止播放指令",
+    "placeholder": "指令将显示在这里...",
+    "generate": "生成指令",
+    "copy": "复制指令",
+    "error": {
+      "no_audio": "请先上传音频文件"
+    },
+    "copied": "指令已复制到剪贴板！"
   }
 }

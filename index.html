@@ -11,6 +11,7 @@
     <script src="./static/jszip/FileSaver.min.js"></script>
     <script src="./static/i18n/i18n.js"></script>
 
+
     <script>
          var link = document.createElement('link');
          link.rel = 'stylesheet';
@@ -41,6 +42,10 @@
     
     <div class="container">
         <h1>我的世界音乐唱片替换工具（基岩版）</h1>
+        <div id="ffmpegStatus" class="ffmpeg-status">
+            <span id="ffmpegStatusDot" class="status-dot"></span>
+            <span id="ffmpegStatusText" class="status-text">FFmpeg状态检查中...</span>
+        </div>
         
         <!-- 介绍部分 -->
         <div class="info-section">
@@ -601,9 +606,9 @@
                 </div>
             </div>
             <div class="audio-processing-option">
-                <span id="audioConversionText">启用音频格式转换</span>
+                <span id="audioConversionText">音频格式转换</span>
                 <div class="toggle-switch">
-                    <input type="checkbox" id="audioProcessingToggle">
+                    <input type="checkbox" id="audioProcessingToggle" checked>
                     <label for="audioProcessingToggle" class="toggle-label"></label>
                 </div>
             </div>
@@ -635,11 +640,26 @@
         
         <div class="status" id="status"></div>
         
+        <!-- 指令生成区域 -->
+        <div class="command-section" style="margin-top: 30px; padding: 20px; border: 1px solid #ddd; border-radius: 5px; background-color: #f9f9f9;">
+            <h3>播放指令生成</h3>
+            <div style="margin-bottom: 15px;">
+                <label style="margin-right: 15px;"><input type="radio" name="commandType" value="play" checked> 播放指令</label>
+                <label><input type="radio" name="commandType" value="stop"> 停止播放指令</label>
+            </div>
+            <div style="margin-bottom: 15px;">
+                <textarea id="commandOutput" rows="10" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; resize: vertical; background-color: #f0f0f0; pointer-events: none;" placeholder="指令将显示在这里..."></textarea>
+            </div>
+            <div style="display: flex; justify-content: flex-end;">
+                <button class="btn" id="generateCommandsBtn">生成指令</button>
+                <button class="btn" id="copyCommandsBtn" style="margin-left: 10px;">复制指令</button>
+            </div>
+        </div>
+        
         <div class="notice-section">
             <h3>注意事项</h3>
             <p>每个乐曲选择按钮下方都标明了限制时长，如果上传的乐曲超过了限制，会直接被游戏强制停止播放</p>
             <p>部分浏览器会在文件名结尾增加.zip，如果遇到这种情况，需要自行去除</p>
-            <p id="slowConversionNotice">内置的音频格式转换工具会比较慢</p>
         </div>
         
         <div class="tools-section" id="convert-tools">
@@ -710,7 +730,8 @@
     <div id="deleteModal" class="modal" style="z-index: 1001;">
         <div class="modal-content">
             <h3 id="modalTitle">确认删除</h3>
-            <p>确定要删除此文件吗？</p>
+            <p id="deleteConfirmMessage">确定要删除此文件吗？</p>
+            <p id="deleteNote">此操作不会删除本地任何文件</p>
             <div class="modal-buttons">
                 <button id="confirmDeleteBtn" class="btn confirm">确认</button>
                 <button id="cancelDeleteBtn" class="btn cancel">取消</button>
@@ -754,6 +775,27 @@
                 <button id="cancelCropBtn" class="btn" style="background-color: #6c757d;">取消</button>
                 <button id="confirmCropBtn" class="btn" style="background-color: #007bff;">确认裁剪</button>
             </div>
+        </div>
+    </div>
+    
+    <!-- FFmpeg下载弹窗 -->
+    <div id="ffmpegDownloadModal" class="modal">
+        <div class="modal-content">
+            <h3>加载FFmpeg</h3>
+            <p>正在下载FFmpeg核心文件，请稍候...</p>
+            <div class="conversion-progress" style="margin: 20px 0; background-color: #CCCCCC; border: 1px solid #808080; height: 18px; position: relative;">
+                <div id="ffmpegDownloadProgress" class="progress-bar" style="width: 100%; height: 100%; background-color: #00BFFF; position: relative; overflow: hidden;">
+                    <div class="xp-progress-bar" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(90deg, #00BFFF, #0099CC, #00BFFF);"></div>
+                    <div class="xp-progress-animation" style="position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent); animation: xpProgress 1.5s infinite;"></div>
+                </div>
+            </div>
+            <div id="ffmpegDownloadProgressText" style="text-align: center; font-size: 14px; color: #666;">加载中...</div>
+            <style>
+                @keyframes xpProgress {
+                    0% { left: -100%; }
+                    100% { left: 100%; }
+                }
+            </style>
         </div>
     </div>
     
@@ -822,6 +864,60 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+        }
+        
+        /* FFmpeg状态指示器样式 */
+        .ffmpeg-status {
+            display: flex;
+            align-items: center;
+            margin: 10px 0 20px 0;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .status-dot {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+            transition: background-color 0.3s ease;
+        }
+        
+        .status-dot.ready {
+            background-color: #4CAF50;
+            box-shadow: 0 0 5px #4CAF50;
+        }
+        
+        .status-dot.error {
+            background-color: #f44336;
+            box-shadow: 0 0 5px #f44336;
+        }
+        
+        .status-dot.checking {
+            background-color: #ff9800;
+            box-shadow: 0 0 5px #ff9800;
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 0.7;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        
+        .status-text {
+            color: #333;
+            transition: color 0.3s ease;
         }
         
         /* 弹窗按钮样式 */
