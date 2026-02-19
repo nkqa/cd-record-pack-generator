@@ -13,7 +13,7 @@ _The downloaded resource pack can be uploaded to various forums and Minecraft we
 - Features:
   + Replace the original CDs with your own music
   + Customize the CD description name for easy identification
-  + Built-in format conversion functionality
+  + Built-in image format conversion and FFmpeg audio format conversion functionality
   + Automatically resize image pixels to prevent game lag and oversized items
   + Crop item display image pixel size
 
