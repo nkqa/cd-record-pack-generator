@@ -521,7 +521,7 @@ async function showCdnSelectionModal() {
     modal.style.display = 'block';
     modal.style.zIndex = '1002';
     modal.innerHTML = `
-      <div class="modal-content">
+      <div class="modal-content" style="width: 80%; max-width: 900px;">
         <h3>${i18n.t('ffmpeg.select_source', '选择FFmpeg下载源')}</h3>
         <p>${i18n.t('ffmpeg.detecting_latency', '正在检测各下载源的延迟，请稍候...')}</p>
         <div id="cdnTestResults" style="margin: 20px 0; max-height: 300px; overflow-y: auto;">
