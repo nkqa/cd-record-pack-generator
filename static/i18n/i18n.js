@@ -639,6 +639,53 @@ const i18n = {
       }
     }
     
+    // 更新FFmpeg下载源选择弹窗
+    const ffmpegCdnModal = document.querySelector('.modal .modal-content h3');
+    if (ffmpegCdnModal && ffmpegCdnModal.textContent.includes('FFmpeg')) {
+      const modalContent = ffmpegCdnModal.closest('.modal-content');
+      if (modalContent) {
+        // 更新标题
+        ffmpegCdnModal.textContent = this.t('ffmpeg.select_source', '选择FFmpeg下载源');
+        
+        // 更新检测延迟提示
+        const detectingText = modalContent.querySelector('p');
+        if (detectingText) {
+          detectingText.textContent = this.t('ffmpeg.detecting_latency', '正在检测各下载源的延迟，请稍候...');
+        }
+        
+        // 更新必需说明
+        const requiredNote = modalContent.querySelector('.ffmpeg-required-note');
+        if (requiredNote) {
+          requiredNote.textContent = this.t('ffmpeg.required_note', '转换音频格式必须的东西，如果不下载将无法转换音频格式');
+        }
+        
+        // 更新选择最快源按钮
+        const selectFastestBtn = modalContent.querySelector('.btn.confirm');
+        if (selectFastestBtn) {
+          selectFastestBtn.textContent = this.t('ffmpeg.select_fastest', '选择最快源');
+        }
+        
+        // 更新表格内容
+        const cdnTable = modalContent.querySelector('table');
+        if (cdnTable) {
+          // 更新表头
+          const thElements = cdnTable.querySelectorAll('th');
+          if (thElements.length >= 4) {
+            thElements[0].textContent = this.t('ffmpeg.cdn.download_source', '下载源');
+            thElements[1].textContent = this.t('ffmpeg.cdn.latency', '延迟');
+            thElements[2].textContent = this.t('ffmpeg.cdn.status', '状态');
+            thElements[3].textContent = this.t('ffmpeg.cdn.action', '操作');
+          }
+          
+          // 更新选择按钮
+          const selectButtons = cdnTable.querySelectorAll('.cdn-select-btn');
+          selectButtons.forEach(btn => {
+            btn.textContent = this.t('ffmpeg.cdn.select', '选择');
+          });
+        }
+      }
+    }
+    
     // 更新语言栏标签
     const langLabels = document.querySelectorAll('.language-selector span');
     langLabels.forEach(label => {
