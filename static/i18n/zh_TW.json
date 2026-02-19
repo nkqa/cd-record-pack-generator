@@ -152,6 +152,9 @@
       "cannot_auto_select": "無法自動選擇，請手動選擇一個下載源",
       "test_not_ready": "測試結果尚未就緒，請稍後再試"
     },
+    "select_source": "選擇FFmpeg下載源",
+    "detecting_latency": "正在檢測各下載源的延遲，請稍候...",
+    "select_fastest": "選擇最快源",
     "error": {
       "title": "FFmpeg載入失敗",
       "message": "請確認網路暢通並重新整理頁面",

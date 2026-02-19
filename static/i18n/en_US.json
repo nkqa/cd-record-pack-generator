@@ -152,6 +152,9 @@
       "cannot_auto_select": "Cannot auto select, please manually select a download source",
       "test_not_ready": "Test results are not ready, please try again later"
     },
+    "select_source": "Select FFmpeg Download Source",
+    "detecting_latency": "Detecting latency for each download source, please wait...",
+    "select_fastest": "Select Fastest Source",
     "error": {
       "title": "FFmpeg Load Failed",
       "message": "Please check your network connection and refresh the page",

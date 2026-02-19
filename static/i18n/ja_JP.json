@@ -152,6 +152,9 @@
       "cannot_auto_select": "自動選択できません。手動でダウンロードソースを選択してください",
       "test_not_ready": "テスト結果が準備できていません。後でもう一度お試しください"
     },
+    "select_source": "FFmpegダウンロードソースを選択",
+    "detecting_latency": "各ダウンロードソースのレイテンシーを検出中、お待ちください...",
+    "select_fastest": "最速のソースを選択",
     "error": {
       "title": "FFmpegのロードに失敗しました",
       "message": "ネットワーク接続を確認してページを更新してください",
