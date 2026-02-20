@@ -3463,6 +3463,9 @@ if (packBtn) {
         }
         
         try {
+            // 先生成播放指令
+            generateCommands();
+            
             // 收集所有上传的文件
             const uploadedFiles = [];
             fileInputs.forEach(input => {
