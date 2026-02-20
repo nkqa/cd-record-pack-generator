@@ -60,7 +60,8 @@
     "selected_audio": "Selected Audio:",
     "converted": "(Converted)",
     "resized": "(Resized)",
-    "audio_conversion_not_available": "This feature is currently not available"
+    "audio_conversion_not_available": "This feature is currently not available",
+    "use_first_item_image_as_icon": "Use the first uploaded item display image as the music pack icon"
   },
   "buttons": {
     "generate": "Generate mcpack file"

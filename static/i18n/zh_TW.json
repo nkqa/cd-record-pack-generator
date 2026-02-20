@@ -60,7 +60,8 @@
     "selected_audio": "已選擇音頻：",
     "converted": "（已轉換）",
     "resized": "（已調整大小）",
-    "audio_conversion_not_available": "該功能目前有問題，目前無法使用"
+    "audio_conversion_not_available": "該功能目前有問題，目前無法使用",
+    "use_first_item_image_as_icon": "使用第一個上傳的物品展示圖作為音樂包圖標"
   },
   "buttons": {
     "generate": "生成mcpack文件"

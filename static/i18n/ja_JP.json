@@ -60,7 +60,8 @@
     "selected_audio": "選択したオーディオ：",
     "converted": "（変換済み）",
     "resized": "（サイズ変更済み）",
-    "audio_conversion_not_available": "この機能は現在使用できません"
+    "audio_conversion_not_available": "この機能は現在使用できません",
+    "use_first_item_image_as_icon": "最初にアップロードしたアイテム表示画像を音楽パックアイコンとして使用する"
   },
   "buttons": {
     "generate": "mcpackファイルを生成"
