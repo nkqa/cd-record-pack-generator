@@ -140,6 +140,7 @@
     "loading": "FFmpeg Loading...",
     "loading_text": "Loading...",
     "required_note": "Required for audio format conversion. If not downloaded, audio conversion will not be possible.",
+    "auto_select_countdown": "After {seconds} seconds, the fastest source will be automatically selected",
     "cdn": {
       "available": "Available",
       "unavailable": "Unavailable",

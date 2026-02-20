@@ -495,6 +495,16 @@ input:checked + .toggle-label:before {
     color: #333;
 }
 
+/* 循环进度条动画 */
+@keyframes loopProgress {
+    0% {
+        left: -20%;
+    }
+    100% {
+        left: 100%;
+    }
+}
+
 /* 按钮容器样式 */
 .btn-container {
     display: flex;

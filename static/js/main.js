@@ -186,11 +186,14 @@ function showErrorModal(message) {
         };
         
         // 点击模态框外部关闭
-        window.onclick = function(event) {
+        function handleOutsideClick(event) {
             if (event.target === errorModal) {
                 errorModal.style.display = 'none';
+                // 移除事件监听器
+                window.removeEventListener('click', handleOutsideClick);
             }
-        };
+        }
+        window.addEventListener('click', handleOutsideClick);
     }
 }
 
@@ -257,6 +260,8 @@ function showDurationCheckWarningModal() {
 function showDurationExceededModal(limitMinutes, limitSeconds, input, inputId, inputInfo, file, btnText, deleteBtn, descInput) {
     // 创建弹窗
     const modal = document.createElement('div');
+    const modalId = 'durationExceededModal_' + Date.now();
+    modal.id = modalId;
     modal.className = 'modal';
     modal.style.display = 'block';
     modal.style.zIndex = '1002';
@@ -310,39 +315,242 @@ function showDurationExceededModal(limitMinutes, limitSeconds, input, inputId, i
                 }
             }
             
-            document.body.removeChild(modal);
+            // 移除模态框
+            const currentModal = document.getElementById(modalId);
+            if (currentModal) {
+                document.body.removeChild(currentModal);
+            }
         });
     }
     
     // 仍要选择按钮
     const confirmBtn = document.getElementById('confirmDurationBtn');
     if (confirmBtn) {
-        confirmBtn.addEventListener('click', function() {
+        confirmBtn.addEventListener('click', async function() {
             // 允许使用超过时长的文件
-            // 更新按钮文本
-            btnText.textContent = `${i18n.t('upload.selected_audio', '已选择音频：')}${file.name}`;
-            if (deleteBtn) {
-                deleteBtn.style.display = 'block';
+            try {
+                let finalFile = file;
+                let isConverted = false;
+                
+                // 检查音频转换开关状态
+                const audioProcessingToggle = document.getElementById('audioProcessingToggle');
+                const isAudioConversionEnabled = audioProcessingToggle ? audioProcessingToggle.checked : false;
+                
+                // 检查音频格式并转换（如果格式转换开关开启）
+                if (isAudioConversionEnabled) {
+                    // 如果不是ogg格式，尝试转换
+                    if (!file.name.endsWith('.ogg')) {
+                        try {
+                            console.log('开始处理非ogg音频文件:', file.name);
+                            
+                            // 检查浏览器是否支持MediaRecorder API
+                            if (typeof MediaRecorder === 'undefined') {
+                                console.log('浏览器不支持MediaRecorder API');
+                                throw new Error('浏览器不支持音频转换');
+                            }
+                            
+                            // 显示转换进度模态框
+                            showConversionModal(file.name, inputInfo.targetName);
+                            
+                            // 更新进度为0%
+                            updateConversionProgress(0);
+                            
+                            // 执行转换，传入进度更新回调
+                            console.log('执行音频转换');
+                            finalFile = await convertAudioToOgg(file, inputInfo.targetName, updateConversionProgress);
+                            isConverted = true;
+                            console.log('音频转换成功');
+                            
+                            // 更新进度为100%
+                            updateConversionProgress(100);
+                            
+                            // 延迟一点时间再隐藏模态框，让用户看到转换完成的状态
+                            setTimeout(() => {
+                                hideConversionModal();
+                            }, 500);
+                        } catch (error) {
+                            console.error('音频转换失败:', error);
+                            
+                            // 隐藏转换进度模态框
+                            hideConversionModal();
+                            
+                            // 检查是否是浏览器不支持的问题
+                            if (error.message.includes('浏览器不支持') || error.message.includes('Failed to construct \'MediaRecorder\'')) {
+                                // 降级方案：直接使用原始文件
+                                console.log('降级到使用原始文件');
+                                showErrorModal(`${i18n.t('errors.error', '警告')}：${i18n.t('errors.browser_not_support_conversion', '浏览器不支持音频转换，将直接使用原始文件')}`);
+                                finalFile = file;
+                                isConverted = false;
+                            } else {
+                                // 其他错误
+                                showErrorModal(`${i18n.t('errors.error', '错误')}：${i18n.t('errors.audio_conversion_failed', '音频转换失败，请确保上传的是有效的音频文件')}`);
+                                
+                                // 重置文件输入元素的值，确保不保留错误文件的信息
+                                input.value = '';
+                                
+                                // 删除lastSelectedFiles中的错误文件信息，确保下次选择文件时重新处理
+                                if (lastSelectedFiles[inputId]) {
+                                    delete lastSelectedFiles[inputId];
+                                }
+                                
+                                // 保持上一次成功上传的文件
+                                if (window.lastValidAudioFiles[inputInfo.id]) {
+                                    const lastValidFile = window.lastValidAudioFiles[inputInfo.id];
+                                    btnText.textContent = `${i18n.t('upload.selected_audio', '已选择音频：')}${lastValidFile.name}`;
+                                    if (deleteBtn) {
+                                        deleteBtn.style.display = 'block';
+                                    }
+                                    
+                                    // 保持上一次的描述
+                                    if (descInput) {
+                                        descInput.value = lastValidFile.description;
+                                    }
+                                } else {
+                                    btnText.textContent = i18n.t('upload.select_audio', '选择音频（不上传即为保持原版音乐）');
+                                    if (deleteBtn) {
+                                        deleteBtn.style.display = 'none';
+                                    }
+                                    
+                                    // 清空描述输入框
+                                    if (descInput) {
+                                        descInput.value = '';
+                                    }
+                                }
+                                
+                                // 移除模态框
+                                const currentModal = document.getElementById(modalId);
+                                if (currentModal) {
+                                    document.body.removeChild(currentModal);
+                                }
+                                return;
+                            }
+                        }
+                    } else {
+                        console.log('使用原始ogg文件:', file.name);
+                    }
+                } else {
+                    // 音频转换开关关闭，直接使用原始文件
+                    if (!file.name.endsWith('.ogg')) {
+                        showErrorModal('错误：非 .ogg 格式（未启用音频转换开关）');
+                        
+                        // 重置文件输入元素的值，确保不保留错误文件的信息
+                        input.value = '';
+                        
+                        // 删除lastSelectedFiles中的错误文件信息，确保下次选择文件时重新处理
+                        if (lastSelectedFiles[inputId]) {
+                            delete lastSelectedFiles[inputId];
+                        }
+                        
+                        // 保持上一次成功上传的文件
+                        if (window.lastValidAudioFiles[inputInfo.id]) {
+                            const lastValidFile = window.lastValidAudioFiles[inputInfo.id];
+                            btnText.textContent = `${i18n.t('upload.selected_audio', '已选择音频：')}${lastValidFile.name}`;
+                            if (deleteBtn) {
+                                deleteBtn.style.display = 'block';
+                            }
+                            
+                            // 保持上一次的描述
+                            if (descInput) {
+                                descInput.value = lastValidFile.description;
+                            }
+                        } else {
+                            btnText.textContent = i18n.t('upload.select_audio', '选择音频（不上传即为保持原版音乐）');
+                            if (deleteBtn) {
+                                deleteBtn.style.display = 'none';
+                            }
+                            
+                            // 清空描述输入框
+                            if (descInput) {
+                                descInput.value = '';
+                            }
+                        }
+                        
+                        // 移除模态框
+                        const currentModal = document.getElementById(modalId);
+                        if (currentModal) {
+                            document.body.removeChild(currentModal);
+                        }
+                        return;
+                    }
+                }
+                
+                // 更新按钮文本
+                if (isConverted) {
+                    btnText.textContent = `${i18n.t('upload.selected_audio', '已选择音频：')}${file.name}${i18n.t('upload.converted', '（已转换）')}`;
+                } else {
+                    btnText.textContent = `${i18n.t('upload.selected_audio', '已选择音频：')}${file.name}`;
+                }
+                if (deleteBtn) {
+                    deleteBtn.style.display = 'block';
+                }
+                
+                // 保存到lastSelectedFiles
+                lastSelectedFiles[inputId] = finalFile;
+                
+                // 保存到window.lastValidAudioFiles
+                window.lastValidAudioFiles[inputInfo.id] = {
+                    file: finalFile,
+                    name: finalFile.name,
+                    description: descInput ? descInput.value : '',
+                    targetName: inputInfo.targetName,
+                    isConverted: isConverted
+                };
+                
+                // 自动填充描述（如果为空）
+                if (descInput && !descInput.value) {
+                    const fileNameWithoutExt = file.name.replace(/\.[^/.]+$/, "");
+                    descInput.value = fileNameWithoutExt;
+                    // 更新保存的描述
+                    window.lastValidAudioFiles[inputInfo.id].description = fileNameWithoutExt;
+                }
+                
+                // 移除模态框
+                const currentModal = document.getElementById(modalId);
+                if (currentModal) {
+                    document.body.removeChild(currentModal);
+                }
+            } catch (error) {
+                console.error('处理超过时长的音频文件失败:', error);
+                showErrorModal(`${i18n.t('errors.error', '错误')}：${i18n.t('errors.file_processing_failed', '文件处理失败，请重试')}`);
+                
+                // 重置文件输入元素的值，确保不保留错误文件的信息
+                input.value = '';
+                
+                // 删除lastSelectedFiles中的错误文件信息，确保下次选择文件时重新处理
+                if (lastSelectedFiles[inputId]) {
+                    delete lastSelectedFiles[inputId];
+                }
+                
+                // 保持上一次成功上传的文件
+                if (window.lastValidAudioFiles[inputInfo.id]) {
+                    const lastValidFile = window.lastValidAudioFiles[inputInfo.id];
+                    btnText.textContent = `${i18n.t('upload.selected_audio', '已选择音频：')}${lastValidFile.name}`;
+                    if (deleteBtn) {
+                        deleteBtn.style.display = 'block';
+                    }
+                    
+                    // 保持上一次的描述
+                    if (descInput) {
+                        descInput.value = lastValidFile.description;
+                    }
+                } else {
+                    btnText.textContent = i18n.t('upload.select_audio', '选择音频（不上传即为保持原版音乐）');
+                    if (deleteBtn) {
+                        deleteBtn.style.display = 'none';
+                    }
+                    
+                    // 清空描述输入框
+                    if (descInput) {
+                        descInput.value = '';
+                    }
+                }
+                
+                // 移除模态框
+                const currentModal = document.getElementById(modalId);
+                if (currentModal) {
+                    document.body.removeChild(currentModal);
+                }
             }
-            
-            // 保存到lastSelectedFiles
-            lastSelectedFiles[inputId] = file;
-            
-            // 保存到window.lastValidAudioFiles
-            window.lastValidAudioFiles[inputInfo.id] = {
-                name: file.name,
-                description: descInput ? descInput.value : ''
-            };
-            
-            // 自动填充描述（如果为空）
-            if (descInput && !descInput.value) {
-                const fileNameWithoutExt = file.name.replace(/\.[^/.]+$/, "");
-                descInput.value = fileNameWithoutExt;
-                // 更新保存的描述
-                window.lastValidAudioFiles[inputInfo.id].description = fileNameWithoutExt;
-            }
-            
-            document.body.removeChild(modal);
         });
     }
     
@@ -381,7 +589,11 @@ function showDurationExceededModal(limitMinutes, limitSeconds, input, inputId, i
                 }
             }
             
-            document.body.removeChild(modal);
+            // 移除模态框
+            const currentModal = document.getElementById(modalId);
+            if (currentModal) {
+                document.body.removeChild(currentModal);
+            }
         }
     });
 }
@@ -414,9 +626,70 @@ function showConversionModal(sourceFileName, targetFileName) {
                 progressContainer.appendChild(progressText);
             }
         }
-        progressText.textContent = '0%';
         
+        // 提高z-index，确保显示在音频时长警告窗口上面
+        conversionModal.style.zIndex = '1003';
         conversionModal.style.display = 'block';
+        
+        // 立即开始动画，不等待音频加载
+        const progressBar = conversionModal.querySelector('.progress-bar');
+        if (progressBar && progressText) {
+            console.log('Starting conversion progress animation');
+            
+            // 重置进度条样式
+            progressBar.style.transition = 'none';
+            progressBar.style.width = '100%'; // 容器宽度
+            progressBar.style.height = '100%'; // 容器高度
+            progressBar.style.position = 'relative';
+            progressBar.style.overflow = 'hidden'; // 隐藏溢出部分
+            progressBar.style.backgroundColor = 'transparent'; // 透明背景
+            
+            // 清空进度条内容
+            progressBar.innerHTML = '';
+            
+            // 创建绿条元素
+            const greenBar = document.createElement('div');
+            greenBar.style.width = '20%'; // 绿条宽度
+            greenBar.style.height = '100%'; // 绿条高度
+            greenBar.style.backgroundColor = '#4CAF50'; // 绿色
+            greenBar.style.position = 'absolute';
+            greenBar.style.left = '-20%'; // 初始位置在左侧外
+            greenBar.style.top = '0';
+            greenBar.style.animation = 'loopProgress 2s linear infinite'; // 循环动画
+            
+            // 添加绿条到进度条容器
+            progressBar.appendChild(greenBar);
+            
+            // 添加CSS动画
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes loopProgress {
+                    0% { transform: translateX(0); }
+                    100% { transform: translateX(600%); }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            // 手动更新文本内容
+            let currentProgress = 0;
+            const updateInterval = setInterval(() => {
+                currentProgress += 1;
+                if (currentProgress <= 80) {
+                    progressText.textContent = `${currentProgress}%`;
+                    console.log('Progress update:', currentProgress);
+                } else if (currentProgress <= 99) {
+                    // 从80%慢慢到99%
+                    currentProgress += 0.5;
+                    progressText.textContent = `${Math.round(currentProgress)}%`;
+                    console.log('Progress update:', Math.round(currentProgress));
+                } else {
+                    clearInterval(updateInterval);
+                    console.log('Animation complete');
+                }
+            }, 100); // 每100ms更新一次
+        } else {
+            console.error('Progress bar or text element not found');
+        }
     }
 }
 
@@ -435,11 +708,16 @@ function updateConversionProgress(progress) {
         const progressBar = conversionModal.querySelector('.progress-bar');
         const progressText = conversionModal.querySelector('.progress-text');
         
-        if (progressBar) {
-            progressBar.style.width = `${progress}%`;
-        }
-        if (progressText) {
-            progressText.textContent = `${Math.round(progress)}%`;
+        if (progressBar && progressText) {
+            // 当进度达到100%时，确保进度条显示完成
+            if (progress >= 100) {
+                // 重置过渡效果
+                progressBar.style.transition = 'width 1s ease-in-out';
+                // 直接设置到100%
+                progressBar.style.width = '100%';
+                progressText.textContent = '100%';
+            }
+            // 对于100%以下的进度，不更新，让showConversionModal中的动画正常执行
         }
     }
 }
@@ -450,7 +728,11 @@ const FFMPEG_PREFERRED_CDN_KEY = "cdpack_ffmpeg_preferred_cdn_v1";
 const FFMPEG_CDN_BASES = [
   "https://unpkg.com/@ffmpeg/core@0.12.10/dist/umd",
   "https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.10/dist/umd",
-  "https://cdn.jsdmirror.com/npm/@ffmpeg/core@0.12.10/dist/umd"
+  "https://unpkg.zhihu.com/@ffmpeg/core@0.12.10/dist/umd",
+  "https://unpkg.zhimg.com/@ffmpeg/core@0.12.10/dist/umd",
+  "https://cdn.osyb.cn/npm/@ffmpeg/core@0.12.10/dist/umd",
+  "https://gcore.jsdelivr.net/npm/@ffmpeg/core@0.12.10/dist/umd",
+  "https://fastly.jsdelivr.net/npm/@ffmpeg/core@0.12.10/dist/umd"
 ];
 
 // 检测CDN延迟（使用HTTPS连接测试，模拟tcping:443）
@@ -524,6 +806,7 @@ async function showCdnSelectionModal() {
       <div class="modal-content" style="width: 80%; max-width: 900px;">
         <h3>${i18n.t('ffmpeg.select_source', '选择FFmpeg下载源')}</h3>
         <p>${i18n.t('ffmpeg.detecting_latency', '正在检测各下载源的延迟，请稍候...')}</p>
+        <p id="autoSelectCountdown" style="color: #666; font-size: 14px; text-align: center; margin: 10px 0;"></p>
         <div id="cdnTestResults" style="margin: 20px 0; max-height: 300px; overflow-y: auto;">
           <!-- 测试结果将在这里显示 -->
         </div>
@@ -537,7 +820,12 @@ async function showCdnSelectionModal() {
 
     // 测试CDN延迟
     const cdnTestResults = document.getElementById('cdnTestResults');
+    const autoSelectCountdown = document.getElementById('autoSelectCountdown');
     let testResults = [];
+    let autoSelectTimer = null;
+    let countdownInterval = null;
+    let countdownSeconds = 5;
+    
     testAllCdnLatencies().then(results => {
       testResults = results;
       if (cdnTestResults) {
@@ -566,6 +854,15 @@ async function showCdnSelectionModal() {
           document.querySelectorAll('.cdn-select-btn').forEach(btn => {
             btn.addEventListener('click', function() {
               if (this.disabled) return;
+              // 清除自动选择定时器和倒计时
+              if (autoSelectTimer) {
+                clearTimeout(autoSelectTimer);
+                autoSelectTimer = null;
+              }
+              if (countdownInterval) {
+                clearInterval(countdownInterval);
+                countdownInterval = null;
+              }
               const cdn = this.getAttribute('data-cdn');
               try {
                 localStorage.setItem(FFMPEG_PREFERRED_CDN_KEY, cdn);
@@ -576,8 +873,57 @@ async function showCdnSelectionModal() {
               }
               resolve(cdn);
               document.body.removeChild(modal);
+              // 弹出下载中窗口
+              showFfmpegDownloadModal();
             });
           });
+          
+          // 开始倒计时
+          function startCountdown() {
+            countdownSeconds = 5;
+            if (autoSelectCountdown) {
+              autoSelectCountdown.textContent = i18n.t('ffmpeg.auto_select_countdown', `${countdownSeconds} 秒后，将自动选择最快的源`).replace('{seconds}', countdownSeconds);
+            }
+            
+            countdownInterval = setInterval(function() {
+              countdownSeconds--;
+              if (autoSelectCountdown) {
+                autoSelectCountdown.textContent = i18n.t('ffmpeg.auto_select_countdown', `${countdownSeconds} 秒后，将自动选择最快的源`).replace('{seconds}', countdownSeconds);
+              }
+              if (countdownSeconds <= 0) {
+                clearInterval(countdownInterval);
+                countdownInterval = null;
+              }
+            }, 1000);
+          }
+          
+          // 开始倒计时
+          startCountdown();
+          
+          // 添加5秒自动选择定时器
+          autoSelectTimer = setTimeout(function() {
+            // 清除倒计时
+            if (countdownInterval) {
+              clearInterval(countdownInterval);
+              countdownInterval = null;
+            }
+            // 过滤出可用的CDN
+            const availableCdn = testResults.filter(result => result.ok);
+            if (availableCdn.length > 0) {
+              const fastestCdn = availableCdn[0].cdn;
+              try {
+                localStorage.setItem(FFMPEG_PREFERRED_CDN_KEY, fastestCdn);
+                // 更新FFmpegService实例的首选CDN
+                ffmpegService.updatePreferredCdn();
+              } catch (e) {
+                console.error('Failed to save preferred CDN:', e);
+              }
+              resolve(fastestCdn);
+              document.body.removeChild(modal);
+              // 弹出下载中窗口
+              showFfmpegDownloadModal();
+            }
+          }, 5000);
         }
       }
     });
@@ -586,6 +932,15 @@ async function showCdnSelectionModal() {
     const cdnAutoSelectBtn = document.getElementById('cdnAutoSelectBtn');
     if (cdnAutoSelectBtn) {
       cdnAutoSelectBtn.addEventListener('click', function() {
+        // 清除自动选择定时器和倒计时
+        if (autoSelectTimer) {
+          clearTimeout(autoSelectTimer);
+          autoSelectTimer = null;
+        }
+        if (countdownInterval) {
+          clearInterval(countdownInterval);
+          countdownInterval = null;
+        }
         // 使用之前已经测试过的结果，而不是重新测试
         if (testResults.length > 0) {
           // 过滤出可用的CDN
@@ -601,6 +956,8 @@ async function showCdnSelectionModal() {
             }
             resolve(fastestCdn);
             document.body.removeChild(modal);
+            // 弹出下载中窗口
+            showFfmpegDownloadModal();
           } else {
             if (cdnTestResults) {
               cdnTestResults.innerHTML += `<p style="color: red;">${i18n.t('ffmpeg.cdn.cannot_auto_select', '无法自动选择，请手动选择一个下载源')}</p>`;
@@ -2788,16 +3145,61 @@ function showFfmpegDownloadModal() {
         }
         noteElement.textContent = i18n.t('ffmpeg.required_note', '转换音频格式必须的东西，如果不下载将无法转换音频格式');
         
-        // 设置进度条为固定宽度，始终显示完整动画
-        progressBar.style.width = '100%';
-        progressText.textContent = i18n.t('ffmpeg.loading_text', '加载中...');
+        // 立即开始动画
+        // 重置进度条样式
+        progressBar.style.transition = 'none';
+        progressBar.style.width = '100%'; // 容器宽度
+        progressBar.style.height = '100%'; // 容器高度
+        progressBar.style.position = 'relative';
+        progressBar.style.overflow = 'hidden'; // 隐藏溢出部分
+        progressBar.style.backgroundColor = 'transparent'; // 透明背景
+        
+        // 清空进度条内容
+        progressBar.innerHTML = '';
+        
+        // 创建绿条元素
+        const greenBar = document.createElement('div');
+        greenBar.style.width = '20%'; // 绿条宽度
+        greenBar.style.height = '100%'; // 绿条高度
+        greenBar.style.backgroundColor = '#4CAF50'; // 绿色
+        greenBar.style.position = 'absolute';
+        greenBar.style.left = '-20%'; // 初始位置在左侧外
+        greenBar.style.top = '0';
+        greenBar.style.animation = 'loopProgress 2s linear infinite'; // 循环动画
+        
+        // 添加绿条到进度条容器
+        progressBar.appendChild(greenBar);
         
         // 显示弹窗
         modal.style.display = 'block';
         
-        // 监听FFmpeg加载进度（仅用于调试）
-        ffmpegService.onProgress((progress) => {
+        // 模拟进度文本
+        let textProgress = 0;
+        const textInterval = setInterval(() => {
+            if (textProgress < 80) {
+                textProgress += 2;
+                progressText.textContent = `${textProgress}%`;
+            } else if (textProgress < 99) {
+                textProgress += 0.5;
+                progressText.textContent = `${Math.round(textProgress)}%`;
+            }
+        }, 200);
+        
+        // 监听FFmpeg加载进度，实时更新UI
+        const unsubscribe = ffmpegService.onProgress((progress) => {
             console.log('FFmpeg load progress:', progress);
+            if (progress >= 100) {
+                clearInterval(textInterval);
+                progressText.textContent = '100%';
+                // 停止动画
+                if (greenBar) {
+                    greenBar.style.animation = 'none';
+                    greenBar.style.left = '0';
+                    greenBar.style.width = '100%';
+                }
+                // 取消订阅
+                unsubscribe();
+            }
         });
     }
 }

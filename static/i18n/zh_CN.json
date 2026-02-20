@@ -139,6 +139,7 @@
     "loading": "FFmpeg加载中...",
     "loading_text": "加载中...",
     "required_note": "转换音频格式必须的东西，如果不下载将无法转换音频格式",
+    "auto_select_countdown": "{seconds} 秒后，将自动选择最快的源",
     "cdn": {
       "available": "可用",
       "unavailable": "不可用",
