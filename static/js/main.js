@@ -1511,6 +1511,177 @@ class FFmpegService {
 // 创建 FFmpegService 实例
 const ffmpegService = new FFmpegService();
 
+// 更换FFmpeg下载源
+function changeFfmpegSource() {
+    // 显示带有取消按钮的CDN选择弹窗
+    showCdnSelectionModalWithCancel()
+        .then(selectedCdn => {
+            if (selectedCdn) {
+                // 用户选择了一个CDN
+                console.log('User selected CDN:', selectedCdn);
+                // 更新首选CDN
+                ffmpegService.preferredCdn = selectedCdn;
+                try {
+                    localStorage.setItem(FFMPEG_PREFERRED_CDN_KEY, selectedCdn);
+                    // 更新FFmpegService实例的首选CDN
+                    ffmpegService.updatePreferredCdn();
+                } catch (e) {
+                    console.error('Failed to save preferred CDN:', e);
+                }
+                
+                // 重新加载FFmpeg
+                loadFfmpegIfNeeded();
+            } else {
+                // 用户取消了选择
+                console.log('User cancelled CDN selection');
+            }
+        })
+        .catch(error => {
+            console.error('Error in changeFfmpegSource:', error);
+        });
+}
+
+// 显示带有取消按钮的CDN选择弹窗
+async function showCdnSelectionModalWithCancel() {
+    return new Promise((resolve) => {
+        // 创建弹窗
+        const modal = document.createElement('div');
+        modal.className = 'modal';
+        modal.style.display = 'block';
+        modal.style.zIndex = '1002';
+        modal.innerHTML = `
+            <div class="modal-content" style="width: 80%; max-width: 900px;">
+                <h3>${i18n.t('ffmpeg.select_source', '选择FFmpeg下载源')}</h3>
+                <p>${i18n.t('ffmpeg.detecting_latency', '正在检测各下载源的延迟，请稍候...')}</p>
+                <p id="autoSelectCountdown" style="color: #666; font-size: 14px; text-align: center; margin: 10px 0;"></p>
+                <div id="cdnTestResults" style="margin: 20px 0; max-height: 300px; overflow-y: auto;">
+                    <!-- 测试结果将在这里显示 -->
+                </div>
+                <p class="ffmpeg-required-note" style="color: #999; font-size: 12px; margin-top: 10px; text-align: center;">${i18n.t('ffmpeg.required_note', '转换音频格式必须的东西，如果不下载将无法转换音频格式')}</p>
+                <div class="modal-buttons">
+                    <button id="cdnCancelBtn" class="btn cancel" style="margin-right: 10px;">${i18n.t('modal.cancel', '取消')}</button>
+                    <button id="cdnAutoSelectBtn" class="btn confirm">${i18n.t('ffmpeg.select_fastest', '选择最快源')}</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+
+        // 测试CDN延迟
+        const cdnTestResults = document.getElementById('cdnTestResults');
+        const autoSelectCountdown = document.getElementById('autoSelectCountdown');
+        let testResults = [];
+        let autoSelectTimer = null;
+        let countdownInterval = null;
+        let countdownSeconds = 5;
+        
+        testAllCdnLatencies().then(results => {
+            testResults = results;
+            if (cdnTestResults) {
+                if (results.length === 0) {
+                    cdnTestResults.innerHTML = `<p style="color: red;">${i18n.t('ffmpeg.cdn.all_unavailable', '所有下载源都不可用，请检查网络连接')}</p>`;
+                } else {
+                    let html = '<table style="width: 100%; border-collapse: collapse;">';
+                    html += `<tr><th style="border: 1px solid #ddd; padding: 8px; text-align: left;">${i18n.t('ffmpeg.cdn.download_source', '下载源')}</th><th style="border: 1px solid #ddd; padding: 8px; text-align: left;">${i18n.t('ffmpeg.cdn.latency', '延迟')}</th><th style="border: 1px solid #ddd; padding: 8px; text-align: left;">${i18n.t('ffmpeg.cdn.status', '状态')}</th><th style="border: 1px solid #ddd; padding: 8px; text-align: left;">${i18n.t('ffmpeg.cdn.action', '操作')}</th></tr>`;
+                    results.forEach(result => {
+                        const status = result.ok ? i18n.t('ffmpeg.cdn.available', '可用') : i18n.t('ffmpeg.cdn.unavailable', '不可用');
+                        const statusColor = result.ok ? '#4CAF50' : '#f44336';
+                        const latencyText = result.ok ? `${result.latency.toFixed(2)}ms` : 'N/A';
+                        html += `<tr>
+                            <td style="border: 1px solid #ddd; padding: 8px; word-break: break-all;">${result.cdn}</td>
+                            <td style="border: 1px solid #ddd; padding: 8px;">${latencyText}</td>
+                            <td style="border: 1px solid #ddd; padding: 8px; color: ${statusColor};">${status}</td>
+                            <td style="border: 1px solid #ddd; padding: 8px;">
+                                <button class="cdn-select-btn" data-cdn="${result.cdn}" style="padding: 4px 8px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; ${!result.ok ? 'opacity: 0.5; cursor: not-allowed;' : ''}" ${!result.ok ? 'disabled' : ''}>${i18n.t('ffmpeg.cdn.select', '选择')}</button>
+                            </td>
+                        </tr>`;
+                    });
+                    html += '</table>';
+                    cdnTestResults.innerHTML = html;
+
+                    // 添加选择按钮事件监听器
+                    document.querySelectorAll('.cdn-select-btn').forEach(btn => {
+                        btn.addEventListener('click', function() {
+                            if (this.disabled) return;
+                            // 清除自动选择定时器和倒计时
+                            if (autoSelectTimer) {
+                                clearTimeout(autoSelectTimer);
+                                autoSelectTimer = null;
+                            }
+                            if (countdownInterval) {
+                                clearInterval(countdownInterval);
+                                countdownInterval = null;
+                            }
+                            const cdn = this.getAttribute('data-cdn');
+                            resolve(cdn);
+                            document.body.removeChild(modal);
+                        });
+                    });
+                }
+            }
+        });
+
+        // 添加取消按钮事件监听器
+        document.getElementById('cdnCancelBtn').addEventListener('click', function() {
+            // 清除自动选择定时器和倒计时
+            if (autoSelectTimer) {
+                clearTimeout(autoSelectTimer);
+                autoSelectTimer = null;
+            }
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+                countdownInterval = null;
+            }
+            resolve(null);
+            document.body.removeChild(modal);
+        });
+
+        // 添加选择最快源按钮事件监听器
+        document.getElementById('cdnAutoSelectBtn').addEventListener('click', function() {
+            if (testResults.length > 0) {
+                // 找到最快的可用CDN
+                const fastestCdn = testResults
+                    .filter(result => result.ok)
+                    .sort((a, b) => a.latency - b.latency)[0];
+                
+                if (fastestCdn) {
+                    // 清除自动选择定时器和倒计时
+                    if (autoSelectTimer) {
+                        clearTimeout(autoSelectTimer);
+                        autoSelectTimer = null;
+                    }
+                    if (countdownInterval) {
+                        clearInterval(countdownInterval);
+                        countdownInterval = null;
+                    }
+                    resolve(fastestCdn.cdn);
+                    document.body.removeChild(modal);
+                } else {
+                    showErrorModal(i18n.t('ffmpeg.cdn.cannot_auto_select', '无法自动选择，请手动选择一个下载源'));
+                }
+            } else {
+                showErrorModal(i18n.t('ffmpeg.cdn.test_not_ready', '测试结果尚未就绪，请稍后再试'));
+            }
+        });
+
+        // 点击模态框外部关闭
+        modal.addEventListener('click', function(event) {
+            if (event.target === modal) {
+                // 清除自动选择定时器和倒计时
+                if (autoSelectTimer) {
+                    clearTimeout(autoSelectTimer);
+                    autoSelectTimer = null;
+                }
+                if (countdownInterval) {
+                    clearInterval(countdownInterval);
+                    countdownInterval = null;
+                }
+                resolve(null);
+                document.body.removeChild(modal);
+            }
+        });
+    });
+}
+
 // 当前正在进行的音频转换信息
 let currentConversionInfo = null;
 
