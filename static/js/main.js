@@ -840,18 +840,25 @@ async function showCdnSelectionModal() {
         if (results.length === 0) {
           cdnTestResults.innerHTML = `<p style="color: red;">${i18n.t('ffmpeg.cdn.all_unavailable', '所有下载源都不可用，请检查网络连接')}</p>`;
         } else {
+          // 获取当前已选择的CDN
+          const currentSelectedCdn = getPreferredCdn();
           let html = '<table style="width: 100%; border-collapse: collapse;">';
           html += `<tr><th style="border: 1px solid #ddd; padding: 8px; text-align: left;">${i18n.t('ffmpeg.cdn.download_source', '下载源')}</th><th style="border: 1px solid #ddd; padding: 8px; text-align: left;">${i18n.t('ffmpeg.cdn.latency', '延迟')}</th><th style="border: 1px solid #ddd; padding: 8px; text-align: left;">${i18n.t('ffmpeg.cdn.status', '状态')}</th><th style="border: 1px solid #ddd; padding: 8px; text-align: left;">${i18n.t('ffmpeg.cdn.action', '操作')}</th></tr>`;
           results.forEach(result => {
             const status = result.ok ? i18n.t('ffmpeg.cdn.available', '可用') : i18n.t('ffmpeg.cdn.unavailable', '不可用');
             const statusColor = result.ok ? '#4CAF50' : '#f44336';
             const latencyText = result.ok ? `${result.latency.toFixed(2)}ms` : 'N/A';
+            // 检查是否是当前已选择的CDN
+            const isSelected = currentSelectedCdn === result.cdn;
+            const buttonText = isSelected ? '已选择' : i18n.t('ffmpeg.cdn.select', '选择');
+            const buttonDisabled = !result.ok || isSelected;
+            const buttonStyle = `padding: 4px 8px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; ${buttonDisabled ? 'opacity: 0.5; cursor: not-allowed;' : ''}`;
             html += `<tr>
               <td style="border: 1px solid #ddd; padding: 8px; word-break: break-all;">${result.cdn}</td>
               <td style="border: 1px solid #ddd; padding: 8px;">${latencyText}</td>
               <td style="border: 1px solid #ddd; padding: 8px; color: ${statusColor};">${status}</td>
               <td style="border: 1px solid #ddd; padding: 8px;">
-                <button class="cdn-select-btn" data-cdn="${result.cdn}" style="padding: 4px 8px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; ${!result.ok ? 'opacity: 0.5; cursor: not-allowed;' : ''}" ${!result.ok ? 'disabled' : ''}>${i18n.t('ffmpeg.cdn.select', '选择')}</button>
+                <button class="cdn-select-btn" data-cdn="${result.cdn}" style="${buttonStyle}" ${buttonDisabled ? 'disabled' : ''}>${buttonText}</button>
               </td>
             </tr>`;
           });
@@ -1602,18 +1609,25 @@ async function showCdnSelectionModalWithCancel() {
                         document.getElementById('cdnAutoSelectBtn').style.opacity = '0.5';
                         document.getElementById('cdnAutoSelectBtn').style.cursor = 'not-allowed';
                     } else {
+                        // 获取当前已选择的CDN
+                        const currentSelectedCdn = getPreferredCdn();
                         let html = '<table style="width: 100%; border-collapse: collapse;">';
                         html += `<tr><th style="border: 1px solid #ddd; padding: 8px; text-align: left;">${i18n.t('ffmpeg.cdn.download_source', '下载源')}</th><th style="border: 1px solid #ddd; padding: 8px; text-align: left;">${i18n.t('ffmpeg.cdn.latency', '延迟')}</th><th style="border: 1px solid #ddd; padding: 8px; text-align: left;">${i18n.t('ffmpeg.cdn.status', '状态')}</th><th style="border: 1px solid #ddd; padding: 8px; text-align: left;">${i18n.t('ffmpeg.cdn.action', '操作')}</th></tr>`;
                         results.forEach(result => {
                             const status = result.ok ? i18n.t('ffmpeg.cdn.available', '可用') : i18n.t('ffmpeg.cdn.unavailable', '不可用');
                             const statusColor = result.ok ? '#4CAF50' : '#f44336';
                             const latencyText = result.ok ? `${result.latency.toFixed(2)}ms` : 'N/A';
+                            // 检查是否是当前已选择的CDN
+                            const isSelected = currentSelectedCdn === result.cdn;
+                            const buttonText = isSelected ? '已选择' : i18n.t('ffmpeg.cdn.select', '选择');
+                            const buttonDisabled = !result.ok || isSelected;
+                            const buttonStyle = `padding: 4px 8px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; ${buttonDisabled ? 'opacity: 0.5; cursor: not-allowed;' : ''}`;
                             html += `<tr>
                                 <td style="border: 1px solid #ddd; padding: 8px; word-break: break-all;">${result.cdn}</td>
                                 <td style="border: 1px solid #ddd; padding: 8px;">${latencyText}</td>
                                 <td style="border: 1px solid #ddd; padding: 8px; color: ${statusColor};">${status}</td>
                                 <td style="border: 1px solid #ddd; padding: 8px;">
-                                    <button class="cdn-select-btn" data-cdn="${result.cdn}" style="padding: 4px 8px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; ${!result.ok ? 'opacity: 0.5; cursor: not-allowed;' : ''}" ${!result.ok ? 'disabled' : ''}>${i18n.t('ffmpeg.cdn.select', '选择')}</button>
+                                    <button class="cdn-select-btn" data-cdn="${result.cdn}" style="${buttonStyle}" ${buttonDisabled ? 'disabled' : ''}>${buttonText}</button>
                                 </td>
                             </tr>`;
                         });
