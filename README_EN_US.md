@@ -16,6 +16,7 @@ _The downloaded resource pack can be uploaded to various forums and Minecraft we
   + Built-in image format conversion and FFmpeg audio format conversion functionality
   + Automatically resize image pixels to prevent game lag and oversized items
   + Crop item display image pixel size
+  + Automatically generate commands to play music without duration restrictions
 
 - [Create your own CD pack! > w <](https://www.mcneko.com/tools/cdpack/)
 

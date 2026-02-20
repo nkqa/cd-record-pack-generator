@@ -22,6 +22,8 @@ _下載的資源包可以上傳到各種論壇，Minecraft 網站和軟體_
 
   + 裁切物品顯示影像像素尺寸
 
+  + 自動生成指令，可以透過指令播放樂曲，不受限制時長影響
+
 - [創建您自己的 CD 資源包！ > w <](https://www.mcneko.com/tools/cdpack/)
 
 ![image](https://static.mcneko.com/otheruploadfiles/cd-pack.webp)
