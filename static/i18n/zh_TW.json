@@ -38,8 +38,8 @@
     "title": "上傳音樂文件",
     "select_audio": "選擇音頻（不上傳即為保持原版音樂）",
     "duration_warning": "此名字的樂曲對應時長不能超過",
-    "custom_desc": "自定義描述（預設自動填入文件名）",
-    "icon_label": "唱片包圖標",
+    "custom_desc": "自定義描述（默認自動填入文件名）",
+    "icon_label": "音樂包圖標",
     "select_icon": "選擇圖標",
     "auto_convert": "啟用自動轉換圖片格式",
     "audio_conversion": "啟用音頻格式轉換",
@@ -48,7 +48,7 @@
     "duration_check": "啟用音頻時長檢查",
     "image_size_modify": "啟用物品展示圖像素修改",
     "pixels": "像素",
-    "pack_name": "唱片包名稱",
+    "pack_name": "音樂包名稱",
     "pack_name_placeholder": "未輸入則使用第一個上傳文件的名字",
     "item_image": "選擇物品展示圖（不上傳即為保持原版材質）",
     "selected_image": "已選擇圖片：",
@@ -61,7 +61,10 @@
     "converted": "（已轉換）",
     "resized": "（已調整大小）",
     "audio_conversion_not_available": "該功能目前有問題，目前無法使用",
-    "use_first_item_image_as_icon": "使用第一個上傳的物品展示圖作為音樂包圖標"
+    "use_first_item_image_as_icon": "使用第一個上傳的物品展示圖作為音樂包圖標",
+    "processing": "處理中",
+    "detecting_duration": "正在識別音頻時間中...",
+    "duration_detection_failed": "音頻時長檢測失敗，請確保上傳的是有效的音頻文件"
   },
   "buttons": {
     "generate": "生成mcpack文件"

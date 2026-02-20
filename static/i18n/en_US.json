@@ -61,7 +61,10 @@
     "converted": "(Converted)",
     "resized": "(Resized)",
     "audio_conversion_not_available": "This feature is currently not available",
-    "use_first_item_image_as_icon": "Use the first uploaded item display image as the music pack icon"
+    "use_first_item_image_as_icon": "Use the first uploaded item display image as the music pack icon",
+    "processing": "Processing",
+    "detecting_duration": "Detecting audio duration...",
+    "duration_detection_failed": "Audio duration detection failed, please ensure you uploaded a valid audio file"
   },
   "buttons": {
     "generate": "Generate mcpack file"

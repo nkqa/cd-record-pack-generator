@@ -206,11 +206,11 @@ function showAudioDurationDetectionModal() {
     const modalTitle = errorModal.querySelector('h3');
     
     if (errorModal && errorMessage && closeErrorBtn) {
-        errorMessage.textContent = '正在识别音频时间中...';
+        errorMessage.textContent = i18n.t('upload.detecting_duration', '正在识别音频时间中...');
         
         // 设置标题
         if (modalTitle) {
-            modalTitle.textContent = '处理中';
+            modalTitle.textContent = i18n.t('upload.processing', '处理中');
         }
         
         // 隐藏关闭按钮，因为会自动关闭
@@ -2415,7 +2415,7 @@ fileInputs.forEach(inputInfo => {
                             
                             // 显示错误信息
                             console.error('音频时长检测失败:', error);
-                            showErrorModal(`${i18n.t('errors.error', '错误')}：音频时长检测失败，请确保上传的是有效的音频文件`);
+                            showErrorModal(`${i18n.t('errors.error', '错误')}：${i18n.t('upload.duration_detection_failed', '音频时长检测失败，请确保上传的是有效的音频文件')}`);
                             
                             // 重置文件输入元素的值
                             input.value = '';
