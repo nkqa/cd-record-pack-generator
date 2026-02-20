@@ -3145,6 +3145,16 @@ function showFfmpegDownloadModal() {
         }
         noteElement.textContent = i18n.t('ffmpeg.required_note', '转换音频格式必须的东西，如果不下载将无法转换音频格式');
         
+        // 添加首次加载提示
+        let firstLoadNote = modal.querySelector('.ffmpeg-first-load-note');
+        if (!firstLoadNote) {
+            firstLoadNote = document.createElement('p');
+            firstLoadNote.className = 'ffmpeg-first-load-note';
+            firstLoadNote.style.cssText = 'color: #666; font-size: 12px; margin-top: 5px; text-align: center;';
+            modal.querySelector('.modal-content').appendChild(firstLoadNote);
+        }
+        firstLoadNote.textContent = '首次加载较慢，需要耐心等待';
+        
         // 立即开始动画
         // 重置进度条样式
         progressBar.style.transition = 'none';
