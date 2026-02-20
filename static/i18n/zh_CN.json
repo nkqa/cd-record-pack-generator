@@ -161,7 +161,8 @@
     },
     "fallback_to_browser": "请尝试更换其它FFmpeg下载源",
     "non_ogg_format": "错误：非 .ogg 格式（未启用音频转换开关）",
-    "unsaved_changes": "你所做的更改可能未保存"
+    "unsaved_changes": "你所做的更改可能未保存",
+    "change_source": "更换下载源"
   },
   "language": {
     "label": "语言",

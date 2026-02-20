@@ -165,7 +165,8 @@
     },
     "fallback_to_browser": "Please try changing to another FFmpeg download source",
     "non_ogg_format": "Error: Not .ogg format (audio conversion is disabled)",
-    "unsaved_changes": "Your changes may not be saved"
+    "unsaved_changes": "Your changes may not be saved",
+    "change_source": "Change Download Source"
   },
   "language": {
     "label": "Language",

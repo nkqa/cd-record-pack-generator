@@ -46,6 +46,10 @@
             <span id="ffmpegStatusDot" class="status-dot"></span>
             <span id="ffmpegStatusText" class="status-text">FFmpeg状态检查中...</span>
             <button id="changeFfmpegSourceBtn" class="change-source-btn" onclick="changeFfmpegSource()">更换下载源</button>
+            <script>
+                // 更新更换下载源按钮文本
+                document.getElementById('changeFfmpegSourceBtn').textContent = i18n.t('ffmpeg.change_source', '更换下载源');
+            </script>
         </div>
         
         <!-- 介绍部分 -->

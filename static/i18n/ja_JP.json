@@ -165,7 +165,8 @@
     },
     "fallback_to_browser": "他のFFmpegダウンロードソースに変更してみてください",
     "non_ogg_format": "エラー：.ogg形式ではない（オーディオ変換が無効）",
-    "unsaved_changes": "変更内容が保存されていない可能性があります"
+    "unsaved_changes": "変更内容が保存されていない可能性があります",
+    "change_source": "ダウンロードソースを変更"
   },
   "language": {
     "label": "言語",

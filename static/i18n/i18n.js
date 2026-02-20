@@ -627,17 +627,23 @@ const i18n = {
     }
     
     // 更新FFmpeg下载弹窗
-    const ffmpegDownloadModal = document.getElementById('ffmpegDownloadModal');
-    if (ffmpegDownloadModal) {
-      const h3 = ffmpegDownloadModal.querySelector('h3');
-      if (h3) {
-        h3.textContent = this.t('modal.ffmpeg.load_ffmpeg', '加载FFmpeg');
+      const ffmpegDownloadModal = document.getElementById('ffmpegDownloadModal');
+      if (ffmpegDownloadModal) {
+        const h3 = ffmpegDownloadModal.querySelector('h3');
+        if (h3) {
+          h3.textContent = this.t('modal.ffmpeg.load_ffmpeg', '加载FFmpeg');
+        }
+        const p = ffmpegDownloadModal.querySelector('p');
+        if (p) {
+          p.textContent = this.t('modal.ffmpeg.downloading', '正在下载FFmpeg核心文件，请稍候...');
+        }
       }
-      const p = ffmpegDownloadModal.querySelector('p');
-      if (p) {
-        p.textContent = this.t('modal.ffmpeg.downloading', '正在下载FFmpeg核心文件，请稍候...');
+      
+      // 更新更换下载源按钮文本
+      const changeSourceBtn = document.getElementById('changeFfmpegSourceBtn');
+      if (changeSourceBtn) {
+        changeSourceBtn.textContent = this.t('ffmpeg.change_source', '更换下载源');
       }
-    }
     
     // 更新FFmpeg下载源选择弹窗
     const ffmpegCdnModal = document.querySelector('.modal .modal-content h3');
