@@ -1838,9 +1838,9 @@ const recordNameMap = {
 
 // 生成指令
 function generateCommands() {
-    const commandType = document.querySelector('input[name="commandType"]:checked').value;
     const commandOutput = document.getElementById('commandOutput');
-    let commands = [];
+    let playCommands = [];
+    let stopCommands = [];
     
     // 遍历所有文件输入
     fileInputs.forEach(inputInfo => {
@@ -1852,20 +1852,31 @@ function generateCommands() {
         if (lastSelectedFiles[inputId] || descText) {
             const recordName = recordNameMap[inputId];
             if (recordName) {
-                const command = commandType === 'play' 
-                    ? `/playsound record.${recordName}` 
-                    : `/stopsound record.${recordName}`;
+                // 生成播放命令
+                const playCommand = `/playsound record.${recordName}`;
+                playCommands.push(`${inputInfo.targetName} ${descText} ${playCommand}`);
                 
-                // 第一部分固定为被替换的文件名（inputInfo.targetName）
-                commands.push(`${inputInfo.targetName} ${descText} ${command}`);
+                // 生成停止命令
+                const stopCommand = `/stopsound record.${recordName}`;
+                stopCommands.push(`${inputInfo.targetName} ${descText} ${stopCommand}`);
             }
         }
     });
     
-    // 默认无输入的情况下，指令生成区域保持空白
-    // 移除了显示所有可能指令的逻辑
+    // 构建完整的命令输出，包含播放和停止命令
+    let output = '';
+    if (playCommands.length > 0) {
+        output += 'Play Command:\n';
+        output += playCommands.join('\n');
+        output += '\n\n';
+    }
+    if (stopCommands.length > 0) {
+        output += 'Stop Command:\n';
+        output += stopCommands.join('\n');
+    }
     
-    commandOutput.value = commands.join('\n');
+    // 默认无输入的情况下，指令生成区域保持空白
+    commandOutput.value = output.trim();
 }
 
 // 复制指令到剪贴板
