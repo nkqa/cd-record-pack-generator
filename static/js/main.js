@@ -1866,12 +1866,12 @@ function generateCommands() {
     // 构建完整的命令输出，包含播放和停止命令
     let output = '';
     if (playCommands.length > 0) {
-        output += 'Play Command:\n';
+        output += i18n.t('command.play', 'Play Command') + ':\n';
         output += playCommands.join('\n');
         output += '\n\n';
     }
     if (stopCommands.length > 0) {
-        output += 'Stop Command:\n';
+        output += i18n.t('command.stop', 'Stop Command') + ':\n';
         output += stopCommands.join('\n');
     }
     
