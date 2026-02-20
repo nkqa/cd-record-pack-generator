@@ -140,6 +140,7 @@
     "loading": "FFmpeg載入中...",
     "loading_text": "載入中...",
     "required_note": "轉換音頻格式必須的東西，如果不下載將無法轉換音頻格式",
+    "first_load_note": "首次載入較慢，需要耐心等待",
     "auto_select_countdown": "{seconds} 秒後，將自動選擇最快的源",
     "cdn": {
       "available": "可用",

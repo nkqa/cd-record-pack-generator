@@ -3153,7 +3153,7 @@ function showFfmpegDownloadModal() {
             firstLoadNote.style.cssText = 'color: #666; font-size: 12px; margin-top: 5px; text-align: center;';
             modal.querySelector('.modal-content').appendChild(firstLoadNote);
         }
-        firstLoadNote.textContent = '首次加载较慢，需要耐心等待';
+        firstLoadNote.textContent = i18n.t('ffmpeg.first_load_note', '首次加载较慢，需要耐心等待');
         
         // 立即开始动画
         // 重置进度条样式
