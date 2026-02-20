@@ -3112,6 +3112,12 @@ async function loadFfmpegIfNeeded() {
         updateFfmpegStatus('ready');
         console.log('FFmpeg加载成功');
     } else {
+        // 隐藏下载弹窗
+        hideFfmpegDownloadModal();
+        
+        // 显示警告信息，告知用户将使用备选方案
+        showErrorModal(i18n.t('ffmpeg.fallback_to_browser', 'FFmpeg加载失败，将使用浏览器内置的音频转换功能'));
+        
         // 更新状态为错误
         updateFfmpegStatus('error');
         console.log('FFmpeg加载失败：核心实例不存在');
