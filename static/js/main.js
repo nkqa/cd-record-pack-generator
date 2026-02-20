@@ -292,28 +292,30 @@ function showDurationExceededModal(limitMinutes, limitSeconds, input, inputId, i
             }
             
             // 保持上一次成功上传的文件
-            if (window.lastValidAudioFiles[inputInfo.id]) {
-                const lastValidFile = window.lastValidAudioFiles[inputInfo.id];
-                btnText.textContent = `${i18n.t('upload.selected_audio', '已选择音频：')}${lastValidFile.name}`;
-                if (deleteBtn) {
-                    deleteBtn.style.display = 'block';
+                if (window.lastValidAudioFiles[inputInfo.id]) {
+                    const lastValidFile = window.lastValidAudioFiles[inputInfo.id];
+                    // 使用原始文件名而不是转换后的文件名
+                    const displayName = lastValidFile.originalName || lastValidFile.name;
+                    btnText.textContent = `${i18n.t('upload.selected_audio', '已选择音频：')}${displayName}`;
+                    if (deleteBtn) {
+                        deleteBtn.style.display = 'block';
+                    }
+                    
+                    // 保持上一次的描述
+                    if (descInput) {
+                        descInput.value = lastValidFile.description;
+                    }
+                } else {
+                    btnText.textContent = i18n.t('upload.select_audio', '选择音频（不上传即为保持原版音乐）');
+                    if (deleteBtn) {
+                        deleteBtn.style.display = 'none';
+                    }
+                    
+                    // 清空描述输入框
+                    if (descInput) {
+                        descInput.value = '';
+                    }
                 }
-                
-                // 保持上一次的描述
-                if (descInput) {
-                    descInput.value = lastValidFile.description;
-                }
-            } else {
-                btnText.textContent = i18n.t('upload.select_audio', '选择音频（不上传即为保持原版音乐）');
-                if (deleteBtn) {
-                    deleteBtn.style.display = 'none';
-                }
-                
-                // 清空描述输入框
-                if (descInput) {
-                    descInput.value = '';
-                }
-            }
             
             // 移除模态框
             const currentModal = document.getElementById(modalId);
@@ -491,14 +493,16 @@ function showDurationExceededModal(limitMinutes, limitSeconds, input, inputId, i
                 window.lastValidAudioFiles[inputInfo.id] = {
                     file: finalFile,
                     name: finalFile.name,
+                    originalName: file.name, // 保存原始文件名
                     description: descInput ? descInput.value : '',
                     targetName: inputInfo.targetName,
                     isConverted: isConverted
                 };
                 
-                // 自动填充描述（如果为空）
-                if (descInput && !descInput.value) {
+                // 自动填充描述为新文件的文件名（不含扩展名）
+                if (descInput) {
                     const fileNameWithoutExt = file.name.replace(/\.[^/.]+$/, "");
+                    console.log('更新描述输入框的值为:', fileNameWithoutExt);
                     descInput.value = fileNameWithoutExt;
                     // 更新保存的描述
                     window.lastValidAudioFiles[inputInfo.id].description = fileNameWithoutExt;
@@ -524,7 +528,9 @@ function showDurationExceededModal(limitMinutes, limitSeconds, input, inputId, i
                 // 保持上一次成功上传的文件
                 if (window.lastValidAudioFiles[inputInfo.id]) {
                     const lastValidFile = window.lastValidAudioFiles[inputInfo.id];
-                    btnText.textContent = `${i18n.t('upload.selected_audio', '已选择音频：')}${lastValidFile.name}`;
+                    // 使用原始文件名而不是转换后的文件名
+                    const displayName = lastValidFile.originalName || lastValidFile.name;
+                    btnText.textContent = `${i18n.t('upload.selected_audio', '已选择音频：')}${displayName}`;
                     if (deleteBtn) {
                         deleteBtn.style.display = 'block';
                     }
@@ -566,28 +572,30 @@ function showDurationExceededModal(limitMinutes, limitSeconds, input, inputId, i
             }
             
             // 保持上一次成功上传的文件
-            if (window.lastValidAudioFiles[inputInfo.id]) {
-                const lastValidFile = window.lastValidAudioFiles[inputInfo.id];
-                btnText.textContent = `${i18n.t('upload.selected_audio', '已选择音频：')}${lastValidFile.name}`;
-                if (deleteBtn) {
-                    deleteBtn.style.display = 'block';
+                if (window.lastValidAudioFiles[inputInfo.id]) {
+                    const lastValidFile = window.lastValidAudioFiles[inputInfo.id];
+                    // 使用原始文件名而不是转换后的文件名
+                    const displayName = lastValidFile.originalName || lastValidFile.name;
+                    btnText.textContent = `${i18n.t('upload.selected_audio', '已选择音频：')}${displayName}`;
+                    if (deleteBtn) {
+                        deleteBtn.style.display = 'block';
+                    }
+                    
+                    // 保持上一次的描述
+                    if (descInput) {
+                        descInput.value = lastValidFile.description;
+                    }
+                } else {
+                    btnText.textContent = i18n.t('upload.select_audio', '选择音频（不上传即为保持原版音乐）');
+                    if (deleteBtn) {
+                        deleteBtn.style.display = 'none';
+                    }
+                    
+                    // 清空描述输入框
+                    if (descInput) {
+                        descInput.value = '';
+                    }
                 }
-                
-                // 保持上一次的描述
-                if (descInput) {
-                    descInput.value = lastValidFile.description;
-                }
-            } else {
-                btnText.textContent = i18n.t('upload.select_audio', '选择音频（不上传即为保持原版音乐）');
-                if (deleteBtn) {
-                    deleteBtn.style.display = 'none';
-                }
-                
-                // 清空描述输入框
-                if (descInput) {
-                    descInput.value = '';
-                }
-            }
             
             // 移除模态框
             const currentModal = document.getElementById(modalId);
@@ -959,9 +967,8 @@ async function showCdnSelectionModal() {
             // 弹出下载中窗口
             showFfmpegDownloadModal();
           } else {
-            if (cdnTestResults) {
-              cdnTestResults.innerHTML += `<p style="color: red;">${i18n.t('ffmpeg.cdn.cannot_auto_select', '无法自动选择，请手动选择一个下载源')}</p>`;
-            }
+            // 当没有可用CDN时，不显示手动选择提示，因为所有选择按钮都是禁用的
+            // 保持显示"所有下载源都不可用，请检查网络连接"的提示
           }
         } else {
           if (cdnTestResults) {
@@ -1553,6 +1560,7 @@ async function showCdnSelectionModalWithCancel() {
             <div class="modal-content" style="width: 80%; max-width: 900px;">
                 <h3>${i18n.t('ffmpeg.select_source', '选择FFmpeg下载源')}</h3>
                 <p>${i18n.t('ffmpeg.detecting_latency', '正在检测各下载源的延迟，请稍候...')}</p>
+                <p style="color: #ff9800; font-size: 14px; text-align: center; margin: 10px 0;">${i18n.t('ffmpeg.cdn.reload_note', '只有刷新页面后才会真正的更换下载源')}</p>
                 <p id="autoSelectCountdown" style="color: #666; font-size: 14px; text-align: center; margin: 10px 0;"></p>
                 <div id="cdnTestResults" style="margin: 20px 0; max-height: 300px; overflow-y: auto;">
                     <!-- 测试结果将在这里显示 -->
@@ -1579,43 +1587,58 @@ async function showCdnSelectionModalWithCancel() {
             if (cdnTestResults) {
                 if (results.length === 0) {
                     cdnTestResults.innerHTML = `<p style="color: red;">${i18n.t('ffmpeg.cdn.all_unavailable', '所有下载源都不可用，请检查网络连接')}</p>`;
+                    // 禁用选择最快源按钮
+                    document.getElementById('cdnAutoSelectBtn').disabled = true;
+                    document.getElementById('cdnAutoSelectBtn').style.opacity = '0.5';
+                    document.getElementById('cdnAutoSelectBtn').style.cursor = 'not-allowed';
                 } else {
-                    let html = '<table style="width: 100%; border-collapse: collapse;">';
-                    html += `<tr><th style="border: 1px solid #ddd; padding: 8px; text-align: left;">${i18n.t('ffmpeg.cdn.download_source', '下载源')}</th><th style="border: 1px solid #ddd; padding: 8px; text-align: left;">${i18n.t('ffmpeg.cdn.latency', '延迟')}</th><th style="border: 1px solid #ddd; padding: 8px; text-align: left;">${i18n.t('ffmpeg.cdn.status', '状态')}</th><th style="border: 1px solid #ddd; padding: 8px; text-align: left;">${i18n.t('ffmpeg.cdn.action', '操作')}</th></tr>`;
-                    results.forEach(result => {
-                        const status = result.ok ? i18n.t('ffmpeg.cdn.available', '可用') : i18n.t('ffmpeg.cdn.unavailable', '不可用');
-                        const statusColor = result.ok ? '#4CAF50' : '#f44336';
-                        const latencyText = result.ok ? `${result.latency.toFixed(2)}ms` : 'N/A';
-                        html += `<tr>
-                            <td style="border: 1px solid #ddd; padding: 8px; word-break: break-all;">${result.cdn}</td>
-                            <td style="border: 1px solid #ddd; padding: 8px;">${latencyText}</td>
-                            <td style="border: 1px solid #ddd; padding: 8px; color: ${statusColor};">${status}</td>
-                            <td style="border: 1px solid #ddd; padding: 8px;">
-                                <button class="cdn-select-btn" data-cdn="${result.cdn}" style="padding: 4px 8px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; ${!result.ok ? 'opacity: 0.5; cursor: not-allowed;' : ''}" ${!result.ok ? 'disabled' : ''}>${i18n.t('ffmpeg.cdn.select', '选择')}</button>
-                            </td>
-                        </tr>`;
-                    });
-                    html += '</table>';
-                    cdnTestResults.innerHTML = html;
-
-                    // 添加选择按钮事件监听器
-                    document.querySelectorAll('.cdn-select-btn').forEach(btn => {
-                        btn.addEventListener('click', function() {
-                            if (this.disabled) return;
-                            // 清除自动选择定时器和倒计时
-                            if (autoSelectTimer) {
-                                clearTimeout(autoSelectTimer);
-                                autoSelectTimer = null;
-                            }
-                            if (countdownInterval) {
-                                clearInterval(countdownInterval);
-                                countdownInterval = null;
-                            }
-                            const cdn = this.getAttribute('data-cdn');
-                            resolve(cdn);
-                            document.body.removeChild(modal);
+                    // 检查是否有可用的CDN
+                    const hasAvailableCdn = results.some(result => result.ok);
+                    
+                    if (!hasAvailableCdn) {
+                        cdnTestResults.innerHTML = `<p style="color: red;">${i18n.t('ffmpeg.cdn.all_unavailable', '所有下载源都不可用，请检查网络连接')}</p>`;
+                        // 禁用选择最快源按钮
+                        document.getElementById('cdnAutoSelectBtn').disabled = true;
+                        document.getElementById('cdnAutoSelectBtn').style.opacity = '0.5';
+                        document.getElementById('cdnAutoSelectBtn').style.cursor = 'not-allowed';
+                    } else {
+                        let html = '<table style="width: 100%; border-collapse: collapse;">';
+                        html += `<tr><th style="border: 1px solid #ddd; padding: 8px; text-align: left;">${i18n.t('ffmpeg.cdn.download_source', '下载源')}</th><th style="border: 1px solid #ddd; padding: 8px; text-align: left;">${i18n.t('ffmpeg.cdn.latency', '延迟')}</th><th style="border: 1px solid #ddd; padding: 8px; text-align: left;">${i18n.t('ffmpeg.cdn.status', '状态')}</th><th style="border: 1px solid #ddd; padding: 8px; text-align: left;">${i18n.t('ffmpeg.cdn.action', '操作')}</th></tr>`;
+                        results.forEach(result => {
+                            const status = result.ok ? i18n.t('ffmpeg.cdn.available', '可用') : i18n.t('ffmpeg.cdn.unavailable', '不可用');
+                            const statusColor = result.ok ? '#4CAF50' : '#f44336';
+                            const latencyText = result.ok ? `${result.latency.toFixed(2)}ms` : 'N/A';
+                            html += `<tr>
+                                <td style="border: 1px solid #ddd; padding: 8px; word-break: break-all;">${result.cdn}</td>
+                                <td style="border: 1px solid #ddd; padding: 8px;">${latencyText}</td>
+                                <td style="border: 1px solid #ddd; padding: 8px; color: ${statusColor};">${status}</td>
+                                <td style="border: 1px solid #ddd; padding: 8px;">
+                                    <button class="cdn-select-btn" data-cdn="${result.cdn}" style="padding: 4px 8px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; ${!result.ok ? 'opacity: 0.5; cursor: not-allowed;' : ''}" ${!result.ok ? 'disabled' : ''}>${i18n.t('ffmpeg.cdn.select', '选择')}</button>
+                                </td>
+                            </tr>`;
                         });
-                    });
+                        html += '</table>';
+                        cdnTestResults.innerHTML = html;
+
+                        // 添加选择按钮事件监听器
+                        document.querySelectorAll('.cdn-select-btn').forEach(btn => {
+                            btn.addEventListener('click', function() {
+                                if (this.disabled) return;
+                                // 清除自动选择定时器和倒计时
+                                if (autoSelectTimer) {
+                                    clearTimeout(autoSelectTimer);
+                                    autoSelectTimer = null;
+                                }
+                                if (countdownInterval) {
+                                    clearInterval(countdownInterval);
+                                    countdownInterval = null;
+                                }
+                                const cdn = this.getAttribute('data-cdn');
+                                resolve(cdn);
+                                document.body.removeChild(modal);
+                            });
+                        });
+                    }
                 }
             }
         });
@@ -1637,6 +1660,9 @@ async function showCdnSelectionModalWithCancel() {
 
         // 添加选择最快源按钮事件监听器
         document.getElementById('cdnAutoSelectBtn').addEventListener('click', function() {
+            // 如果按钮被禁用，直接返回
+            if (this.disabled) return;
+            
             if (testResults.length > 0) {
                 // 找到最快的可用CDN
                 const fastestCdn = testResults
@@ -1655,9 +1681,8 @@ async function showCdnSelectionModalWithCancel() {
                     }
                     resolve(fastestCdn.cdn);
                     document.body.removeChild(modal);
-                } else {
-                    showErrorModal(i18n.t('ffmpeg.cdn.cannot_auto_select', '无法自动选择，请手动选择一个下载源'));
                 }
+                // 移除错误提示，因为当没有可用CDN时，按钮已经被禁用
             } else {
                 showErrorModal(i18n.t('ffmpeg.cdn.test_not_ready', '测试结果尚未就绪，请稍后再试'));
             }
@@ -1735,13 +1760,20 @@ function initCancelConversionBtn() {
             // 显示确认弹窗
             const deleteModal = document.getElementById('deleteModal');
             const modalTitle = document.getElementById('modalTitle');
-            const modalMessage = deleteModal.querySelector('p');
+            const modalMessage = document.getElementById('deleteConfirmMessage');
+            const deleteNote = document.getElementById('deleteNote');
             const confirmBtn = document.getElementById('confirmDeleteBtn');
             
-            if (deleteModal && modalTitle && modalMessage && confirmBtn) {
+            if (deleteModal && modalTitle && modalMessage && confirmBtn && deleteNote) {
                 // 修改模态框内容
                 modalTitle.textContent = i18n.t('modal.confirm_cancel', '确认取消');
                 modalMessage.textContent = i18n.t('modal.confirm_cancel_message', '确定要取消当前的音频转换吗？');
+                
+                // 隐藏"此操作不会删除本地任何文件"提示
+                deleteNote.style.display = 'none';
+                
+                // 确保弹窗显示在转换进度条窗口上方
+                deleteModal.style.zIndex = '1004';
                 
                 // 保存原始的确认按钮点击事件
                 const originalConfirmClick = confirmBtn.onclick;
@@ -1866,8 +1898,6 @@ const fileInputs = [
 
 // 页面加载完成后初始化
 window.addEventListener('DOMContentLoaded', function() {
-    initCancelConversionBtn();
-    
     // 为音频格式转换开关添加事件监听器，阻止关闭
     const audioProcessingToggle = document.getElementById('audioProcessingToggle');
     if (audioProcessingToggle) {
@@ -1967,7 +1997,7 @@ function showFfmpegErrorModal() {
             <p>${i18n.t('ffmpeg.error.message', '请确认网络通畅并刷新页面')}</p>
             <div class="modal-buttons">
                 <button id="refreshPageBtn" class="btn confirm">${i18n.t('ffmpeg.error.refresh', '刷新页面')}</button>
-                <button id="cancelErrorBtn" class="btn cancel">${i18n.t('ffmpeg.error.cancel', '取消')}</button>
+                <button id="cancelErrorBtn" class="btn cancel">${i18n.t('modal.cancel', '取消')}</button>
             </div>
         </div>
     `;
@@ -2345,50 +2375,42 @@ fileInputs.forEach(inputInfo => {
                                 // 隐藏转换进度模态框
                                 hideConversionModal();
                                 
-                                // 检查是否是浏览器不支持的问题
-                                if (error.message.includes('浏览器不支持') || error.message.includes('Failed to construct \'MediaRecorder\'')) {
-                                    // 降级方案：直接使用原始文件
-                                    console.log('降级到使用原始文件');
-                                    showErrorModal(`${i18n.t('errors.error', '警告')}：${i18n.t('errors.browser_not_support_conversion', '浏览器不支持音频转换，将直接使用原始文件')}`);
-                                    finalFile = file;
-                                    isConverted = false;
-                                } else {
-                                    // 其他错误
-                                    showErrorModal(`${i18n.t('errors.error', '错误')}：${i18n.t('errors.audio_conversion_failed', '音频转换失败，请确保上传的是有效的音频文件')}`);
-                                    
-                                    // 重置文件输入元素的值，确保不保留错误文件的信息
-                                    input.value = '';
-                                    
-                                    // 删除lastSelectedFiles中的错误文件信息，确保下次选择文件时重新处理
-                                    if (lastSelectedFiles[inputId]) {
-                                        delete lastSelectedFiles[inputId];
-                                    }
-                                    
-                                    // 保持上一次成功上传的文件
-                                    if (window.lastValidAudioFiles[inputInfo.id]) {
-                                        const lastValidFile = window.lastValidAudioFiles[inputInfo.id];
-                                        btnText.textContent = `${i18n.t('upload.selected_audio', '已选择音频：')}${lastValidFile.name}`;
-                                        if (deleteBtn) {
-                                            deleteBtn.style.display = 'block';
-                                        }
-                                        
-                                        // 保持上一次的描述
-                                        if (descInput) {
-                                            descInput.value = lastValidFile.description;
-                                        }
-                                    } else {
-                                        btnText.textContent = i18n.t('upload.select_audio', '选择音频（不上传即为保持原版音乐）');
-                                        if (deleteBtn) {
-                                            deleteBtn.style.display = 'none';
-                                        }
-                                        
-                                        // 清空描述输入框
-                                        if (descInput) {
-                                            descInput.value = '';
-                                        }
-                                    }
-                                    return;
+                                // 无论什么错误，都不使用原始文件作为降级方案
+                                console.error('音频转换失败:', error);
+                                showErrorModal(`${i18n.t('errors.error', '错误')}：${i18n.t('errors.audio_conversion_failed', '音频转换失败，请确保上传的是有效的音频文件')}`);
+                                
+                                // 重置文件输入元素的值，确保不保留错误文件的信息
+                                input.value = '';
+                                
+                                // 删除lastSelectedFiles中的错误文件信息，确保下次选择文件时重新处理
+                                if (lastSelectedFiles[inputId]) {
+                                    delete lastSelectedFiles[inputId];
                                 }
+                                
+                                // 保持上一次成功上传的文件
+                                if (window.lastValidAudioFiles[inputInfo.id]) {
+                                    const lastValidFile = window.lastValidAudioFiles[inputInfo.id];
+                                    btnText.textContent = `${i18n.t('upload.selected_audio', '已选择音频：')}${lastValidFile.name}`;
+                                    if (deleteBtn) {
+                                        deleteBtn.style.display = 'block';
+                                    }
+                                    
+                                    // 保持上一次的描述
+                                    if (descInput) {
+                                        descInput.value = lastValidFile.description;
+                                    }
+                                } else {
+                                    btnText.textContent = i18n.t('upload.select_audio', '选择音频（不上传即为保持原版音乐）');
+                                    if (deleteBtn) {
+                                        deleteBtn.style.display = 'none';
+                                    }
+                                    
+                                    // 清空描述输入框
+                                    if (descInput) {
+                                        descInput.value = '';
+                                    }
+                                }
+                                return;
                             }
                         } else {
                             console.log('使用原始ogg文件:', file.name);
@@ -2440,6 +2462,7 @@ fileInputs.forEach(inputInfo => {
                     window.lastValidAudioFiles[inputInfo.id] = {
                         file: finalFile,
                         name: finalFile.name,
+                        originalName: originalFileName, // 保存原始文件名
                         description: fileNameWithoutExt,
                         targetName: inputInfo.targetName, // 保存目标文件名
                         isConverted: isConverted
@@ -2456,7 +2479,10 @@ fileInputs.forEach(inputInfo => {
                     
                     // 自动填入文件名（不含扩展名）到描述输入框
                     if (descInput) {
+                        console.log('更新描述输入框的值为:', fileNameWithoutExt);
                         descInput.value = fileNameWithoutExt;
+                        // 同时更新window.lastValidAudioFiles中的description值
+                        window.lastValidAudioFiles[inputInfo.id].description = fileNameWithoutExt;
                     }
                 } catch (error) {
                     console.error('文件处理失败:', error);
@@ -3286,8 +3312,8 @@ async function loadFfmpegIfNeeded() {
         // 隐藏下载弹窗
         hideFfmpegDownloadModal();
         
-        // 显示警告信息，告知用户将使用备选方案
-        showErrorModal(i18n.t('ffmpeg.fallback_to_browser', 'FFmpeg加载失败，将使用浏览器内置的音频转换功能'));
+        // 显示错误信息，告知用户FFmpeg加载失败
+        showErrorModal(i18n.t('ffmpeg.error.message', '请确认网络通畅并刷新页面'));
         
         // 更新状态为错误
         updateFfmpegStatus('error');
@@ -3299,12 +3325,12 @@ async function loadFfmpegIfNeeded() {
     // 隐藏下载弹窗
     hideFfmpegDownloadModal();
     
-    // 显示警告信息，告知用户将使用备选方案
-    showErrorModal(i18n.t('ffmpeg.fallback_to_browser', 'FFmpeg加载失败，将使用浏览器内置的音频转换功能'));
+    // 显示错误信息，告知用户FFmpeg加载失败
+    showErrorModal(i18n.t('ffmpeg.error.message', '请确认网络通畅并刷新页面'));
     
     // 更新状态为错误
     updateFfmpegStatus('error');
-    console.log('使用浏览器内置的音频转换功能作为备选方案');
+    console.log('FFmpeg加载失败');
   }
 }
 
@@ -3556,20 +3582,55 @@ if (packBtn) {
                 }
             }
             
-            // 添加pack_icon.png（如果有，否则使用默认图标）
+            // 添加pack_icon.png（如果有，否则使用默认图标或第一个上传的物品展示图）
             if (window.lastValidIconFile) {
                 zip.file('pack_icon.png', window.lastValidIconFile);
             } else {
-                // 使用bedrockSrc目录中的默认图标
-                try {
-                    // 创建一个请求来获取默认图标
-                    const response = await fetch('bedrockSrc/pack_icon.png');
-                    if (response.ok) {
-                        const blob = await response.blob();
-                        zip.file('pack_icon.png', blob);
+                // 检查是否启用了使用第一个上传的物品展示图作为图标
+                const useFirstItemImageToggle = document.getElementById('useFirstItemImageAsIconToggle');
+                const useFirstItemImage = useFirstItemImageToggle ? useFirstItemImageToggle.checked : true;
+                
+                if (useFirstItemImage) {
+                    // 查找第一个上传的物品展示图
+                    let firstItemImage = null;
+                    const iconKeys = ['11', '13', '5', 'blocks', 'cat', 'creator', 'creator_music_box', 'mall', 'mellohi', 'otherside', 'pigstep_master', 'precipice', 'relic', 'stal', 'strad', 'wait', 'ward', 'chirp', 'far', 'tears', 'lava_chicken'];
+                    
+                    for (const key of iconKeys) {
+                        const imageInputId = `imageFile_${key}`;
+                        if (window.lastValidImageFiles[imageInputId]) {
+                            firstItemImage = window.lastValidImageFiles[imageInputId].file;
+                            break;
+                        }
                     }
-                } catch (error) {
-                    console.warn('无法加载默认图标:', error);
+                    
+                    if (firstItemImage) {
+                        // 使用第一个上传的物品展示图作为图标，不压缩像素
+                        zip.file('pack_icon.png', firstItemImage);
+                    } else {
+                        // 使用bedrockSrc目录中的默认图标
+                        try {
+                            // 创建一个请求来获取默认图标
+                            const response = await fetch('bedrockSrc/pack_icon.png');
+                            if (response.ok) {
+                                const blob = await response.blob();
+                                zip.file('pack_icon.png', blob);
+                            }
+                        } catch (error) {
+                            console.warn('无法加载默认图标:', error);
+                        }
+                    }
+                } else {
+                    // 使用bedrockSrc目录中的默认图标
+                    try {
+                        // 创建一个请求来获取默认图标
+                        const response = await fetch('bedrockSrc/pack_icon.png');
+                        if (response.ok) {
+                            const blob = await response.blob();
+                            zip.file('pack_icon.png', blob);
+                        }
+                    } catch (error) {
+                        console.warn('无法加载默认图标:', error);
+                    }
                 }
             }
             
@@ -3763,9 +3824,13 @@ function openDeleteModal(target, type) {
     }
     
     // 设置弹窗内容
-    const modalContent = modal.querySelector('.modal-content p');
+    const modalContent = document.getElementById('deleteConfirmMessage');
+    const deleteNote = document.getElementById('deleteNote');
     if (modalContent) {
         modalContent.textContent = i18n.t('modal.confirm_delete_message', '确定要删除此文件吗？');
+    }
+    if (deleteNote) {
+        deleteNote.style.display = 'block';
     }
     
     // 设置按钮文本
