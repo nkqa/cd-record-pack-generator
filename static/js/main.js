@@ -177,6 +177,7 @@ function showErrorModal(message) {
         
         // 设置按钮文本
         closeErrorBtn.textContent = i18n.t('modal.confirm', '确定');
+        closeErrorBtn.style.display = 'block';
         
         errorModal.style.display = 'block';
         
@@ -194,6 +195,46 @@ function showErrorModal(message) {
             }
         }
         window.addEventListener('click', handleOutsideClick);
+    }
+}
+
+// 显示音频时长检测模态框
+function showAudioDurationDetectionModal() {
+    const errorModal = document.getElementById('errorModal');
+    const errorMessage = document.getElementById('errorMessage');
+    const closeErrorBtn = document.getElementById('closeErrorBtn');
+    const modalTitle = errorModal.querySelector('h3');
+    
+    if (errorModal && errorMessage && closeErrorBtn) {
+        errorMessage.textContent = '正在识别音频时间中...';
+        
+        // 设置标题
+        if (modalTitle) {
+            modalTitle.textContent = '处理中';
+        }
+        
+        // 隐藏关闭按钮，因为会自动关闭
+        closeErrorBtn.style.display = 'none';
+        
+        errorModal.style.display = 'block';
+        
+        // 防止点击外部关闭
+        function handleOutsideClick(event) {
+            // 不执行任何操作，保持弹窗打开
+        }
+        window.addEventListener('click', handleOutsideClick);
+    }
+}
+
+// 关闭音频时长检测模态框
+function closeAudioDurationDetectionModal() {
+    const errorModal = document.getElementById('errorModal');
+    if (errorModal) {
+        errorModal.style.display = 'none';
+        const closeErrorBtn = document.getElementById('closeErrorBtn');
+        if (closeErrorBtn) {
+            closeErrorBtn.style.display = 'block';
+        }
     }
 }
 
@@ -2347,17 +2388,43 @@ fileInputs.forEach(inputInfo => {
                     const isAudioConversionEnabled = audioProcessingToggle ? audioProcessingToggle.checked : false; // 默认关闭
                     const isDurationCheckEnabled = durationCheckToggle ? durationCheckToggle.checked : true; // 默认开启，互不干扰
                     
-                    // 检查音频时长（如果时长检查开关开启）
-                    if (isDurationCheckEnabled) {
-                        // 检查音频时长
-                        const duration = await getAudioDuration(file);
-                        const limit = audioDurationLimits[inputInfo.id];
+                    // 检查音频时长（如果时长检查开关开启或音频转换开关开启）
+                    if (isDurationCheckEnabled || isAudioConversionEnabled) {
+                        // 显示音频时长检测弹窗
+                        showAudioDurationDetectionModal();
                         
-                        if (duration > limit) {
-                            const minutes = Math.floor(limit / 60);
-                            const seconds = limit % 60;
-                            // 显示带有"仍要选择"按钮的弹窗
-                            showDurationExceededModal(minutes, seconds, input, inputId, inputInfo, file, btnText, deleteBtn, descInput);
+                        try {
+                            // 检查音频时长
+                            const duration = await getAudioDuration(file);
+                            
+                            // 关闭音频时长检测弹窗
+                            closeAudioDurationDetectionModal();
+                            
+                            const limit = audioDurationLimits[inputInfo.id];
+                            
+                            if (duration > limit) {
+                                const minutes = Math.floor(limit / 60);
+                                const seconds = limit % 60;
+                                // 显示带有"仍要选择"按钮的弹窗
+                                showDurationExceededModal(minutes, seconds, input, inputId, inputInfo, file, btnText, deleteBtn, descInput);
+                                return;
+                            }
+                        } catch (error) {
+                            // 关闭音频时长检测弹窗
+                            closeAudioDurationDetectionModal();
+                            
+                            // 显示错误信息
+                            console.error('音频时长检测失败:', error);
+                            showErrorModal(`${i18n.t('errors.error', '错误')}：音频时长检测失败，请确保上传的是有效的音频文件`);
+                            
+                            // 重置文件输入元素的值
+                            input.value = '';
+                            
+                            // 删除lastSelectedFiles中的错误文件信息
+                            if (lastSelectedFiles[inputId]) {
+                                delete lastSelectedFiles[inputId];
+                            }
+                            
                             return;
                         }
                     }
