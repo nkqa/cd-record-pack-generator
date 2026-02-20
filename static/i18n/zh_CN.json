@@ -159,7 +159,7 @@
       "refresh": "刷新页面",
       "cancel": "取消"
     },
-    "fallback_to_browser": "FFmpeg加载失败，将使用浏览器内置的音频转换功能",
+    "fallback_to_browser": "请尝试更换其它FFmpeg下载源",
     "non_ogg_format": "错误：非 .ogg 格式（未启用音频转换开关）",
     "unsaved_changes": "你所做的更改可能未保存"
   },
