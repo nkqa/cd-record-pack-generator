@@ -850,7 +850,7 @@ async function showCdnSelectionModal() {
             const latencyText = result.ok ? `${result.latency.toFixed(2)}ms` : 'N/A';
             // 检查是否是当前已选择的CDN
             const isSelected = currentSelectedCdn === result.cdn;
-            const buttonText = isSelected ? '已选择' : i18n.t('ffmpeg.cdn.select', '选择');
+            const buttonText = isSelected ? i18n.t('ffmpeg.cdn.selected', '已选择') : i18n.t('ffmpeg.cdn.select', '选择');
             const buttonDisabled = !result.ok || isSelected;
             const buttonStyle = `padding: 4px 8px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; ${buttonDisabled ? 'opacity: 0.5; cursor: not-allowed;' : ''}`;
             html += `<tr>
@@ -1619,7 +1619,7 @@ async function showCdnSelectionModalWithCancel() {
                             const latencyText = result.ok ? `${result.latency.toFixed(2)}ms` : 'N/A';
                             // 检查是否是当前已选择的CDN
                             const isSelected = currentSelectedCdn === result.cdn;
-                            const buttonText = isSelected ? '已选择' : i18n.t('ffmpeg.cdn.select', '选择');
+                            const buttonText = isSelected ? i18n.t('ffmpeg.cdn.selected', '已选择') : i18n.t('ffmpeg.cdn.select', '选择');
                             const buttonDisabled = !result.ok || isSelected;
                             const buttonStyle = `padding: 4px 8px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; ${buttonDisabled ? 'opacity: 0.5; cursor: not-allowed;' : ''}`;
                             html += `<tr>

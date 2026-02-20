@@ -146,6 +146,7 @@
       "available": "利用可能",
       "unavailable": "利用不可",
       "select": "選択",
+      "selected": "選択済み",
       "download_source": "ダウンロードソース",
       "latency": "レイテンシ",
       "status": "状態",

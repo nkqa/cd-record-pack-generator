@@ -146,6 +146,7 @@
       "available": "Available",
       "unavailable": "Unavailable",
       "select": "Select",
+      "selected": "Selected",
       "download_source": "Download Source",
       "latency": "Latency",
       "status": "Status",

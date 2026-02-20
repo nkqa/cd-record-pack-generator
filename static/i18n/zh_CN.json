@@ -145,6 +145,7 @@
       "available": "可用",
       "unavailable": "不可用",
       "select": "选择",
+      "selected": "已选择",
       "download_source": "下载源",
       "latency": "延迟",
       "status": "状态",
