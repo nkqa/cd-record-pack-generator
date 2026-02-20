@@ -3795,6 +3795,12 @@ if (packBtn) {
                 zip.file(`texts/${lang}.lang`, langContent.trim());
             });
             
+            // 添加command.txt文件，内容与播放指令生成输入框相同
+            const commandOutput = document.getElementById('commandOutput');
+            if (commandOutput && commandOutput.value.trim()) {
+                zip.file('command.txt', commandOutput.value.trim());
+            }
+            
             // 生成压缩包
             const content = await zip.generateAsync({ type: 'blob' });
             
