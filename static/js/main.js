@@ -3428,10 +3428,12 @@ function showFfmpegDownloadModal() {
         let textProgress = 0;
         const textInterval = setInterval(() => {
             if (textProgress < 80) {
-                textProgress += 2;
-                progressText.textContent = `${textProgress}%`;
+                // 从0%到80%用30秒，每200ms增加约0.53%
+                textProgress += 0.53;
+                progressText.textContent = `${Math.round(textProgress)}%`;
             } else if (textProgress < 99) {
-                textProgress += 0.5;
+                // 从80%到99%用20秒，每200ms增加约0.19%
+                textProgress += 0.19;
                 progressText.textContent = `${Math.round(textProgress)}%`;
             }
         }, 200);
