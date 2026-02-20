@@ -1289,6 +1289,12 @@ class FFmpegService {
             }
 
             console.log('FFmpeg core instance created successfully!');
+            
+            // 检查FFmpeg实例是否真正可用
+            if (!this.core || typeof this.core !== 'object') {
+              throw new Error('FFmpeg core instance is not valid');
+            }
+            
             this.loaded = true;
             this.setStatus("idle");
             console.log('FFmpeg core load process completed');
@@ -3057,8 +3063,8 @@ window.addEventListener('DOMContentLoaded', async function() {
     const hasPreferredCdn = !!ffmpegService.preferredCdn;
     console.log('Has preferred CDN:', hasPreferredCdn);
     
-    // 检查FFmpeg是否已加载
-    if (ffmpegService.loaded) {
+    // 检查FFmpeg是否已加载且核心实例存在
+    if (ffmpegService.loaded && ffmpegService.core) {
         updateFfmpegStatus('ready');
         console.log('FFmpeg is already loaded');
     } else if (hasPreferredCdn) {
@@ -3100,9 +3106,16 @@ async function loadFfmpegIfNeeded() {
     // 隐藏下载弹窗
     hideFfmpegDownloadModal();
     
-    // 更新状态为就绪
-    updateFfmpegStatus('ready');
-    console.log('FFmpeg加载成功');
+    // 检查FFmpeg是否真正加载成功且核心实例存在
+    if (ffmpegService.loaded && ffmpegService.core) {
+        // 更新状态为就绪
+        updateFfmpegStatus('ready');
+        console.log('FFmpeg加载成功');
+    } else {
+        // 更新状态为错误
+        updateFfmpegStatus('error');
+        console.log('FFmpeg加载失败：核心实例不存在');
+    }
   } catch (error) {
     console.error('加载FFmpeg失败:', error);
     
