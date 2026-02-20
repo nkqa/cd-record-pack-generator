@@ -1116,7 +1116,7 @@ class FFmpegService {
                 resolve();
               };
               coreScript.onerror = () => {
-                console.error(`Failed to load ffmpeg-core.js from ${cachedCoreUrl || coreUrl}`);
+                console.error(`Failed to load ffmpeg-core.js from ${coreUrl}`);
                 reject(new Error(`Failed to load ffmpeg-core.js from ${cdnUrl}`));
               };
               document.head.appendChild(coreScript);
