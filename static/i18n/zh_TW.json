@@ -162,7 +162,10 @@
       "message": "請確認網路暢通並重新整理頁面",
       "refresh": "重新整理頁面",
       "cancel": "取消"
-    }
+    },
+    "fallback_to_browser": "FFmpeg載入失敗，將使用瀏覽器內建的音頻轉換功能",
+    "non_ogg_format": "錯誤：非 .ogg 格式（未啟用音頻轉換開關）",
+    "unsaved_changes": "你所做的變更可能未儲存"
   },
   "language": {
     "label": "語言",

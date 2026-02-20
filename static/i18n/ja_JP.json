@@ -158,11 +158,14 @@
     "detecting_latency": "各ダウンロードソースのレイテンシーを検出中、お待ちください...",
     "select_fastest": "最速のソースを選択",
     "error": {
-      "title": "FFmpegのロードに失敗しました",
+      "title": "FFmpegロード失敗",
       "message": "ネットワーク接続を確認してページを更新してください",
       "refresh": "ページを更新",
       "cancel": "キャンセル"
-    }
+    },
+    "fallback_to_browser": "FFmpegのロードに失敗しました、ブラウザの組み込みオーディオ変換を使用します",
+    "non_ogg_format": "エラー：.ogg形式ではない（オーディオ変換が無効）",
+    "unsaved_changes": "変更内容が保存されていない可能性があります"
   },
   "language": {
     "label": "言語",

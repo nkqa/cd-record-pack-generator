@@ -162,7 +162,10 @@
       "message": "Please check your network connection and refresh the page",
       "refresh": "Refresh Page",
       "cancel": "Cancel"
-    }
+    },
+    "fallback_to_browser": "FFmpeg loading failed, will use browser's built-in audio conversion",
+    "non_ogg_format": "Error: Not .ogg format (audio conversion is disabled)",
+    "unsaved_changes": "Your changes may not be saved"
   },
   "language": {
     "label": "Language",

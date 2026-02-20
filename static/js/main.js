@@ -22,7 +22,7 @@ window.onbeforeunload = function(e) {
     e.preventDefault();
     e.returnValue = '';
     // 某些浏览器需要返回字符串
-    return '你所做的更改可能未保存';
+    return i18n.t('ffmpeg.unsaved_changes', '你所做的更改可能未保存');
 };
 
 // 加载函数
@@ -431,7 +431,7 @@ function showDurationExceededModal(limitMinutes, limitSeconds, input, inputId, i
                 } else {
                     // 音频转换开关关闭，直接使用原始文件
                     if (!file.name.endsWith('.ogg')) {
-                        showErrorModal('错误：非 .ogg 格式（未启用音频转换开关）');
+                        showErrorModal(i18n.t('ffmpeg.non_ogg_format', '错误：非 .ogg 格式（未启用音频转换开关）'));
                         
                         // 重置文件输入元素的值，确保不保留错误文件的信息
                         input.value = '';
@@ -2225,7 +2225,7 @@ fileInputs.forEach(inputInfo => {
                     } else {
                         // 音频转换开关关闭，直接使用原始文件
                         if (!file.name.endsWith('.ogg')) {
-                            showErrorModal('错误：非 .ogg 格式（未启用音频转换开关）');
+                            showErrorModal(i18n.t('ffmpeg.non_ogg_format', '错误：非 .ogg 格式（未启用音频转换开关）'));
                             
                             // 重置文件输入元素的值，确保不保留错误文件的信息
                             input.value = '';
@@ -3123,7 +3123,7 @@ async function loadFfmpegIfNeeded() {
     hideFfmpegDownloadModal();
     
     // 显示警告信息，告知用户将使用备选方案
-    showErrorModal('FFmpeg加载失败，将使用浏览器内置的音频转换功能');
+    showErrorModal(i18n.t('ffmpeg.fallback_to_browser', 'FFmpeg加载失败，将使用浏览器内置的音频转换功能'));
     
     // 更新状态为错误
     updateFfmpegStatus('error');
