@@ -170,6 +170,14 @@ function showErrorModal(message) {
     if (errorModal && errorMessage && closeErrorBtn) {
         errorMessage.textContent = message;
         
+        // 检查错误信息是否与FFmpeg下载源不可用有关，如果是，则关闭"启用音频格式转换"开关
+        if (message.includes('FFmpeg下载源均不可用') || message.includes('FFmpeg download sources are currently unavailable')) {
+            const audioProcessingToggle = document.getElementById('audioProcessingToggle');
+            if (audioProcessingToggle) {
+                audioProcessingToggle.checked = false;
+            }
+        }
+        
         // 设置标题
         if (modalTitle) {
             modalTitle.textContent = i18n.t('errors.error', '错误');
@@ -2124,7 +2132,7 @@ function showFfmpegErrorModal() {
             <p>${i18n.t('ffmpeg.error.message', '请确认网络通畅并刷新页面')}</p>
             <div class="modal-buttons">
                 <button id="refreshPageBtn" class="btn confirm">${i18n.t('ffmpeg.error.refresh', '刷新页面')}</button>
-                <button id="cancelErrorBtn" class="btn cancel">${i18n.t('modal.cancel', '取消')}</button>
+                <button id="cancelErrorBtn" class="btn cancel">${i18n.t('modal.confirm', '确定')}</button>
             </div>
         </div>
     `;
