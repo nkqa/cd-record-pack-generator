@@ -306,7 +306,7 @@ function showDurationCheckWarningModal() {
 }
 
 // 显示音频时长超过限制的警告模态框，带有"仍要选择"按钮
-function showDurationExceededModal(limitMinutes, limitSeconds, input, inputId, inputInfo, file, btnText, deleteBtn, descInput) {
+function showDurationExceededModal(limitMinutes, limitSeconds, input, inputId, inputInfo, file, btnText, deleteBtn, descInput, audioPreview) {
     // 创建弹窗
     const modal = document.createElement('div');
     const modalId = 'durationExceededModal_' + Date.now();
@@ -334,6 +334,11 @@ function showDurationExceededModal(limitMinutes, limitSeconds, input, inputId, i
         cancelBtn.addEventListener('click', function() {
             // 重置文件输入元素的值，确保不保留错误文件的信息
             input.value = '';
+            
+            // 清空预览区域
+            if (audioPreview) {
+                audioPreview.innerHTML = '';
+            }
             
             // 删除lastSelectedFiles中的错误文件信息，确保下次选择文件时重新处理
             if (lastSelectedFiles[inputId]) {
@@ -486,6 +491,11 @@ function showDurationExceededModal(limitMinutes, limitSeconds, input, inputId, i
                         
                         // 重置文件输入元素的值，确保不保留错误文件的信息
                         input.value = '';
+                        
+                        // 清空预览区域
+                        if (audioPreview) {
+                            audioPreview.innerHTML = '';
+                        }
                         
                         // 删除lastSelectedFiles中的错误文件信息，确保下次选择文件时重新处理
                         if (lastSelectedFiles[inputId]) {
@@ -801,15 +811,32 @@ async function testCdnLatency(cdnUrl) {
     console.log(`Testing latency for ${secureUrl} (port 443)`);
     const startTime = performance.now();
     
-    // 发送HEAD请求，只获取响应头，不下载内容
-    const response = await fetch(`${secureUrl}/ffmpeg-core.js`, {
+    // 先测试ffmpeg-core.js文件
+    const jsResponse = await fetch(`${secureUrl}/ffmpeg-core.js`, {
       method: 'HEAD',
       cache: 'no-cache',
       // 超时设置
-      signal: AbortSignal.timeout(5000)
+      signal: AbortSignal.timeout(3000)
     });
     
-    if (response.ok) {
+    if (!jsResponse.ok) {
+      console.log(`Failed to connect to ${secureUrl} (ffmpeg-core.js): ${jsResponse.status}`);
+      return {
+        cdn: cdnUrl,
+        latency: Infinity,
+        ok: false
+      };
+    }
+    
+    // 再测试ffmpeg-core.wasm文件
+    const wasmResponse = await fetch(`${secureUrl}/ffmpeg-core.wasm`, {
+      method: 'HEAD',
+      cache: 'no-cache',
+      // 超时设置
+      signal: AbortSignal.timeout(3000)
+    });
+    
+    if (wasmResponse.ok) {
       const endTime = performance.now();
       const latency = endTime - startTime;
       console.log(`Latency for ${secureUrl}: ${latency.toFixed(2)}ms`);
@@ -819,7 +846,7 @@ async function testCdnLatency(cdnUrl) {
         ok: true
       };
     } else {
-      console.log(`Failed to connect to ${secureUrl}: ${response.status}`);
+      console.log(`Failed to connect to ${secureUrl} (ffmpeg-core.wasm): ${wasmResponse.status}`);
       return {
         cdn: cdnUrl,
         latency: Infinity,
@@ -2026,16 +2053,19 @@ window.addEventListener('DOMContentLoaded', function() {
             if (this.checked) {
                 // 用户尝试打开开关，检查是否有可用的FFmpeg下载源
                 console.log('用户尝试打开音频格式转换开关');
+                // 先暂时关闭开关，等待检查结果
+                this.checked = false;
+                // 检查是否有可用的FFmpeg下载源
                 const hasAvailableSource = await hasAvailableFfmpegSource();
                 console.log('FFmpeg下载源可用性检查结果:', hasAvailableSource);
                 if (!hasAvailableSource) {
-                    // 无可用的下载源，阻止打开操作
+                    // 无可用的下载源，保持关闭状态并显示错误提示
                     console.log('无可用的FFmpeg下载源，阻止打开操作');
-                    this.checked = false;
-                    // 显示错误提示
                     showErrorModal(i18n.t('ffmpeg.cdn.all_unavailable_no_conversion', '因FFmpeg所有下载源均不可用，无法启用此功能'));
                 } else {
+                    // 有可用的下载源，允许打开操作
                     console.log('有可用的FFmpeg下载源，允许打开操作');
+                    this.checked = true;
                 }
             } else {
                 // 用户尝试关闭开关，阻止关闭操作
@@ -2424,6 +2454,7 @@ async function fallbackConvertAudioToOgg(file, targetName, progressCallback) {
 fileInputs.forEach(inputInfo => {
     const input = document.getElementById(inputInfo.id);
     const btnText = document.getElementById(inputInfo.btnId);
+    const audioPreviewId = `audioPreview_${inputInfo.id.replace('oggFile_', '')}`;
     
     if (input && btnText) {
         input.addEventListener('change', async function() {
@@ -2431,6 +2462,7 @@ fileInputs.forEach(inputInfo => {
             const status = document.getElementById('status');
             const deleteBtn = this.parentElement.querySelector('.delete-btn');
             const descInput = document.getElementById(`desc_${inputInfo.id.replace('oggFile_', '')}`);
+            const audioPreview = document.getElementById(audioPreviewId);
             
             // 隐藏全局错误提示
             status.textContent = '';
@@ -2456,7 +2488,25 @@ fileInputs.forEach(inputInfo => {
                     lastModified: file.lastModified
                 };
                 
-
+                // 显示音频预览
+                if (audioPreview) {
+                    // 清空预览区域
+                    audioPreview.innerHTML = '';
+                    
+                    // 创建音频元素
+                    const audio = document.createElement('audio');
+                    audio.controls = true;
+                    audio.style.width = '100%';
+                    audio.style.marginTop = '5px';
+                    
+                    // 创建音频URL
+                    const audioUrl = URL.createObjectURL(file);
+                    audio.src = audioUrl;
+                    
+                    // 添加到预览区域
+                    audioPreview.appendChild(audio);
+                }
+                
                 try {
                     let finalFile = file;
                     let isConverted = false;
@@ -2485,7 +2535,7 @@ fileInputs.forEach(inputInfo => {
                                 const minutes = Math.floor(limit / 60);
                                 const seconds = limit % 60;
                                 // 显示带有"仍要选择"按钮的弹窗
-                                showDurationExceededModal(minutes, seconds, input, inputId, inputInfo, file, btnText, deleteBtn, descInput);
+                                showDurationExceededModal(minutes, seconds, input, inputId, inputInfo, file, btnText, deleteBtn, descInput, audioPreview);
                                 return;
                             }
                         } catch (error) {
@@ -2498,6 +2548,11 @@ fileInputs.forEach(inputInfo => {
                             
                             // 重置文件输入元素的值
                             input.value = '';
+                            
+                            // 清空预览区域
+                            if (audioPreview) {
+                                audioPreview.innerHTML = '';
+                            }
                             
                             // 删除lastSelectedFiles中的错误文件信息
                             if (lastSelectedFiles[inputId]) {
@@ -2552,6 +2607,11 @@ fileInputs.forEach(inputInfo => {
                                 
                                 // 重置文件输入元素的值，确保不保留错误文件的信息
                                 input.value = '';
+                                
+                                // 清空预览区域
+                                if (audioPreview) {
+                                    audioPreview.innerHTML = '';
+                                }
                                 
                                 // 删除lastSelectedFiles中的错误文件信息，确保下次选择文件时重新处理
                                 if (lastSelectedFiles[inputId]) {
@@ -2659,6 +2719,11 @@ fileInputs.forEach(inputInfo => {
                     console.error('文件处理失败:', error);
                     showErrorModal(`${i18n.t('errors.error', '错误')}：${i18n.t('errors.file_processing_failed', '文件处理失败，请重试')}`);
                     
+                    // 清空预览区域
+                    if (audioPreview) {
+                        audioPreview.innerHTML = '';
+                    }
+                    
                     // 保持上一次成功上传的文件
                     if (window.lastValidAudioFiles[inputInfo.id]) {
                         const lastValidFile = window.lastValidAudioFiles[inputInfo.id];
@@ -2687,7 +2752,9 @@ fileInputs.forEach(inputInfo => {
                 // 如果用户取消选择文件，保持上一次成功上传的音频
                 if (window.lastValidAudioFiles[inputInfo.id]) {
                     const lastValidFile = window.lastValidAudioFiles[inputInfo.id];
-                    btnText.textContent = `${i18n.t('upload.selected_audio', '已选择音频：')}${lastValidFile.name}`;
+                    // 使用原始文件名而不是转换后的文件名
+                    const displayName = lastValidFile.originalName || lastValidFile.name;
+                    btnText.textContent = `${i18n.t('upload.selected_audio', '已选择音频：')}${displayName}`;
                     if (deleteBtn) {
                         deleteBtn.style.display = 'block';
                     }
@@ -2706,6 +2773,14 @@ fileInputs.forEach(inputInfo => {
                     if (descInput) {
                         descInput.value = '';
                     }
+                }
+                
+                // 当用户取消选择文件时，保持上一次成功上传的音频预览
+                if (window.lastValidAudioFiles[inputInfo.id] && audioPreview) {
+                    // 保持预览区域不变
+                } else if (audioPreview) {
+                    // 只有当没有上一次成功上传的音频时，才清空预览区域
+                    audioPreview.innerHTML = '';
                 }
             }
         });
@@ -3033,7 +3108,9 @@ imageFileInputs.forEach(inputInfo => {
                 // 如果用户取消选择文件，保持上一次成功上传的图片
             if (window.lastValidImageFiles[inputInfo.id]) {
                 const lastValidFile = window.lastValidImageFiles[inputInfo.id];
-                btnText.textContent = `${i18n.t('upload.selected_image', '已选择图片：')}${lastValidFile.name}`;
+                // 使用原始文件名而不是转换后的文件名
+                const displayName = lastValidFile.originalName || lastValidFile.name;
+                btnText.textContent = `${i18n.t('upload.selected_image', '已选择图片：')}${displayName}`;
                 toggleImageButtons(inputInfo, true);
                 
                 // 显示上一次的预览
@@ -3356,29 +3433,29 @@ if (iconFileInput && iconBtnText && iconPreview) {
             currentSelectedIconFile = null;
             
             // 保持上一次成功上传的图标
-            if (window.lastValidIconFile) {
-                iconBtnText.textContent = `${i18n.t('upload.selected_icon', '已选择图标：')}${lastValidIconName}`;
-                iconPreview.innerHTML = lastValidIconPreview;
-                try {
-                    const iconDeleteBtn = this.parentElement.parentElement.querySelector('.delete-btn');
-                    if (iconDeleteBtn) {
-                        iconDeleteBtn.style.display = 'block';
+                if (window.lastValidIconFile) {
+                    iconBtnText.textContent = `${i18n.t('upload.selected_icon', '已选择图标：')}${lastValidIconName}`;
+                    iconPreview.innerHTML = lastValidIconPreview;
+                    try {
+                        const iconDeleteBtn = this.parentElement.parentElement.querySelector('.delete-btn');
+                        if (iconDeleteBtn) {
+                            iconDeleteBtn.style.display = 'block';
+                        }
+                    } catch (e) {
+                        // 忽略错误
                     }
-                } catch (e) {
-                    // 忽略错误
-                }
-            } else {
-                iconBtnText.textContent = '选择图标';
-                iconPreview.innerHTML = '';
-                try {
-                    const iconDeleteBtn = this.parentElement.parentElement.querySelector('.delete-btn');
-                    if (iconDeleteBtn) {
-                        iconDeleteBtn.style.display = 'none';
+                } else {
+                    iconBtnText.textContent = i18n.t('upload.select_icon', '选择图标');
+                    iconPreview.innerHTML = '';
+                    try {
+                        const iconDeleteBtn = this.parentElement.parentElement.querySelector('.delete-btn');
+                        if (iconDeleteBtn) {
+                            iconDeleteBtn.style.display = 'none';
+                        }
+                    } catch (e) {
+                        // 忽略错误
                     }
-                } catch (e) {
-                    // 忽略错误
                 }
-            }
         }
     });
 }
@@ -3572,14 +3649,22 @@ function showFfmpegDownloadModal() {
         
         // 模拟进度文本
         let textProgress = 0;
+        // 随机生成时间范围
+        const phase1Duration = 30000 + Math.random() * 10000; // 30-40秒
+        const phase2Duration = 20000 + Math.random() * 5000;  // 20-25秒
+        
+        // 计算每200ms的进度增量
+        const phase1Increment = 80 / (phase1Duration / 200);
+        const phase2Increment = 19 / (phase2Duration / 200);
+        
         const textInterval = setInterval(() => {
             if (textProgress < 80) {
-                // 从0%到80%用30秒，每200ms增加约0.53%
-                textProgress += 0.53;
+                // 从0%到80%用随机30-40秒
+                textProgress += phase1Increment;
                 progressText.textContent = `${Math.round(textProgress)}%`;
             } else if (textProgress < 99) {
-                // 从80%到99%用20秒，每200ms增加约0.19%
-                textProgress += 0.19;
+                // 从80%到99%用随机20-25秒
+                textProgress += phase2Increment;
                 progressText.textContent = `${Math.round(textProgress)}%`;
             }
         }, 200);
@@ -4097,9 +4182,11 @@ function openDeleteModal(target, type) {
                     
                     const btnText = document.getElementById(`fileBtnText_${inputId.replace('oggFile_', '')}`);
                     const descInput = document.getElementById(`desc_${inputId.replace('oggFile_', '')}`);
+                    const audioPreview = document.getElementById(`audioPreview_${inputId.replace('oggFile_', '')}`);
                     
                     if (btnText) btnText.textContent = i18n.t('upload.select_audio', '选择音频（不上传即为保持原版音乐）');
                     if (descInput) descInput.value = '';
+                    if (audioPreview) audioPreview.innerHTML = '';
                     
                     // 获取删除按钮
                     let deleteBtn = null;
