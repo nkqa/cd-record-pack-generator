@@ -166,7 +166,7 @@
     "select_fastest": "Select Fastest Source",
     "error": {
       "title": "FFmpeg Load Failed",
-      "message": "Please check your network connection and refresh the page",
+      "message": "All FFmpeg download sources are currently unavailable, only .ogg audio format is allowed",
       "refresh": "Refresh Page",
       "cancel": "Cancel"
     },

@@ -162,7 +162,7 @@
     },
     "error": {
       "title": "FFmpeg加载失败",
-      "message": "请确认网络通畅并刷新页面",
+      "message": "目前所有FFmpeg下载源均不可用，将仅允许选择 .ogg 音频格式",
       "refresh": "刷新页面",
       "cancel": "取消"
     },

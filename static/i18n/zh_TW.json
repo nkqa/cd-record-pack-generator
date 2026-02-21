@@ -166,7 +166,7 @@
     "select_fastest": "選擇最快源",
     "error": {
       "title": "FFmpeg載入失敗",
-      "message": "請確認網路暢通並重新整理頁面",
+      "message": "目前所有FFmpeg下載源均不可用，將僅允許選擇 .ogg 音頻格式",
       "refresh": "重新整理頁面",
       "cancel": "取消"
     },
