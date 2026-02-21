@@ -142,6 +142,7 @@
     "ready": "FFmpeg已就緒",
     "not_loaded": "FFmpeg未載入",
     "loading": "FFmpeg載入中...",
+    "checking_status": "FFmpeg狀態檢查中...",
     "loading_text": "載入中...",
     "required_note": "轉換音頻格式必須的東西，如果不下載將無法轉換音頻格式",
     "first_load_note": "首次載入較慢，需要耐心等待",
@@ -156,7 +157,7 @@
       "status": "狀態",
       "action": "操作",
       "all_unavailable": "所有下載源都不可用，請檢查網路連線",
-      "all_unavailable_no_conversion": "目前所有FFmpeg下載源均不可用，將僅允許選擇 .ogg 音頻格式",
+      "all_unavailable_no_conversion": "因FFmpeg所有下載源均不可用，無法啟用此功能",
       "cannot_auto_select": "無法自動選擇，請手動選擇一個下載源",
       "test_not_ready": "測試結果尚未就緒，請稍後再試",
       "reload_note": "只有重新整理頁面後才會真正的更換下載源"

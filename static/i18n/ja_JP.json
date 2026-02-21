@@ -142,6 +142,7 @@
     "ready": "FFmpeg準備完了",
     "not_loaded": "FFmpegがロードされていません",
     "loading": "FFmpegロード中...",
+    "checking_status": "FFmpegステータス確認中...",
     "loading_text": "読み込み中...",
     "required_note": "オーディオ形式変換に必要です。ダウンロードしないとオーディオ変換はできません。",
     "first_load_note": "初回ロードは遅いです、辛抱強く待ってください",
@@ -156,7 +157,7 @@
       "status": "ステータス",
       "action": "アクション",
       "all_unavailable": "すべてのダウンロードソースが利用できません、ネットワーク接続を確認してください",
-      "all_unavailable_no_conversion": "現在、すべてのFFmpegダウンロードソースが利用できません、.oggオーディオ形式のみが許可されています",
+      "all_unavailable_no_conversion": "FFmpegのすべてのダウンロードソースが利用できないため、この機能を有効にすることができません",
       "cannot_auto_select": "自動選択できません、手動でダウンロードソースを選択してください",
       "test_not_ready": "テスト結果がまだ準備されていません、後でもう一度お試しください",
       "reload_note": "ページをリロードした後にのみ、ダウンロードソースが実際に変更されます"

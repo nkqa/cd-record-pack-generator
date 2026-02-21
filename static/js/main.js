@@ -3402,7 +3402,7 @@ function updateFfmpegStatus(status) {
                 break;
             case 'checking':
                 statusDot.classList.add('checking');
-                statusText.textContent = 'FFmpeg状态检查中...';
+                statusText.textContent = i18n.t('ffmpeg.checking_status', 'FFmpeg状态检查中...');
                 break;
             case 'loading':
                 statusDot.classList.add('checking');
