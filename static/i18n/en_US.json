@@ -156,6 +156,7 @@
       "status": "Status",
       "action": "Action",
       "all_unavailable": "All download sources are unavailable, please check your network connection",
+      "all_unavailable_no_conversion": "All FFmpeg download sources are currently unavailable, only .ogg audio format is allowed",
       "cannot_auto_select": "Cannot auto select, please manually select a download source",
       "test_not_ready": "Test results are not ready yet, please try again later",
       "reload_note": "The download source will only be truly changed after refreshing the page"

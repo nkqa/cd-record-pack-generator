@@ -843,6 +843,34 @@ async function testAllCdnLatencies() {
     });
 }
 
+// 检测是否有可用的FFmpeg下载源
+async function hasAvailableFfmpegSource() {
+  try {
+    const results = await testAllCdnLatencies();
+    // 检查是否有至少一个可用的CDN
+    return results.some(result => result.ok);
+  } catch (error) {
+    console.error('检测FFmpeg下载源可用性时出错:', error);
+    return false;
+  }
+}
+
+// 更新音频格式转换开关状态
+async function updateAudioProcessingToggleState() {
+  const audioProcessingToggle = document.getElementById('audioProcessingToggle');
+  if (!audioProcessingToggle) return;
+  
+  const hasAvailableSource = await hasAvailableFfmpegSource();
+  
+  if (hasAvailableSource) {
+    // 有可用的下载源，开启开关
+    audioProcessingToggle.checked = true;
+  } else {
+    // 无可用的下载源，关闭开关
+    audioProcessingToggle.checked = false;
+  }
+}
+
 // 显示CDN选择弹窗
 async function showCdnSelectionModal() {
   return new Promise((resolve) => {
@@ -1964,18 +1992,30 @@ const fileInputs = [
 
 // 页面加载完成后初始化
 window.addEventListener('DOMContentLoaded', function() {
-    // 为音频格式转换开关添加事件监听器，阻止关闭
+    // 为音频格式转换开关添加事件监听器，根据FFmpeg下载源可用性处理开关状态
     const audioProcessingToggle = document.getElementById('audioProcessingToggle');
     if (audioProcessingToggle) {
-        audioProcessingToggle.addEventListener('change', function(event) {
-            if (!this.checked) {
-                // 阻止关闭操作
+        audioProcessingToggle.addEventListener('change', async function(event) {
+            if (this.checked) {
+                // 用户尝试打开开关，检查是否有可用的FFmpeg下载源
+                const hasAvailableSource = await hasAvailableFfmpegSource();
+                if (!hasAvailableSource) {
+                    // 无可用的下载源，阻止打开操作
+                    this.checked = false;
+                    // 显示错误提示
+                    showErrorModal(i18n.t('ffmpeg.cdn.all_unavailable_no_conversion', '目前所有FFmpeg下载源均不可用，将仅允许选择 .ogg 音频格式'));
+                }
+            } else {
+                // 用户尝试关闭开关，阻止关闭操作
                 this.checked = true;
                 // 显示错误提示
                 showErrorModal(i18n.t('errors.audio_conversion_cannot_disable', '音频格式转换功能不能关闭'));
             }
         });
     }
+    
+    // 页面加载完成后，更新音频格式转换开关状态
+    updateAudioProcessingToggleState();
     
     // 为音频时长检查开关添加事件监听器，阻止关闭并显示提示
     const durationCheckToggle = document.getElementById('durationCheckToggle');

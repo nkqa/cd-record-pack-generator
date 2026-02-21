@@ -155,6 +155,7 @@
       "status": "状态",
       "action": "操作",
       "all_unavailable": "所有下载源都不可用，请检查网络连接",
+      "all_unavailable_no_conversion": "目前所有FFmpeg下载源均不可用，将仅允许选择 .ogg 音频格式",
       "cannot_auto_select": "无法自动选择，请手动选择一个下载源",
       "test_not_ready": "测试结果尚未就绪，请稍后再试",
       "reload_note": "只有刷新页面后才会真正的更换下载源"
