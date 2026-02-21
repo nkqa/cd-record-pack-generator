@@ -908,6 +908,11 @@ async function showCdnSelectionModal() {
       if (cdnTestResults) {
         if (results.length === 0) {
           cdnTestResults.innerHTML = `<p style="color: red;">${i18n.t('ffmpeg.cdn.all_unavailable', '所有下载源都不可用，请检查网络连接')}</p>`;
+          // 关闭"启用音频格式转换"开关
+          const audioProcessingToggle = document.getElementById('audioProcessingToggle');
+          if (audioProcessingToggle) {
+              audioProcessingToggle.checked = false;
+          }
         } else {
           // 获取当前已选择的CDN
           const currentSelectedCdn = getPreferredCdn();
@@ -1663,6 +1668,11 @@ async function showCdnSelectionModalWithCancel() {
             if (cdnTestResults) {
                 if (results.length === 0) {
                     cdnTestResults.innerHTML = `<p style="color: red;">${i18n.t('ffmpeg.cdn.all_unavailable', '所有下载源都不可用，请检查网络连接')}</p>`;
+                    // 关闭"启用音频格式转换"开关
+                    const audioProcessingToggle = document.getElementById('audioProcessingToggle');
+                    if (audioProcessingToggle) {
+                        audioProcessingToggle.checked = false;
+                    }
                     // 禁用选择最快源按钮
                     document.getElementById('cdnAutoSelectBtn').disabled = true;
                     document.getElementById('cdnAutoSelectBtn').style.opacity = '0.5';
@@ -1673,6 +1683,11 @@ async function showCdnSelectionModalWithCancel() {
                     
                     if (!hasAvailableCdn) {
                         cdnTestResults.innerHTML = `<p style="color: red;">${i18n.t('ffmpeg.cdn.all_unavailable', '所有下载源都不可用，请检查网络连接')}</p>`;
+                        // 关闭"启用音频格式转换"开关
+                        const audioProcessingToggle = document.getElementById('audioProcessingToggle');
+                        if (audioProcessingToggle) {
+                            audioProcessingToggle.checked = false;
+                        }
                         // 禁用选择最快源按钮
                         document.getElementById('cdnAutoSelectBtn').disabled = true;
                         document.getElementById('cdnAutoSelectBtn').style.opacity = '0.5';
@@ -2092,6 +2107,12 @@ let currentDeleteType = null;
 
 // 显示FFmpeg加载失败的错误弹窗
 function showFfmpegErrorModal() {
+    // 关闭"启用音频格式转换"开关
+    const audioProcessingToggle = document.getElementById('audioProcessingToggle');
+    if (audioProcessingToggle) {
+        audioProcessingToggle.checked = false;
+    }
+    
     // 创建弹窗
     const modal = document.createElement('div');
     modal.className = 'modal';
