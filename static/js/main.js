@@ -865,16 +865,20 @@ async function hasAvailableFfmpegSource() {
 
 // 更新音频格式转换开关状态
 async function updateAudioProcessingToggleState() {
+  console.log('开始更新音频格式转换开关状态');
   const audioProcessingToggle = document.getElementById('audioProcessingToggle');
   if (!audioProcessingToggle) return;
   
   const hasAvailableSource = await hasAvailableFfmpegSource();
+  console.log('页面加载时FFmpeg下载源可用性检查结果:', hasAvailableSource);
   
   if (hasAvailableSource) {
     // 有可用的下载源，开启开关
+    console.log('有可用的FFmpeg下载源，开启开关');
     audioProcessingToggle.checked = true;
   } else {
     // 无可用的下载源，关闭开关
+    console.log('无可用的FFmpeg下载源，关闭开关');
     audioProcessingToggle.checked = false;
   }
 }
@@ -2021,15 +2025,21 @@ window.addEventListener('DOMContentLoaded', function() {
         audioProcessingToggle.addEventListener('change', async function(event) {
             if (this.checked) {
                 // 用户尝试打开开关，检查是否有可用的FFmpeg下载源
+                console.log('用户尝试打开音频格式转换开关');
                 const hasAvailableSource = await hasAvailableFfmpegSource();
+                console.log('FFmpeg下载源可用性检查结果:', hasAvailableSource);
                 if (!hasAvailableSource) {
                     // 无可用的下载源，阻止打开操作
+                    console.log('无可用的FFmpeg下载源，阻止打开操作');
                     this.checked = false;
                     // 显示错误提示
-                    showErrorModal(i18n.t('ffmpeg.cdn.all_unavailable_no_conversion', '目前所有FFmpeg下载源均不可用，将仅允许选择 .ogg 音频格式'));
+                    showErrorModal(i18n.t('ffmpeg.cdn.all_unavailable_no_conversion', '因FFmpeg所有下载源均不可用，无法启用此功能'));
+                } else {
+                    console.log('有可用的FFmpeg下载源，允许打开操作');
                 }
             } else {
                 // 用户尝试关闭开关，阻止关闭操作
+                console.log('用户尝试关闭音频格式转换开关，阻止关闭操作');
                 this.checked = true;
                 // 显示错误提示
                 showErrorModal(i18n.t('errors.audio_conversion_cannot_disable', '音频格式转换功能不能关闭'));
