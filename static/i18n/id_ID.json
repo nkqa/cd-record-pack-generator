@@ -1,0 +1,197 @@
+{
+  "title": "Alat Pengganti Piringan Musik Minecraft (Bedrock Edition)",
+  "header": {
+    "title": "Alat Pengganti Piringan Musik Minecraft (Bedrock Edition)"
+  },
+  "info": {
+    "toggle": "Informasi",
+    "developer": "Pengembang：",
+    "community": "Komunitas：",
+    "source_code": "Kode sumber：",
+    "what_is_this": "Apa tujuan situs ini？",
+    "what_is_this_desc": "Situs ini menyediakan fungsi untuk menghasilkan pengganti piringan Minecraft Bedrock Edition",
+    "how_to_use": "Bagaimana menggunakan alat ini？",
+    "how_to_use_desc": "Cukup unggah audio dalam format ogg. Perhatikan durasi maksimum yang didukung di bawah ini",
+    "why_cant_upload": "Mengapa saya tidak dapat mengunggah atau mengunduh？",
+    "why_cant_upload_desc1": "Harap gunakan browser berbasis Chromium, seperti Google Chrome atau Microsoft Edge",
+    "why_cant_upload_desc2": "Pastikan Anda mengunggah format yang benar",
+    "not_ogg_format": "Format audio yang saya unggah bukan ogg, apakah ada alat untuk mengkonversi format？",
+    "not_ogg_format_desc": "Ya, klik di sini untuk melihat",
+    "thanks": "Terima kasih",
+    "thanks_desc": "Terima kasih kepada video ini yang memberi saya inspirasi dan menyediakan file",
+    "faq": "Pertanyaan yang Sering Diajukan",
+    "faq_desc": "Klik di sini untuk melihat"
+  },
+  "faq": {
+    "title": "Pertanyaan yang Sering Diajukan",
+    "zh_title": "Cina",
+    "zh_q1": "Q1：Mengapa saya tidak dapat menemukan deskripsi kustom yang saya masukkan di pencarian inventori？",
+    "zh_a1": "A1：Anda perlu memasukkan \"Disk Musik\" terlebih dahulu, kemudian Anda dapat menemukannya。",
+    "en_title": "English",
+    "en_q1": "Q1: Why can't I find my custom description in the inventory search?",
+    "en_a1": "A1: You need to search for \"Music Disc\" first, then you can find it.",
+    "ja_title": "日本語",
+    "ja_q1": "Q1：なぜインベントリ検索でカスタム説明を見つけることができないのですか？",
+    "ja_a1": "A1：最初に\"レコード\"を検索する必要があります。その後、見つけることができます。"
+  },
+  "upload": {
+    "title": "Unggah File Musik",
+    "select_audio": "Pilih audio（jika tidak diunggah, musik asli akan dipertahankan）",
+    "duration_warning": "Durasi maksimum untuk musik ini tidak boleh melebihi",
+    "custom_desc": "Deskripsi kustom（secara default diisi otomatis dengan nama file）",
+    "icon_label": "Ikon Paket Musik",
+    "select_icon": "Pilih Ikon",
+    "auto_convert": "Aktifkan konversi format gambar otomatis",
+    "audio_conversion": "Aktifkan konversi format audio",
+    "pack_success": "Pengemasan berhasil！",
+    "duration_check": "Aktifkan pemeriksaan durasi audio",
+    "image_size_modify": "Aktifkan modifikasi piksel gambar tampilan item",
+    "pixels": "Piksel",
+    "pack_name": "Nama Paket Musik",
+    "pack_name_placeholder": "Jika tidak dimasukkan, nama file pertama yang diunggah akan digunakan",
+    "item_image": "Pilih gambar tampilan item（jika tidak diunggah, tekstur asli akan dipertahankan）",
+    "selected_image": "Gambar yang Dipilih：",
+    "selected_image_converted": "Gambar yang Dipilih：{{filename}}（Terkonversi）",
+    "selected_icon": "Ikon yang Dipilih：",
+    "selected_icon_converted": "Ikon yang Dipilih：{{filename}}（Terkonversi）",
+    "delete": "Hapus",
+    "edit": "Edit",
+    "selected_audio": "Audio yang Dipilih：",
+    "converted": "（Terkonversi）",
+    "resized": "（Ukuran diubah）",
+    "audio_conversion_not_available": "Fitur ini memiliki masalah saat ini, tidak tersedia untuk digunakan",
+    "use_first_item_image_as_icon": "Gunakan gambar tampilan item pertama yang diunggah sebagai ikon paket musik",
+    "processing": "Memproses",
+    "detecting_duration": "Mendeteksi durasi audio...",
+    "duration_detection_failed": "Gagal mendeteksi durasi audio, pastikan Anda mengunggah file audio yang valid"
+  },
+  "buttons": {
+    "generate": "Hasilkan file mcpack"
+  },
+  "notices": {
+    "title": "Catatan",
+    "notice1": "Setiap tombol pilihan musik memiliki batas durasi yang ditunjukkan di bawahnya. Jika musik yang diunggah melebihi batas, itu akan dihentikan secara paksa oleh game",
+    "notice2": "Beberapa browser akan menambahkan .zip di akhir nama file. Jika hal ini terjadi, Anda perlu menghapusnya secara manual",
+    "slow_conversion": "Alat konversi format audio bawaan akan relatif lambat"
+  },
+  "tools": {
+    "title": "Alat Konversi Format",
+    "description": "Jika file yang ingin Anda unggah bukan dalam format .ogg, disarankan untuk menggunakan alat konversi online berikut："
+  },
+  "background": {
+    "notice": "Gambar latar dari Internet, jika ada pelanggaran hak cipta, kunjungi situs pribadi saya untuk mendapatkan alamat email kontak"
+  },
+  "errors": {
+    "ogg_format": "Error：format harus berupa .ogg",
+    "ogg_format_disabled": "Error：bukan format ogg",
+    "png_format": "Error：format harus berupa .png",
+    "duration_exceeded": "Error：durasi audio tidak boleh melebihi",
+    "no_files": "Harap unggah audio terlebih dahulu",
+    "error": "Error",
+    "must_be_image": "Yang dipilih harus berupa gambar",
+    "must_be_png": "Format harus berupa png",
+    "browser_not_support_conversion": "Browser tidak mendukung konversi audio, akan menggunakan file asli secara langsung",
+    "audio_conversion_failed": "Konversi audio gagal, pastikan Anda mengunggah file audio yang valid",
+    "file_processing_failed": "Pengolahan file gagal, silakan coba lagi",
+    "image_loading_failed": "Gagal memuat gambar",
+    "image_processing_failed": "Pengolahan gambar gagal, silakan coba lagi",
+    "image_format_not_supported": "Format gambar tidak didukung",
+    "please_upload_image": "Harap unggah file gambar",
+    "audio_conversion_cannot_disable": "Fungsi konversi format audio tidak dapat dinonaktifkan"
+  },
+  "modal": {
+    "confirm_delete": "Konfirmasi Hapus",
+    "confirm_delete_icon": "Apakah Anda yakin ingin menghapus ikon？",
+    "confirm_delete_message": "Apakah Anda yakin ingin menghapus file ini？",
+    "delete": {
+      "confirm_message": "Apakah Anda yakin ingin menghapus file ini？",
+      "note": "Operasi ini tidak akan menghapus file apa pun secara lokal"
+    },
+    "confirm_cancel": "Konfirmasi Batal",
+    "confirm_cancel_message": "Apakah Anda yakin ingin membatalkan konversi audio saat ini？",
+    "confirm": "Konfirmasi",
+    "cancel": "Batal",
+    "duration_check": {
+      "warning_title": "Peringatan",
+      "warning_message1": "Musik yang melebihi durasi akan dihentikan secara paksa saat diputar langsung dengan mesin putar piringan",
+      "warning_message2": "Anda hanya dapat memutar durasi yang lebih panjang saat menggunakan perintah",
+      "warning_message3": "Anda hanya dapat memutar durasi yang lebih panjang saat menggunakan perintah, apakah Anda yakin ingin menambahkannya？",
+      "still_disable": "Masih nonaktif",
+      "still_select": "Masih pilih"
+    },
+    "conversion": {
+      "title": "Konversi Audio",
+      "cancel": "Batal Konversi",
+      "processing": "Mengonversi",
+      "to": "ke"
+    },
+    "crop": {
+      "title": "Potong Gambar",
+      "confirm": "Konfirmasi Potong"
+    },
+    "ffmpeg": {
+      "select_source": "Pilih Sumber Unduhan FFmpeg",
+      "detecting_latency": "Mendeteksi latency setiap sumber unduhan, harap tunggu...",
+      "select_fastest": "Pilih Sumber Tercepat",
+      "load_ffmpeg": "Memuat FFmpeg",
+      "downloading": "Mengunduh file inti FFmpeg, harap tunggu..."
+    }
+  },
+  "ffmpeg": {
+    "ready": "FFmpeg Siap",
+    "not_loaded": "FFmpeg Belum Dimuat",
+    "loading": "Memuat FFmpeg...",
+    "checking_status": "Memeriksa status FFmpeg...",
+    "loading_text": "Memuat...",
+    "required_note": "Diperlukan untuk konversi format audio. Jika tidak diunduh, konversi format audio tidak akan mungkin dilakukan",
+    "first_load_note": "Muatan pertama lambat, mohon tunggu dengan sabar",
+    "auto_select_countdown": "Setelah {seconds} detik, sumber tercepat akan dipilih secara otomatis",
+    "cdn": {
+      "available": "Tersedia",
+      "unavailable": "Tidak tersedia",
+      "select": "Pilih",
+      "selected": "Telah dipilih",
+      "download_source": "Sumber unduhan",
+      "latency": "Latency",
+      "status": "Status",
+      "action": "Aksi",
+      "all_unavailable": "Semua sumber unduhan tidak tersedia, periksa koneksi jaringan",
+      "all_unavailable_no_conversion": "Tidak dapat mengaktifkan fitur ini karena semua sumber unduhan FFmpeg tidak tersedia",
+      "cannot_auto_select": "Tidak dapat memilih secara otomatis, silakan pilih sumber unduhan secara manual",
+      "test_not_ready": "Hasil tes belum siap, silakan coba lagi nanti",
+      "reload_note": "Sumber unduhan hanya akan benar-benar berubah setelah me-refresh halaman"
+    },
+    "error": {
+      "title": "Gagal Memuat FFmpeg",
+      "message": "Saat ini semua sumber unduhan FFmpeg tidak tersedia, hanya format audio .ogg yang diizinkan",
+      "refresh": "Refresh Halaman",
+      "cancel": "Batal"
+    },
+    "fallback_to_browser": "Silakan coba mengganti ke sumber unduhan FFmpeg lain",
+    "non_ogg_format": "Error：bukan format .ogg（konversi audio dinonaktifkan）",
+    "unsaved_changes": "Perubahan Anda mungkin tidak disimpan",
+    "change_source": "Ganti Sumber Unduhan"
+  },
+  "language": {
+    "label": "Bahasa",
+    "zh_CN": "Cina Sederhana",
+    "zh_TW": "Cina Tradisional",
+    "en": "English",
+    "ja": "Jepang",
+    "ko": "Korea",
+    "ru": "Rusia",
+    "id": "Indonesia"
+  },
+  "command": {
+    "title": "Hasilkan Perintah Putar",
+    "play": "Perintah Putar",
+    "stop": "Perintah Hentikan",
+    "placeholder": "Perintah akan ditampilkan di sini...",
+    "generate": "Hasilkan Perintah",
+    "copy": "Salin Perintah",
+    "error": {
+      "no_audio": "Harap unggah file audio terlebih dahulu"
+    },
+    "copied": "Perintah telah disalin ke clipboard！"
+  }
+}

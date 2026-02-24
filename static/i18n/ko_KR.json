@@ -1,0 +1,197 @@
+{
+  "title": "마인크래프트 음악 디스크 교체 도구 (베드락 버전)",
+  "header": {
+    "title": "마인크래프트 음악 디스크 교체 도구 (베드락 버전)"
+  },
+  "info": {
+    "toggle": "소개 정보",
+    "developer": "개발자：",
+    "community": "커뮤니티：",
+    "source_code": "소스 코드：",
+    "what_is_this": "이 사이트의 용도는？",
+    "what_is_this_desc": "이 사이트는 마인크래프트 베드락 버전 디스크 교체 기능을 생성합니다",
+    "how_to_use": "이 도구를 어떻게 사용하나요？",
+    "how_to_use_desc": "ogg 형식의 오디오를 업로드하기만 하면 됩니다. 아래의 최대 지원 시간에 주의하세요",
+    "why_cant_upload": "왜 업로드하거나 다운로드할 수 없나요？",
+    "why_cant_upload_desc1": "Google Chrome、Microsoft Edge와 같은 Chromium 기반 브라우저를 사용하여 작업하세요",
+    "why_cant_upload_desc2": "올바른 형식을 업로드했는지 확인하세요",
+    "not_ogg_format": "내가 업로드한 오디오 형식이 ogg가 아닙니다. 형식을 변환하는 도구가 있나요？",
+    "not_ogg_format_desc": "예, 여기를 클릭하여 확인하세요",
+    "thanks": "감사",
+    "thanks_desc": "이 영상이 저에게 영감을 주었고 파일을 제공해 준 것에 감사드립니다",
+    "faq": "자주 묻는 질문",
+    "faq_desc": "여기를 클릭하여 확인하세요"
+  },
+  "faq": {
+    "title": "자주 묻는 질문",
+    "zh_title": "중국어",
+    "zh_q1": "Q1：왜 인벤토리에서 입력한 사용자 정의 설명을 찾을 수 없는가？",
+    "zh_a1": "A1：먼저 \"음악 디스크\"를 입력해야 찾을 수 있습니다。",
+    "en_title": "English",
+    "en_q1": "Q1: Why can't I find my custom description in the inventory search?",
+    "en_a1": "A1: You need to search for \"Music Disc\" first, then you can find it.",
+    "ja_title": "日本語",
+    "ja_q1": "Q1：なぜインベントリ検索でカスタム説明を見つけることができないのですか？",
+    "ja_a1": "A1：最初に\"レコード\"を検索する必要があります。その後、見つけることができます。"
+  },
+  "upload": {
+    "title": "음악 파일 업로드",
+    "select_audio": "오디오 선택（업로드하지 않으면 원본 음악 유지）",
+    "duration_warning": "이 이름의 곡에 해당하는 길이는 초과할 수 없습니다",
+    "custom_desc": "사용자 정의 설명（기본적으로 파일 이름을 자동으로 입력）",
+    "icon_label": "음악 패키지 아이콘",
+    "select_icon": "아이콘 선택",
+    "auto_convert": "이미지 형식 자동 변환 활성화",
+    "audio_conversion": "오디오 형식 변환 활성화",
+    "pack_success": "패키징 성공！",
+    "duration_check": "오디오 길이 확인 활성화",
+    "image_size_modify": "아이템 표시 이미지 픽셀 수정 활성화",
+    "pixels": "픽셀",
+    "pack_name": "음악 패키지 이름",
+    "pack_name_placeholder": "입력하지 않으면 첫 번째 업로드 파일의 이름 사용",
+    "item_image": "아이템 표시 이미지 선택（업로드하지 않으면 원본 재질 유지）",
+    "selected_image": "선택한 이미지：",
+    "selected_image_converted": "선택한 이미지：{{filename}}（변환됨）",
+    "selected_icon": "선택한 아이콘：",
+    "selected_icon_converted": "선택한 아이콘：{{filename}}（변환됨）",
+    "delete": "삭제",
+    "edit": "편집",
+    "selected_audio": "선택한 오디오：",
+    "converted": "（변환됨）",
+    "resized": "（크기 조정됨）",
+    "audio_conversion_not_available": "이 기능에는 현재 문제가 있습니다. 현재 사용할 수 없습니다",
+    "use_first_item_image_as_icon": "첫 번째 업로드한 아이템 표시 이미지를 음악 패키지 아이콘으로 사용",
+    "processing": "처리 중",
+    "detecting_duration": "오디오 시간 식별 중...",
+    "duration_detection_failed": "오디오 길이 감지 실패. 업로드한 파일이 유효한 오디오 파일인지 확인하세요"
+  },
+  "buttons": {
+    "generate": "mcpack 파일 생성"
+  },
+  "notices": {
+    "title": "주의 사항",
+    "notice1": "각 곡 선택 버튼 아래에는 제한 시간이 표시되어 있습니다. 업로드한 곡이 제한을 초과하면 게임에서 강제로 재생이 중지됩니다",
+    "notice2": "일부 브라우저는 파일 이름 끝에 .zip을 추가합니다. 이 경우 수동으로 제거해야 합니다",
+    "slow_conversion": "내장된 오디오 형식 변환 도구는 상대적으로 느립니다"
+  },
+  "tools": {
+    "title": "형식 변환 도구",
+    "description": "업로드하려는 파일이 .ogg 형식이 아닌 경우 다음 온라인 변환 도구를 사용하는 것이 좋습니다："
+  },
+  "background": {
+    "notice": "배경 이미지는 인터넷에서 가져왔습니다. 저작권 침해가 있는 경우 개인 웹사이트를 방문하여 연락처 이메일을 얻으세요"
+  },
+  "errors": {
+    "ogg_format": "오류：형식은 .ogg이어야 합니다",
+    "ogg_format_disabled": "오류：ogg가 아닌 형식",
+    "png_format": "오류：형식은 .png이어야 합니다",
+    "duration_exceeded": "오류：오디오 길이는 초과할 수 없습니다",
+    "no_files": "먼저 오디오를 업로드하세요",
+    "error": "오류",
+    "must_be_image": "선택한 파일은 이미지여야 합니다",
+    "must_be_png": "형식은 png이어야 합니다",
+    "browser_not_support_conversion": "브라우저가 오디오 변환을 지원하지 않습니다. 원본 파일을 직접 사용합니다",
+    "audio_conversion_failed": "오디오 변환 실패. 업로드한 파일이 유효한 오디오 파일인지 확인하세요",
+    "file_processing_failed": "파일 처리 실패. 다시 시도하세요",
+    "image_loading_failed": "이미지 로드 실패",
+    "image_processing_failed": "이미지 처리 실패. 다시 시도하세요",
+    "image_format_not_supported": "이미지 형식이 지원되지 않습니다",
+    "please_upload_image": "이미지 파일을 업로드하세요",
+    "audio_conversion_cannot_disable": "오디오 형식 변환 기능을 비활성화할 수 없습니다"
+  },
+  "modal": {
+    "confirm_delete": "삭제 확인",
+    "confirm_delete_icon": "아이콘을 삭제하시겠습니까？",
+    "confirm_delete_message": "이 파일을 삭제하시겠습니까？",
+    "delete": {
+      "confirm_message": "이 파일을 삭제하시겠습니까？",
+      "note": "이 작업은 로컬의 파일을 삭제하지 않습니다"
+    },
+    "confirm_cancel": "취소 확인",
+    "confirm_cancel_message": "현재 오디오 변환을 취소하시겠습니까？",
+    "confirm": "확인",
+    "cancel": "취소",
+    "duration_check": {
+      "warning_title": "경고",
+      "warning_message1": "레코드 플레이어로 시간 초과 음악을 직접 재생하면 강제로 재생이 중지됩니다",
+      "warning_message2": "명령으로만 더 긴 길이를 재생할 수 있습니다",
+      "warning_message3": "명령으로만 더 긴 길이를 재생할 수 있습니다. 추가하시겠습니까？",
+      "still_disable": "비활성화 계속",
+      "still_select": "계속 선택"
+    },
+    "conversion": {
+      "title": "오디오 변환",
+      "cancel": "변환 취소",
+      "processing": "변환 중",
+      "to": "로 변환"
+    },
+    "crop": {
+      "title": "이미지 자르기",
+      "confirm": "자르기 확인"
+    },
+    "ffmpeg": {
+      "select_source": "FFmpeg 다운로드 소스 선택",
+      "detecting_latency": "각 다운로드 소스의 지연 시간을 검출하는 중입니다. 잠시만 기다려주세요...",
+      "select_fastest": "가장 빠른 소스 선택",
+      "load_ffmpeg": "FFmpeg 로드",
+      "downloading": "FFmpeg 핵심 파일을 다운로드하는 중입니다. 잠시만 기다려주세요..."
+    }
+  },
+  "ffmpeg": {
+    "ready": "FFmpeg 준비 완료",
+    "not_loaded": "FFmpeg 미로드",
+    "loading": "FFmpeg 로드 중...",
+    "checking_status": "FFmpeg 상태 확인 중...",
+    "loading_text": "로드 중...",
+    "required_note": "오디오 형식 변환에 필요한 것입니다. 다운로드하지 않으면 오디오 형식을 변환할 수 없습니다",
+    "first_load_note": "최초 로드는 느립니다. 인내심을 가져야 합니다",
+    "auto_select_countdown": "{seconds} 초 후, 가장 빠른 소스를 자동으로 선택합니다",
+    "cdn": {
+      "available": "사용 가능",
+      "unavailable": "사용 불가",
+      "select": "선택",
+      "selected": "선택됨",
+      "download_source": "다운로드 소스",
+      "latency": "지연 시간",
+      "status": "상태",
+      "action": "작업",
+      "all_unavailable": "모든 다운로드 소스가 사용 불가능합니다. 네트워크 연결을 확인하세요",
+      "all_unavailable_no_conversion": "FFmpeg 다운로드 소스가 모두 사용 불가능하여 이 기능을 활성화할 수 없습니다",
+      "cannot_auto_select": "자동으로 선택할 수 없습니다. 수동으로 다운로드 소스를 선택하세요",
+      "test_not_ready": "테스트 결과가 아직 준비되지 않았습니다. 나중에 다시 시도하세요",
+      "reload_note": "페이지를 새로 고친 후에만 다운로드 소스를 실제로 변경할 수 있습니다"
+    },
+    "error": {
+      "title": "FFmpeg 로드 실패",
+      "message": "현재 모든 FFmpeg 다운로드 소스가 사용 불가능합니다. .ogg 오디오 형식만 선택할 수 있습니다",
+      "refresh": "페이지 새로 고침",
+      "cancel": "취소"
+    },
+    "fallback_to_browser": "다른 FFmpeg 다운로드 소스를 사용해 보세요",
+    "non_ogg_format": "오류：.ogg 형식이 아닙니다（오디오 변환 스위치가 활성화되지 않음）",
+    "unsaved_changes": "변경사항이 저장되지 않을 수 있습니다",
+    "change_source": "다운로드 소스 변경"
+  },
+  "language": {
+    "label": "언어",
+    "zh_CN": "간체 중국어",
+    "zh_TW": "번체 중국어",
+    "en": "English",
+    "ja": "일본어",
+    "ko": "한국어",
+    "ru": "Русский",
+    "id": "Indonesia"
+  },
+  "command": {
+    "title": "재생 명령 생성",
+    "play": "재생 명령",
+    "stop": "재생 정지 명령",
+    "placeholder": "명령이 여기에 표시됩니다...",
+    "generate": "명령 생성",
+    "copy": "명령 복사",
+    "error": {
+      "no_audio": "먼저 오디오를 업로드하세요"
+    },
+    "copied": "명령이 클립보드에 복사되었습니다！"
+  }
+}

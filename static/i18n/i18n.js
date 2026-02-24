@@ -73,28 +73,19 @@ const i18n = {
       // 开发者
       const devElement = infoContent.querySelector('p:nth-child(1)');
       if (devElement) {
-        const link = devElement.querySelector('a');
-        if (link) {
-          devElement.innerHTML = `${this.t('info.developer', 'Developer:')} <a href="https://meowco.cn" target="_blank">Meowco</a>`;
-        }
+        devElement.innerHTML = `${this.t('info.developer', 'Developer:')} <a href="https://meowco.cn" target="_blank">Meowco</a>`;
       }
       
       // 社区
       const communityElement = infoContent.querySelector('p:nth-child(2)');
       if (communityElement) {
-        const link = communityElement.querySelector('a');
-        if (link) {
-          communityElement.innerHTML = `${this.t('info.community', 'Community:')} <a href="https://www.mcneko.com" target="_blank">www.mcneko.com</a>`;
-        }
+        communityElement.innerHTML = `${this.t('info.community', 'Community:')} <a href="https://www.mcneko.com" target="_blank">www.mcneko.com</a>`;
       }
       
       // 源代码
       const sourceElement = infoContent.querySelector('p:nth-child(3)');
       if (sourceElement) {
-        const link = sourceElement.querySelector('a');
-        if (link) {
-          sourceElement.innerHTML = `${this.t('info.source_code', 'Source code:')} <a href="https://github.com/nkqa/cd-record-pack-generator/" target="_blank" rel="nofollow">GitHub</a>`;
-        }
+        sourceElement.innerHTML = `${this.t('info.source_code', 'Source code:')} <a href="https://github.com/nkqa/cd-record-pack-generator/" target="_blank" rel="nofollow">GitHub</a>`;
       }
       
       // 网站用途
@@ -152,6 +143,18 @@ const i18n = {
         } else if (descText.includes('ここをクリック')) {
           // 日文
           descText = descText.replace('ここをクリック', `<a href="#convert-tools" onclick="smoothScroll('convert-tools'); return false;">ここをクリック</a>`);
+        } else if (descText.includes('여기를 클릭하여 확인하세요')) {
+          // 韩文
+          descText = descText.replace('여기를 클릭하여 확인하세요', `<a href="#convert-tools" onclick="smoothScroll('convert-tools'); return false;">여기를 클릭하여 확인하세요</a>`);
+        } else if (descText.includes('нажмите здесь для просмотра') || descText.includes('Нажмите здесь для просмотра')) {
+          // 俄文
+          const match = descText.match(/нажмите здесь для просмотра/i);
+          if (match) {
+            descText = descText.replace(match[0], `<a href="#convert-tools" onclick="smoothScroll('convert-tools'); return false;">${match[0]}</a>`);
+          }
+        } else if (descText.includes('Klik di sini untuk melihat')) {
+          // 印尼文
+          descText = descText.replace('Klik di sini untuk melihat', `<a href="#convert-tools" onclick="smoothScroll('convert-tools'); return false;">Klik di sini untuk melihat</a>`);
         }
         formatDescElement.innerHTML = descText;
       }
@@ -163,22 +166,8 @@ const i18n = {
       }
       const thanksDescElement = infoContent.querySelector('p:nth-child(14)');
       if (thanksDescElement) {
-        let thanksText = this.t('info.thanks_desc', 'Thanks to this video for inspiring me and providing files');
-        // 根据不同语言替换链接文本
-        if (thanksText.includes('this video')) {
-          // 英文
-          thanksText = thanksText.replace('this video', `<a href="https://www.bilibili.com/video/BV1DSBRYrE6N/" target="_blank" rel="nofollow">this video</a>`);
-        } else if (thanksText.includes('此视频')) {
-          // 简体中文
-          thanksText = thanksText.replace('此视频', `<a href="https://www.bilibili.com/video/BV1DSBRYrE6N/" target="_blank" rel="nofollow">此视频</a>`);
-        } else if (thanksText.includes('此影片')) {
-          // 繁体中文
-          thanksText = thanksText.replace('此影片', `<a href="https://www.bilibili.com/video/BV1DSBRYrE6N/" target="_blank" rel="nofollow">此影片</a>`);
-        } else if (thanksText.includes('この動画')) {
-          // 日文
-          thanksText = thanksText.replace('この動画', `<a href="https://www.bilibili.com/video/BV1DSBRYrE6N/" target="_blank" rel="nofollow">この動画</a>`);
-        }
-        thanksDescElement.innerHTML = thanksText;
+        // 直接设置包含链接的HTML，确保所有语言都能显示链接
+        thanksDescElement.innerHTML = `${this.t('info.thanks_desc', 'Thanks to this video for inspiring me and providing files').replace(/this video|此视频|此影片|この動画|video ini|이 동영상|этот ролик/g, '<a href="https://www.bilibili.com/video/BV1DSBRYrE6N/" target="_blank" rel="nofollow">$&</a>')}`;
       }
       
       // 常见问题
@@ -202,6 +191,18 @@ const i18n = {
         } else if (faqText.includes('ここをクリック')) {
           // 日文
           faqText = faqText.replace('ここをクリック', `<a href="#faq" onclick="smoothScroll('faq'); return false;">ここをクリック</a>`);
+        } else if (faqText.includes('여기를 클릭하여 확인하세요')) {
+          // 韩文
+          faqText = faqText.replace('여기를 클릭하여 확인하세요', `<a href="#faq" onclick="smoothScroll('faq'); return false;">여기를 클릭하여 확인하세요</a>`);
+        } else if (faqText.includes('нажмите здесь для просмотра') || faqText.includes('Нажмите здесь для просмотра')) {
+          // 俄文
+          const match = faqText.match(/нажмите здесь для просмотра/i);
+          if (match) {
+            faqText = faqText.replace(match[0], `<a href="#faq" onclick="smoothScroll('faq'); return false;">${match[0]}</a>`);
+          }
+        } else if (faqText.includes('Klik di sini untuk melihat')) {
+          // 印尼文
+          faqText = faqText.replace('Klik di sini untuk melihat', `<a href="#faq" onclick="smoothScroll('faq'); return false;">Klik di sini untuk melihat</a>`);
         }
         faqDescElement.innerHTML = faqText;
       }
@@ -244,12 +245,18 @@ const i18n = {
       const faqZhTw = document.querySelector('#faq-zh-tw');
       const faqEn = document.querySelector('#faq-en');
       const faqJa = document.querySelector('#faq-ja');
+      const faqKo = document.querySelector('#faq-ko');
+      const faqRu = document.querySelector('#faq-ru');
+      const faqId = document.querySelector('#faq-id');
       
       // 隐藏所有语言区块
       if (faqZh) faqZh.style.display = 'none';
       if (faqZhTw) faqZhTw.style.display = 'none';
       if (faqEn) faqEn.style.display = 'none';
       if (faqJa) faqJa.style.display = 'none';
+      if (faqKo) faqKo.style.display = 'none';
+      if (faqRu) faqRu.style.display = 'none';
+      if (faqId) faqId.style.display = 'none';
       
       // 根据当前语言显示对应的区块
       if (this.currentLang === 'zh_CN' && faqZh) {
@@ -260,6 +267,12 @@ const i18n = {
         faqEn.style.display = 'block';
       } else if (this.currentLang === 'ja_JP' && faqJa) {
         faqJa.style.display = 'block';
+      } else if (this.currentLang === 'ko_KR' && faqKo) {
+        faqKo.style.display = 'block';
+      } else if (this.currentLang === 'ru_RU' && faqRu) {
+        faqRu.style.display = 'block';
+      } else if (this.currentLang === 'id_ID' && faqId) {
+        faqId.style.display = 'block';
       }
       
       // 更新中文FAQ
@@ -698,13 +711,19 @@ const i18n = {
       }
     }
     
-    // 更新语言栏标签
+    // 更新语言栏标签和下拉选择框
     const langLabels = document.querySelectorAll('.language-selector span');
     langLabels.forEach(label => {
       if (label.textContent.includes(':')) {
         label.textContent = this.t('language.label', 'Language') + ': ';
       }
     });
+    
+    // 更新下拉选择框的选中状态
+    const langSelect = document.querySelector('.language-selector select');
+    if (langSelect && langSelect.value !== this.currentLang) {
+      langSelect.value = this.currentLang;
+    }
   }
 };
 
@@ -720,6 +739,12 @@ window.addEventListener('DOMContentLoaded', function() {
       return 'zh_CN';
     } else if (langCode.includes('ja')) {
       return 'ja_JP';
+    } else if (langCode.includes('ko')) {
+      return 'ko_KR';
+    } else if (langCode.includes('ru')) {
+      return 'ru_RU';
+    } else if (langCode.includes('id')) {
+      return 'id_ID';
     } else {
       // 默认使用英语
       return 'en_US';
@@ -757,55 +782,48 @@ window.addEventListener('DOMContentLoaded', function() {
   `;
   langContainer.appendChild(langLabel);
   
+  // 创建下拉选择框
+  const langSelect = document.createElement('select');
+  langSelect.style.cssText = `
+    padding: 6px 12px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    background-color: white;
+    color: #333;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s ease;
+  `;
+  
   // 语言选项
   const languages = [
     { code: 'zh_CN', name: '简体中文' },
     { code: 'zh_TW', name: '繁體中文' },
     { code: 'en_US', name: 'English' },
-    { code: 'ja_JP', name: '日本語' }
+    { code: 'ja_JP', name: '日本語' },
+    { code: 'ko_KR', name: '한국어' },
+    { code: 'ru_RU', name: 'Русский' },
+    { code: 'id_ID', name: 'Indonesia' }
   ];
   
+  // 添加语言选项到下拉框
   languages.forEach(lang => {
-    const button = document.createElement('button');
-    button.textContent = lang.name;
-    button.style.cssText = `
-      padding: 4px 10px;
-      border: 1px solid #ddd;
-      border-radius: 12px;
-      background-color: ${savedLang === lang.code ? '#4CAF50' : 'white'};
-      color: #333;
-      cursor: pointer;
-      font-size: 12px;
-      transition: all 0.2s ease;
-    `;
-    
-    button.addEventListener('mouseenter', function() {
-      if (i18n.currentLang !== lang.code) {
-        this.style.backgroundColor = '#f0f0f0';
-      }
-    });
-    
-    button.addEventListener('mouseleave', function() {
-      if (i18n.currentLang !== lang.code) {
-        this.style.backgroundColor = 'white';
-      }
-    });
-    
-    button.addEventListener('click', function() {
-      i18n.changeLang(lang.code);
-      // 更新按钮样式
-      languages.forEach(l => {
-        const btn = document.querySelector(`[data-lang="${l.code}"]`);
-        if (btn) {
-          btn.style.backgroundColor = l.code === lang.code ? '#4CAF50' : 'white';
-          btn.style.color = '#333';
-        }
-      });
-    });
-    
-    button.setAttribute('data-lang', lang.code);
-    langContainer.appendChild(button);
+    const option = document.createElement('option');
+    option.value = lang.code;
+    option.textContent = lang.name;
+    if (savedLang === lang.code) {
+      option.selected = true;
+    }
+    langSelect.appendChild(option);
   });
+  
+  // 监听选择变化
+  langSelect.addEventListener('change', function() {
+    const selectedLang = this.value;
+    i18n.changeLang(selectedLang);
+  });
+  
+  langContainer.appendChild(langSelect);
   
   // 添加到页面（在标题之后）
   const container = document.querySelector('.container');
