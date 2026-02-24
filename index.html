@@ -847,6 +847,11 @@
                 </div>
             </div>
             <div id="ffmpegDownloadProgressText" style="text-align: center; font-size: 14px; color: #666;">加载中...</div>
+            <button id="changeFfmpegSourceBtnInModal" class="btn" onclick="changeFfmpegSource()" style="margin-top: 15px;">更换下载源</button>
+            <script>
+                // 更新更换下载源按钮文本
+                document.getElementById('changeFfmpegSourceBtnInModal').textContent = i18n.t('ffmpeg.change_source', '更换下载源');
+            </script>
             <style>
                 @keyframes xpProgress {
                     0% { left: -100%; }
