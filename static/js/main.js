@@ -920,15 +920,15 @@ async function showCdnSelectionModal() {
     modal.style.zIndex = '1002';
     modal.innerHTML = `
       <div class="modal-content" style="width: 80%; max-width: 900px;">
-        <h3>${i18n.t('ffmpeg.select_source', '选择FFmpeg下载源')}</h3>
-        <p>${i18n.t('ffmpeg.detecting_latency', '正在检测各下载源的延迟，请稍候...')}</p>
+        <h3>${i18n.t('modal.ffmpeg.select_source', '选择FFmpeg下载源')}</h3>
+        <p>${i18n.t('modal.ffmpeg.detecting_latency', '正在检测各下载源的延迟，请稍候...')}</p>
         <p id="autoSelectCountdown" style="color: #666; font-size: 14px; text-align: center; margin: 10px 0;"></p>
         <div id="cdnTestResults" style="margin: 20px 0; max-height: 300px; overflow-y: auto;">
           <!-- 测试结果将在这里显示 -->
         </div>
         <p class="ffmpeg-required-note" style="color: #999; font-size: 12px; margin-top: 10px; text-align: center;">${i18n.t('ffmpeg.required_note', '转换音频格式必须的东西，如果不下载将无法转换音频格式')}</p>
         <div class="modal-buttons">
-          <button id="cdnAutoSelectBtn" class="btn confirm">${i18n.t('ffmpeg.select_fastest', '选择最快源')}</button>
+          <button id="cdnAutoSelectBtn" class="btn confirm">${i18n.t('modal.ffmpeg.select_fastest', '选择最快源')}</button>
         </div>
       </div>
     `;
@@ -1678,8 +1678,8 @@ async function showCdnSelectionModalWithCancel() {
         modal.style.zIndex = '1002';
         modal.innerHTML = `
             <div class="modal-content" style="width: 80%; max-width: 900px;">
-                <h3>${i18n.t('ffmpeg.select_source', '选择FFmpeg下载源')}</h3>
-                <p>${i18n.t('ffmpeg.detecting_latency', '正在检测各下载源的延迟，请稍候...')}</p>
+                <h3>${i18n.t('modal.ffmpeg.select_source', '选择FFmpeg下载源')}</h3>
+                <p>${i18n.t('modal.ffmpeg.detecting_latency', '正在检测各下载源的延迟，请稍候...')}</p>
                 <p style="color: #ff9800; font-size: 14px; text-align: center; margin: 10px 0;">${i18n.t('ffmpeg.cdn.reload_note', '只有刷新页面后才会真正的更换下载源')}</p>
                 <p id="autoSelectCountdown" style="color: #666; font-size: 14px; text-align: center; margin: 10px 0;"></p>
                 <div id="cdnTestResults" style="margin: 20px 0; max-height: 300px; overflow-y: auto;">
@@ -1688,7 +1688,7 @@ async function showCdnSelectionModalWithCancel() {
                 <p class="ffmpeg-required-note" style="color: #999; font-size: 12px; margin-top: 10px; text-align: center;">${i18n.t('ffmpeg.required_note', '转换音频格式必须的东西，如果不下载将无法转换音频格式')}</p>
                 <div class="modal-buttons">
                     <button id="cdnCancelBtn" class="btn cancel" style="margin-right: 10px;">${i18n.t('modal.cancel', '取消')}</button>
-                    <button id="cdnAutoSelectBtn" class="btn confirm">${i18n.t('ffmpeg.select_fastest', '选择最快源')}</button>
+                    <button id="cdnAutoSelectBtn" class="btn confirm">${i18n.t('modal.ffmpeg.select_fastest', '选择最快源')}</button>
                 </div>
             </div>
         `;
