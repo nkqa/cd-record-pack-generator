@@ -2793,15 +2793,15 @@ fileInputs.forEach(inputInfo => {
 const imageFileInputs = [
     { id: 'imageFile_11', btnId: 'imageBtnText_11', previewId: 'imagePreview_11', targetName: 'record_11.png' },
     { id: 'imageFile_13', btnId: 'imageBtnText_13', previewId: 'imagePreview_13', targetName: 'record_13.png' },
-    { id: 'imageFile_5', btnId: 'imageBtnText_5', previewId: 'imagePreview_5', targetName: 'music_disc_5.png' },
+    { id: 'imageFile_5', btnId: 'imageBtnText_5', previewId: 'imagePreview_5', targetName: 'record_5.png' },
     { id: 'imageFile_blocks', btnId: 'imageBtnText_blocks', previewId: 'imagePreview_blocks', targetName: 'record_blocks.png' },
     { id: 'imageFile_cat', btnId: 'imageBtnText_cat', previewId: 'imagePreview_cat', targetName: 'record_cat.png' },
     { id: 'imageFile_creator', btnId: 'imageBtnText_creator', previewId: 'imagePreview_creator', targetName: 'music_disc_creator.png' },
     { id: 'imageFile_creator_music_box', btnId: 'imageBtnText_creator_music_box', previewId: 'imagePreview_creator_music_box', targetName: 'music_disc_creator_music_box.png' },
     { id: 'imageFile_mall', btnId: 'imageBtnText_mall', previewId: 'imagePreview_mall', targetName: 'record_mall.png' },
     { id: 'imageFile_mellohi', btnId: 'imageBtnText_mellohi', previewId: 'imagePreview_mellohi', targetName: 'record_mellohi.png' },
-    { id: 'imageFile_otherside', btnId: 'imageBtnText_otherside', previewId: 'imagePreview_otherside', targetName: 'music_disc_otherside.png' },
-    { id: 'imageFile_pigstep_master', btnId: 'imageBtnText_pigstep_master', previewId: 'imagePreview_pigstep_master', targetName: 'music_disc_pigstep.png' },
+    { id: 'imageFile_otherside', btnId: 'imageBtnText_otherside', previewId: 'imagePreview_otherside', targetName: 'record_otherside.png' },
+    { id: 'imageFile_pigstep_master', btnId: 'imageBtnText_pigstep_master', previewId: 'imagePreview_pigstep_master', targetName: 'record_pigstep.png' },
     { id: 'imageFile_precipice', btnId: 'imageBtnText_precipice', previewId: 'imagePreview_precipice', targetName: 'music_disc_precipice.png' },
     { id: 'imageFile_relic', btnId: 'imageBtnText_relic', previewId: 'imagePreview_relic', targetName: 'music_disc_relic.png' },
     { id: 'imageFile_stal', btnId: 'imageBtnText_stal', previewId: 'imagePreview_stal', targetName: 'record_stal.png' },
@@ -3994,8 +3994,12 @@ if (packBtn) {
                     }
                     
                     if (audioFile) {
-                        // 添加到description.txt
-                        const descriptionContent = `${input.id.replace('oggFile_', '')}=${descInput.value.trim()}`;
+                        // 添加到description.txt，特殊处理 pigstep_master
+                        let recordKey = input.id.replace('oggFile_', '');
+                        if (recordKey === 'pigstep_master') {
+                            recordKey = 'pigstep';
+                        }
+                        const descriptionContent = `${recordKey}=${descInput.value.trim()}`;
                         zip.file(`texts/description.txt`, descriptionContent, { append: true });
                     }
                 }
@@ -4043,9 +4047,12 @@ if (packBtn) {
                 
                 // 遍历所有可能的记录
                 Object.keys(defaultValues).forEach(key => {
+                    // 特殊处理 pigstep_master，使用 pigstep 作为记录名称
+                    const recordKey = key === 'pigstep_master' ? 'pigstep' : key;
+                    
                     if (userDescriptions[key]) {
                         // 用户输入了描述，添加到内容中
-                        langContent += `item.record_${key}.desc=${userDescriptions[key]}\n`;
+                        langContent += `item.record_${recordKey}.desc=${userDescriptions[key]}\n`;
                     } else {
                         // 用户没有输入描述，添加空行
                         langContent += '\n';
