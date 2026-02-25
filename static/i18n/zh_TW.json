@@ -64,7 +64,8 @@
     "use_first_item_image_as_icon": "使用第一個上傳的物品展示圖作為音樂包圖標",
     "processing": "處理中",
     "detecting_duration": "正在識別音頻時間中...",
-    "duration_detection_failed": "音頻時長檢測失敗，請確保上傳的是有效的音頻文件"
+    "duration_detection_failed": "音頻時長檢測失敗，請確保上傳的是有效的音頻文件",
+    "in_game_switch_mode": "啟用遊戲內切換模式（子包設定中可切換：僅音樂 / 僅圖片 / 音樂+圖片）"
   },
   "buttons": {
     "generate": "生成mcpack文件"

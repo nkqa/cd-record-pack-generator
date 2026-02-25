@@ -3772,12 +3772,20 @@ if (packBtn) {
             
             // 创建压缩包
             const zip = new JSZip();
+            const inGameSwitchModeToggle = document.getElementById('inGameSwitchModeToggle');
+            const isInGameSwitchModeEnabled = inGameSwitchModeToggle ? inGameSwitchModeToggle.checked : false;
             
             // 添加音频文件到压缩包
             uploadedFiles.forEach(item => {
                 const file = item.file;
                 const targetName = item.targetName;
-                zip.file(`sounds/music/game/records/${targetName}`, file);
+
+                if (isInGameSwitchModeEnabled) {
+                    zip.file(`subpacks/music_only/sounds/music/game/records/${targetName}`, file);
+                    zip.file(`subpacks/full_custom/sounds/music/game/records/${targetName}`, file);
+                } else {
+                    zip.file(`sounds/music/game/records/${targetName}`, file);
+                }
             });
             
             // 图片像素调整函数
@@ -3821,6 +3829,8 @@ if (packBtn) {
                 });
             }
             
+            const uploadedImages = [];
+
             // 添加图片文件到压缩包
             for (const inputInfo of imageFileInputs) {
                 const inputId = inputInfo.id;
@@ -3837,13 +3847,22 @@ if (packBtn) {
                     if (isImageSizeEnabled) {
                         // 调整图片像素
                         const resizedFile = await resizeImage(imageFile, maxSize);
-                        zip.file(`textures/items/${targetName}`, resizedFile);
+                        uploadedImages.push({ file: resizedFile, targetName });
                     } else {
                         // 直接使用原始文件，不调整像素
-                        zip.file(`textures/items/${targetName}`, imageFile);
+                        uploadedImages.push({ file: imageFile, targetName });
                     }
                 }
             }
+
+            uploadedImages.forEach(item => {
+                if (isInGameSwitchModeEnabled) {
+                    zip.file(`subpacks/image_only/textures/items/${item.targetName}`, item.file);
+                    zip.file(`subpacks/full_custom/textures/items/${item.targetName}`, item.file);
+                } else {
+                    zip.file(`textures/items/${item.targetName}`, item.file);
+                }
+            });
             
             // 添加pack_icon.png（如果有，否则使用默认图标或第一个上传的物品展示图）
             if (window.lastValidIconFile) {
@@ -3917,6 +3936,27 @@ if (packBtn) {
                     // 生成新的uuid
                     manifestJson.header.uuid = generateUUID();
                     manifestJson.modules[0].uuid = generateUUID();
+
+                    if (isInGameSwitchModeEnabled) {
+                        manifestJson.subpacks = [
+                            {
+                                "folder_name": "music_only",
+                                "name": "仅替换音乐",
+                                "memory_tier": 0
+                            },
+                            {
+                                "folder_name": "image_only",
+                                "name": "仅替换物品图片",
+                                "memory_tier": 0
+                            },
+                            {
+                                "folder_name": "full_custom",
+                                "name": "音乐+图片都替换",
+                                "memory_tier": 0
+                            }
+                        ];
+                    }
+
                     // 添加修改后的manifest.json文件
                     zip.file('manifest.json', JSON.stringify(manifestJson, null, 2));
                 } else {
@@ -3940,6 +3980,25 @@ if (packBtn) {
                             }
                         ]
                     };
+                    if (isInGameSwitchModeEnabled) {
+                        manifestJson.subpacks = [
+                            {
+                                "folder_name": "music_only",
+                                "name": "仅替换音乐",
+                                "memory_tier": 0
+                            },
+                            {
+                                "folder_name": "image_only",
+                                "name": "仅替换物品图片",
+                                "memory_tier": 0
+                            },
+                            {
+                                "folder_name": "full_custom",
+                                "name": "音乐+图片都替换",
+                                "memory_tier": 0
+                            }
+                        ];
+                    }
                     zip.file('manifest.json', JSON.stringify(manifestJson, null, 2));
                 }
             } catch (error) {
@@ -3964,6 +4023,25 @@ if (packBtn) {
                         }
                     ]
                 };
+                if (isInGameSwitchModeEnabled) {
+                    manifestJson.subpacks = [
+                        {
+                            "folder_name": "music_only",
+                            "name": "仅替换音乐",
+                            "memory_tier": 0
+                        },
+                        {
+                            "folder_name": "image_only",
+                            "name": "仅替换物品图片",
+                            "memory_tier": 0
+                        },
+                        {
+                            "folder_name": "full_custom",
+                            "name": "音乐+图片都替换",
+                            "memory_tier": 0
+                        }
+                    ];
+                }
                 zip.file('manifest.json', JSON.stringify(manifestJson, null, 2));
             }
             
