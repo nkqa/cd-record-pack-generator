@@ -3906,6 +3906,17 @@ if (packBtn) {
             };
             zip.file('pack.mcmeta', JSON.stringify(packMcmeta, null, 2));
             
+            // 添加item_texture.json文件
+            try {
+                const itemTextureResponse = await fetch('bedrockSrc/textures/item_texture.json');
+                if (itemTextureResponse.ok) {
+                    const itemTextureContent = await itemTextureResponse.text();
+                    zip.file('textures/item_texture.json', itemTextureContent);
+                }
+            } catch (error) {
+                console.warn('无法加载item_texture.json:', error);
+            }
+            
             // 读取并修改bedrockSrc目录中的manifest.json文件
             try {
                 const response = await fetch('bedrockSrc/manifest.json');
