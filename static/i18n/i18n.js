@@ -530,6 +530,11 @@ const i18n = {
       useFirstItemImageAsIconText.textContent = this.t('upload.use_first_item_image_as_icon', '使用第一个上传的物品展示图作为音乐包图标');
     }
 
+    // 更新游戏内切换模式文本
+    const inGameSwitchModeText = document.getElementById('inGameSwitchModeText');
+    if (inGameSwitchModeText) {
+      inGameSwitchModeText.textContent = this.t('upload.in_game_switch_mode', '启用游戏内切换模式（子包设置中可切换：仅音乐 / 仅图片 / 音乐+图片）');
+    }
     
     // 更新播放指令生成部分
     const commandSection = document.querySelector('.command-section');

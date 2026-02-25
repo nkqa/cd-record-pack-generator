@@ -66,6 +66,7 @@
     "detecting_duration": "正在識別音頻時間中...",
     "duration_detection_failed": "音頻時長檢測失敗，請確保上傳的是有效的音頻文件",
     "in_game_switch_mode": "啟用多套方案打包（遊戲內可切換子包）"
+    "in_game_switch_mode": "啟用遊戲內切換模式（子包設定中可切換：僅音樂 / 僅圖片 / 音樂+圖片）"
   },
   "buttons": {
     "generate": "生成mcpack文件"

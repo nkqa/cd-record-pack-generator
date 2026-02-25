@@ -66,6 +66,7 @@
     "detecting_duration": "Detecting audio duration...",
     "duration_detection_failed": "Audio duration detection failed, please ensure you uploaded a valid audio file",
     "in_game_switch_mode": "Enable multi-set packaging (switch subpacks in-game)"
+    "in_game_switch_mode": "Enable in-game switch mode (Subpacks: Music only / Images only / Music + Images)"
   },
   "buttons": {
     "generate": "Generate mcpack file"
