@@ -64,7 +64,8 @@
     "use_first_item_image_as_icon": "最初にアップロードしたアイテム表示画像を音楽パックアイコンとして使用する",
     "processing": "処理中",
     "detecting_duration": "オーディオ再生時間を検出中...",
-    "duration_detection_failed": "オーディオ再生時間の検出に失敗しました。有効なオーディオファイルをアップロードしていることを確認してください"
+    "duration_detection_failed": "オーディオ再生時間の検出に失敗しました。有効なオーディオファイルをアップロードしていることを確認してください",
+    "in_game_switch_mode": "ゲーム内切替モードを有効化（サブパック設定：音楽のみ / 画像のみ / 音楽+画像）"
   },
   "buttons": {
     "generate": "mcpackファイルを生成"
