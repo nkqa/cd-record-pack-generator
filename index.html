@@ -661,6 +661,17 @@
                     <label for="imageSizeToggle" class="toggle-label"></label>
                 </div>
             </div>
+            <div class="audio-processing-option" style="margin-top: 10px; align-items: center; gap: 10px;">
+                <label for="packSetSelect" style="min-width: 80px;">方案选择</label>
+                <select id="packSetSelect" style="flex: 1; min-width: 220px; padding: 6px;">
+                    <option value="base">Music pack</option>
+                    <option value="__add_new__">+ 新增子包</option>
+                </select>
+            </div>
+            <div class="audio-processing-option" style="margin-left: 20px; align-items: center; gap: 10px;">
+                <label for="currentSetNameInput" style="min-width: 80px;">方案名称</label>
+                <input type="text" id="currentSetNameInput" placeholder="可修改当前方案名称" style="flex: 1; min-width: 220px;">
+            </div>
             <div class="audio-processing-option" style="margin-left: 20px;">
                 <input type="number" id="imageSizeInput" value="32" min="1" max="1024" style="width: 100px; margin-left: 10px;">
                 <span style="margin-left: 5px;">像素</span>

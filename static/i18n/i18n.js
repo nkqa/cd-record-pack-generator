@@ -529,6 +529,7 @@ const i18n = {
     if (useFirstItemImageAsIconText) {
       useFirstItemImageAsIconText.textContent = this.t('upload.use_first_item_image_as_icon', '使用第一个上传的物品展示图作为音乐包图标');
     }
+
     
     // 更新播放指令生成部分
     const commandSection = document.querySelector('.command-section');

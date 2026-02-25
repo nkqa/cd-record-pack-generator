@@ -64,7 +64,8 @@
     "use_first_item_image_as_icon": "Use the first uploaded item display image as the music pack icon",
     "processing": "Processing",
     "detecting_duration": "Detecting audio duration...",
-    "duration_detection_failed": "Audio duration detection failed, please ensure you uploaded a valid audio file"
+    "duration_detection_failed": "Audio duration detection failed, please ensure you uploaded a valid audio file",
+    "in_game_switch_mode": "Enable multi-set packaging (switch subpacks in-game)"
   },
   "buttons": {
     "generate": "Generate mcpack file"

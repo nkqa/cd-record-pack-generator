@@ -63,7 +63,8 @@
     "use_first_item_image_as_icon": "Gunakan gambar tampilan item pertama yang diunggah sebagai ikon paket musik",
     "processing": "Memproses",
     "detecting_duration": "Mendeteksi durasi audio...",
-    "duration_detection_failed": "Gagal mendeteksi durasi audio, pastikan Anda mengunggah file audio yang valid"
+    "duration_detection_failed": "Gagal mendeteksi durasi audio, pastikan Anda mengunggah file audio yang valid",
+    "in_game_switch_mode": "Aktifkan paket multi-set (ganti subpack di dalam game)"
   },
   "buttons": {
     "generate": "Hasilkan file mcpack"
