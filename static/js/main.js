@@ -3297,6 +3297,7 @@ function handleIconFile(iconFile) {
                             // 保存转换后的图标
                             window.lastValidIconFile = convertedFile;
                             window.lastValidIconFile.isConverted = true;
+                            window.lastValidIconFile.originalName = iconFile.name; // 保存原始文件名
                             window.lastValidIconName = 'pack_icon.png';
                             
                             iconBtnText.textContent = `${i18n.t('upload.selected_icon', '已选择图标：')}${window.lastValidIconName}${i18n.t('upload.converted', '（已转换）')}`;
@@ -3398,6 +3399,7 @@ function handleIconFile(iconFile) {
             // 保存当前有效的图标信息
             window.lastValidIconFile = iconFile;
             window.lastValidIconFile.isConverted = false;
+            window.lastValidIconFile.originalName = iconFile.name; // 保存原始文件名
             window.lastValidIconName = iconFile.name;
             
             iconBtnText.textContent = `${i18n.t('upload.selected_icon', '已选择图标：')}${iconFile.name}`;

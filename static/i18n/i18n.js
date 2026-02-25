@@ -363,24 +363,25 @@ const i18n = {
       const input = parent.querySelector('input[type="file"]');
       
       // 识别音频选择按钮
-      if (input && input.id && input.id.startsWith('oggFile_')) {
-        // 检查是否有保存的音频文件信息
-        if (window.lastValidAudioFiles && window.lastValidAudioFiles[input.id]) {
-          const lastValidFile = window.lastValidAudioFiles[input.id];
-          if (lastValidFile.isConverted) {
-            btn.textContent = `${this.t('upload.selected_audio', '已选择音频：')}${lastValidFile.name}${this.t('upload.converted', '（已转换）')}`;
+        if (input && input.id && input.id.startsWith('oggFile_')) {
+          // 检查是否有保存的音频文件信息
+          if (window.lastValidAudioFiles && window.lastValidAudioFiles[input.id]) {
+            const lastValidFile = window.lastValidAudioFiles[input.id];
+            const displayName = lastValidFile.originalName || lastValidFile.name;
+            if (lastValidFile.isConverted) {
+              btn.textContent = `${this.t('upload.selected_audio', '已选择音频：')}${displayName}${this.t('upload.converted', '（已转换）')}`;
+            } else {
+              btn.textContent = `${this.t('upload.selected_audio', '已选择音频：')}${displayName}`;
+            }
           } else {
-            btn.textContent = `${this.t('upload.selected_audio', '已选择音频：')}${lastValidFile.name}`;
+            btn.textContent = this.t('upload.select_audio', '选择音频（不上传即为保持原版音乐）');
           }
-        } else {
-          btn.textContent = this.t('upload.select_audio', '选择音频（不上传即为保持原版音乐）');
         }
-      }
       // 识别图标选择按钮
       else if (input && input.id === 'iconFile') {
         // 检查是否有保存的图标文件信息
         if (window.lastValidIconFile) {
-          const lastValidIconName = window.lastValidIconFile.name || 'pack_icon.png';
+          const lastValidIconName = window.lastValidIconFile.originalName || window.lastValidIconFile.name || 'pack_icon.png';
           if (window.lastValidIconFile.isConverted) {
             btn.textContent = `${this.t('upload.selected_icon', '已选择图标：')}${lastValidIconName}${this.t('upload.converted', '（已转换）')}`;
           } else {
