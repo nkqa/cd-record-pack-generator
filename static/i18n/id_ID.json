@@ -64,6 +64,7 @@
     "processing": "Memproses",
     "detecting_duration": "Mendeteksi durasi audio...",
     "duration_detection_failed": "Gagal mendeteksi durasi audio, pastikan Anda mengunggah file audio yang valid",
+    "in_game_switch_mode": "Aktifkan paket multi-set (ganti subpack di dalam game)"
     "in_game_switch_mode": "Aktifkan mode beralih di dalam game (Subpack: Hanya musik / Hanya gambar / Musik + Gambar)"
   },
   "buttons": {

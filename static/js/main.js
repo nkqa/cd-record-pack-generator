@@ -2821,6 +2821,219 @@ window.lastValidImageFiles = {};
 // 保存每个图片文件输入的上一次选择的文件信息
 const lastSelectedImageFiles = {};
 
+// 多套方案缓存（用于生成多个子包）
+window.packSets = [
+    {
+        id: 'base',
+        name: 'Music pack',
+        audioFiles: {},
+        imageFiles: {},
+        descriptions: {}
+    }
+];
+window.currentPackSetId = 'base';
+
+function collectCurrentSetData() {
+    const audioFiles = {};
+    const imageFiles = {};
+    const descriptions = {};
+
+    fileInputs.forEach(input => {
+        const audioInfo = window.lastValidAudioFiles[input.id];
+        if (audioInfo && audioInfo.file) {
+            audioFiles[input.id] = {
+                file: audioInfo.file,
+                targetName: audioInfo.targetName || input.targetName
+            };
+        }
+
+        const descInput = document.getElementById(`desc_${input.id.replace('oggFile_', '')}`);
+        if (descInput) {
+            descriptions[input.id.replace('oggFile_', '')] = descInput.value.trim();
+        }
+    });
+
+    imageFileInputs.forEach(input => {
+        const imageInfo = window.lastValidImageFiles[input.id];
+        if (imageInfo && imageInfo.file) {
+            imageFiles[input.id] = {
+                file: imageInfo.file,
+                targetName: imageInfo.targetName || input.targetName,
+                name: imageInfo.name || imageInfo.file.name
+            };
+        }
+    });
+
+    return {
+        audioFiles,
+        imageFiles,
+        descriptions,
+        hasContent: Object.keys(audioFiles).length > 0 || Object.keys(imageFiles).length > 0
+    };
+}
+
+function saveCurrentSetState() {
+    const set = window.packSets.find(item => item.id === window.currentPackSetId);
+    if (!set) return;
+    const data = collectCurrentSetData();
+    set.audioFiles = data.audioFiles;
+    set.imageFiles = data.imageFiles;
+    set.descriptions = data.descriptions;
+}
+
+function resetUISelections() {
+    window.lastValidAudioFiles = {};
+    window.lastValidImageFiles = {};
+
+    fileInputs.forEach(input => {
+        const fileInput = document.getElementById(input.id);
+        const btnText = document.getElementById(input.btnId);
+        const audioPreview = document.getElementById(`audioPreview_${input.id.replace('oggFile_', '')}`);
+        const descInput = document.getElementById(`desc_${input.id.replace('oggFile_', '')}`);
+        if (fileInput) fileInput.value = '';
+        if (btnText) btnText.textContent = i18n.t('upload.select_audio', '选择音频（不上传即为保持原版音乐）');
+        if (audioPreview) audioPreview.innerHTML = '';
+        if (descInput) descInput.value = '';
+        const deleteBtn = fileInput && fileInput.parentElement ? fileInput.parentElement.querySelector('.delete-btn') : null;
+        if (deleteBtn) deleteBtn.style.display = 'none';
+    });
+
+    imageFileInputs.forEach(input => {
+        const imageInput = document.getElementById(input.id);
+        const btnText = document.getElementById(input.btnId);
+        const preview = document.getElementById(input.previewId);
+        if (imageInput) imageInput.value = '';
+        if (btnText) btnText.textContent = i18n.t('upload.item_image', '选择物品展示图（不上传即为保持原版材质）');
+        if (preview) preview.innerHTML = '';
+        toggleImageButtons(input, false);
+    });
+}
+
+function loadSetToUI(set) {
+    resetUISelections();
+
+    fileInputs.forEach(input => {
+        const audioInfo = set.audioFiles[input.id];
+        if (!audioInfo || !audioInfo.file) return;
+
+        window.lastValidAudioFiles[input.id] = {
+            file: audioInfo.file,
+            targetName: audioInfo.targetName || input.targetName,
+            description: set.descriptions[input.id.replace('oggFile_', '')] || ''
+        };
+
+        const btnText = document.getElementById(input.btnId);
+        if (btnText) {
+            btnText.textContent = `${i18n.t('upload.selected_audio', '已选择音频：')}${audioInfo.file.name}`;
+        }
+
+        const audioPreview = document.getElementById(`audioPreview_${input.id.replace('oggFile_', '')}`);
+        if (audioPreview) {
+            const url = URL.createObjectURL(audioInfo.file);
+            audioPreview.innerHTML = `<audio controls src="${url}" style="width:100%"></audio>`;
+        }
+
+        const fileInput = document.getElementById(input.id);
+        const deleteBtn = fileInput && fileInput.parentElement ? fileInput.parentElement.querySelector('.delete-btn') : null;
+        if (deleteBtn) deleteBtn.style.display = 'block';
+
+        const descInput = document.getElementById(`desc_${input.id.replace('oggFile_', '')}`);
+        if (descInput) {
+            descInput.value = set.descriptions[input.id.replace('oggFile_', '')] || '';
+        }
+    });
+
+    imageFileInputs.forEach(input => {
+        const imageInfo = set.imageFiles[input.id];
+        if (!imageInfo || !imageInfo.file) return;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            window.lastValidImageFiles[input.id] = {
+                file: imageInfo.file,
+                name: imageInfo.name || imageInfo.file.name,
+                preview: e.target.result,
+                targetName: imageInfo.targetName || input.targetName
+            };
+
+            const preview = document.getElementById(input.previewId);
+            if (preview) {
+                preview.innerHTML = `<img src="${e.target.result}" alt="preview" style="max-width:100%;max-height:100%;">`;
+            }
+
+            const btnText = document.getElementById(input.btnId);
+            if (btnText) {
+                btnText.textContent = `${i18n.t('upload.selected_image', '已选择图片：')}${imageInfo.name || imageInfo.file.name}`;
+            }
+            toggleImageButtons(input, true);
+        };
+        reader.readAsDataURL(imageInfo.file);
+    });
+}
+
+function getDefaultSetName() {
+    const count = window.packSets.filter(item => item.id !== 'base').length + 1;
+    return `Music pack ${count}`;
+}
+
+function renderPackSetSelect() {
+    const select = document.getElementById('packSetSelect');
+    if (!select) return;
+
+    const selectedValue = window.currentPackSetId;
+    const options = window.packSets.map(set => `<option value="${set.id}">${set.name}</option>`).join('');
+    select.innerHTML = `${options}<option value="__add_new__">+ 新增子包</option>`;
+    select.value = selectedValue;
+
+    const currentSet = window.packSets.find(item => item.id === window.currentPackSetId);
+    const nameInput = document.getElementById('currentSetNameInput');
+    if (nameInput && currentSet) {
+        nameInput.value = currentSet.name;
+    }
+}
+
+function initPackSetManager() {
+    const select = document.getElementById('packSetSelect');
+    const nameInput = document.getElementById('currentSetNameInput');
+    if (!select || !nameInput) return;
+
+    renderPackSetSelect();
+
+    select.addEventListener('change', function() {
+        saveCurrentSetState();
+
+        if (this.value === '__add_new__') {
+            const newSet = {
+                id: generateUUID(),
+                name: getDefaultSetName(),
+                audioFiles: {},
+                imageFiles: {},
+                descriptions: {}
+            };
+            window.packSets.push(newSet);
+            window.currentPackSetId = newSet.id;
+            renderPackSetSelect();
+            loadSetToUI(newSet);
+            return;
+        }
+
+        window.currentPackSetId = this.value;
+        const targetSet = window.packSets.find(item => item.id === this.value);
+        if (targetSet) {
+            renderPackSetSelect();
+            loadSetToUI(targetSet);
+        }
+    });
+
+    nameInput.addEventListener('change', function() {
+        const set = window.packSets.find(item => item.id === window.currentPackSetId);
+        if (!set) return;
+        const value = this.value.trim();
+        set.name = value || (set.id === 'base' ? 'Music pack' : getDefaultSetName());
+        renderPackSetSelect();
+    });
+}
+
 // 辅助函数：同时显示/隐藏删除和编辑按钮
 function toggleImageButtons(inputInfo, show) {
     try {
@@ -3737,8 +3950,23 @@ if (packBtn) {
                 }
             });
             
+            // 先保存当前正在编辑的方案状态
+            saveCurrentSetState();
+
+            const setsForPackaging = window.packSets
+                .map(set => ({
+                    name: set.name,
+                    audioFiles: set.audioFiles || {},
+                    imageFiles: set.imageFiles || {},
+                    descriptions: set.descriptions || {},
+                    hasContent: Object.keys(set.audioFiles || {}).length > 0 || Object.keys(set.imageFiles || {}).length > 0
+                }))
+                .filter(set => set.hasContent);
+
+            const useSubpackMode = setsForPackaging.length > 1;
+
             // 检查是否至少上传了一个文件
-            if (uploadedFiles.length === 0) {
+            if (setsForPackaging.length === 0 && uploadedFiles.length === 0) {
                 throw new Error(i18n.t('errors.no_files', '必须上传一个音频文件'));
             }
             
@@ -3776,6 +4004,24 @@ if (packBtn) {
             const isInGameSwitchModeEnabled = inGameSwitchModeToggle ? inGameSwitchModeToggle.checked : false;
             
             // 添加音频文件到压缩包
+            const setsForSubpacks = setsForPackaging;
+
+            if (useSubpackMode) {
+                setsForSubpacks.forEach((setItem, index) => {
+                    const folderName = `set_${index + 1}`;
+                    Object.values(setItem.audioFiles || {}).forEach(audioItem => {
+                        if (audioItem && audioItem.file && audioItem.targetName) {
+                            zip.file(`subpacks/${folderName}/sounds/music/game/records/${audioItem.targetName}`, audioItem.file);
+                        }
+                    });
+                });
+            } else {
+                uploadedFiles.forEach(item => {
+                    const file = item.file;
+                    const targetName = item.targetName;
+                    zip.file(`sounds/music/game/records/${targetName}`, file);
+                });
+            }
             uploadedFiles.forEach(item => {
                 const file = item.file;
                 const targetName = item.targetName;
@@ -3855,6 +4101,33 @@ if (packBtn) {
                 }
             }
 
+            if (useSubpackMode) {
+                for (let index = 0; index < setsForSubpacks.length; index++) {
+                    const setItem = setsForSubpacks[index];
+                    const folderName = `set_${index + 1}`;
+
+                    for (const imageItem of Object.values(setItem.imageFiles || {})) {
+                        if (!imageItem || !imageItem.file || !imageItem.targetName) continue;
+
+                        let outputImage = imageItem.file;
+                        // 检查是否启用像素修改
+                        const imageSizeToggle = document.getElementById('imageSizeToggle');
+                        const isImageSizeEnabled = imageSizeToggle ? imageSizeToggle.checked : true;
+                        const imageSizeInput = document.getElementById('imageSizeInput');
+                        const maxSize = isImageSizeEnabled && imageSizeInput ? parseInt(imageSizeInput.value) || 32 : 32;
+
+                        if (isImageSizeEnabled) {
+                            outputImage = await resizeImage(imageItem.file, maxSize);
+                        }
+
+                        zip.file(`subpacks/${folderName}/textures/items/${imageItem.targetName}`, outputImage);
+                    }
+                }
+            } else {
+                uploadedImages.forEach(item => {
+                    zip.file(`textures/items/${item.targetName}`, item.file);
+                });
+            }
             uploadedImages.forEach(item => {
                 if (isInGameSwitchModeEnabled) {
                     zip.file(`subpacks/image_only/textures/items/${item.targetName}`, item.file);
@@ -3937,6 +4210,12 @@ if (packBtn) {
                     manifestJson.header.uuid = generateUUID();
                     manifestJson.modules[0].uuid = generateUUID();
 
+                    if (useSubpackMode) {
+                        manifestJson.subpacks = setsForSubpacks.map((setItem, index) => ({
+                            "folder_name": `set_${index + 1}`,
+                            "name": setItem.name || `方案 ${index + 1}`,
+                            "memory_tier": 0
+                        }));
                     if (isInGameSwitchModeEnabled) {
                         manifestJson.subpacks = [
                             {
@@ -3980,6 +4259,12 @@ if (packBtn) {
                             }
                         ]
                     };
+                    if (useSubpackMode) {
+                        manifestJson.subpacks = setsForSubpacks.map((setItem, index) => ({
+                            "folder_name": `set_${index + 1}`,
+                            "name": setItem.name || `方案 ${index + 1}`,
+                            "memory_tier": 0
+                        }));
                     if (isInGameSwitchModeEnabled) {
                         manifestJson.subpacks = [
                             {
@@ -4023,6 +4308,12 @@ if (packBtn) {
                         }
                     ]
                 };
+                if (useSubpackMode) {
+                    manifestJson.subpacks = setsForSubpacks.map((setItem, index) => ({
+                        "folder_name": `set_${index + 1}`,
+                        "name": setItem.name || `方案 ${index + 1}`,
+                        "memory_tier": 0
+                    }));
                 if (isInGameSwitchModeEnabled) {
                     manifestJson.subpacks = [
                         {
@@ -4840,4 +5131,5 @@ imageFileInputs.forEach(inputInfo => {
 // 初始化
 window.addEventListener('DOMContentLoaded', function() {
     initCropModal();
+    initPackSetManager();
 });

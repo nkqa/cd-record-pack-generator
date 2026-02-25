@@ -64,6 +64,7 @@
     "processing": "처리 중",
     "detecting_duration": "오디오 시간 식별 중...",
     "duration_detection_failed": "오디오 길이 감지 실패. 업로드한 파일이 유효한 오디오 파일인지 확인하세요",
+    "in_game_switch_mode": "다중 세트 패키징 활성화(게임 내 서브팩 전환)"
     "in_game_switch_mode": "게임 내 전환 모드 활성화(서브팩 설정: 음악만 / 이미지 만 / 음악+이미지)"
   },
   "buttons": {

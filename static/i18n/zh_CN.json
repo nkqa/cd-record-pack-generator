@@ -64,6 +64,7 @@
     "processing": "处理中",
     "detecting_duration": "正在识别音频时间中...",
     "duration_detection_failed": "音频时长检测失败，请确保上传的是有效的音频文件",
+    "in_game_switch_mode": "启用多套方案打包（游戏内可切换子包）"
     "in_game_switch_mode": "启用游戏内切换模式（子包设置中可切换：仅音乐 / 仅图片 / 音乐+图片）"
   },
   "buttons": {

@@ -661,6 +661,16 @@
                     <label for="imageSizeToggle" class="toggle-label"></label>
                 </div>
             </div>
+            <div class="audio-processing-option" style="margin-top: 10px; align-items: center; gap: 10px;">
+                <label for="packSetSelect" style="min-width: 80px;">方案选择</label>
+                <select id="packSetSelect" style="flex: 1; min-width: 220px; padding: 6px;">
+                    <option value="base">Music pack</option>
+                    <option value="__add_new__">+ 新增子包</option>
+                </select>
+            </div>
+            <div class="audio-processing-option" style="margin-left: 20px; align-items: center; gap: 10px;">
+                <label for="currentSetNameInput" style="min-width: 80px;">方案名称</label>
+                <input type="text" id="currentSetNameInput" placeholder="可修改当前方案名称" style="flex: 1; min-width: 220px;">
             <div class="audio-processing-option">
                 <div>
                     <span id="inGameSwitchModeText">启用游戏内切换模式（子包设置中可切换：仅音乐 / 仅图片 / 音乐+图片）</span>
