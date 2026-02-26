@@ -2115,7 +2115,277 @@ window.addEventListener('DOMContentLoaded', function() {
             generateCommands();
         });
     }
+    
+    // 初始化批量上传功能
+    initBatchUploadFeature();
 });
+
+// 批量上传功能
+function initBatchUploadFeature() {
+    // 批量图片上传
+    const batchImageFile = document.getElementById('batchImageFile');
+    const batchImageList = document.getElementById('batchImageList');
+    
+    if (batchImageFile && batchImageList) {
+        batchImageFile.addEventListener('change', function() {
+            const files = this.files;
+            batchImageList.innerHTML = '';
+            
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const fileItem = document.createElement('div');
+                fileItem.style.display = 'flex';
+                fileItem.style.alignItems = 'center';
+                fileItem.style.marginBottom = '10px';
+                fileItem.style.padding = '10px';
+                fileItem.style.backgroundColor = '#f0f0f0';
+                fileItem.style.borderRadius = '4px';
+                
+                // 图片预览
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.style.width = '50px';
+                        img.style.height = '50px';
+                        img.style.objectFit = 'cover';
+                        img.style.marginRight = '10px';
+                        fileItem.appendChild(img);
+                    };
+                    reader.readAsDataURL(file);
+                }
+                
+                // 文件名
+                const fileName = document.createElement('span');
+                fileName.textContent = file.name;
+                fileName.style.flex = '1';
+                fileItem.appendChild(fileName);
+                
+                // 下拉选择栏
+                const select = document.createElement('select');
+                select.style.margin = '0 10px';
+                select.style.padding = '5px';
+                
+                // 添加选项
+                const defaultOption = document.createElement('option');
+                defaultOption.value = 'none';
+                defaultOption.textContent = i18n.t('batch_upload.no_selection', '暂时不选');
+                select.appendChild(defaultOption);
+                
+                // 添加图片目标文件名选项
+                const imageTargets = [
+                    { value: 'record_11.png', text: '11.ogg 物品展示图' },
+                    { value: 'record_13.png', text: '13.ogg 物品展示图' },
+                    { value: 'record_5.png', text: '5.ogg 物品展示图' },
+                    { value: 'record_blocks.png', text: 'blocks.ogg 物品展示图' },
+                    { value: 'record_cat.png', text: 'cat.ogg 物品展示图' },
+                    { value: 'music_disc_creator.png', text: 'creator.ogg 物品展示图' },
+                    { value: 'music_disc_creator_music_box.png', text: 'creator_music_box.ogg 物品展示图' },
+                    { value: 'record_mall.png', text: 'mall.ogg 物品展示图' },
+                    { value: 'record_mellohi.png', text: 'mellohi.ogg 物品展示图' },
+                    { value: 'record_otherside.png', text: 'otherside.ogg 物品展示图' },
+                    { value: 'record_pigstep.png', text: 'pigstep_master.ogg 物品展示图' },
+                    { value: 'music_disc_precipice.png', text: 'precipice.ogg 物品展示图' },
+                    { value: 'music_disc_relic.png', text: 'relic.ogg 物品展示图' },
+                    { value: 'record_stal.png', text: 'stal.ogg 物品展示图' },
+                    { value: 'record_strad.png', text: 'strad.ogg 物品展示图' },
+                    { value: 'record_wait.png', text: 'wait.ogg 物品展示图' },
+                    { value: 'record_ward.png', text: 'ward.ogg 物品展示图' },
+                    { value: 'record_chirp.png', text: 'chirp.ogg 物品展示图' },
+                    { value: 'record_far.png', text: 'far.ogg 物品展示图' },
+                    { value: 'record_tears.png', text: 'tears.ogg 物品展示图' },
+                    { value: 'record_lava_chicken.png', text: 'lava_chicken.ogg 物品展示图' }
+                ];
+                
+                imageTargets.forEach(target => {
+                    const option = document.createElement('option');
+                    option.value = target.value;
+                    option.textContent = target.text;
+                    select.appendChild(option);
+                });
+                
+                fileItem.appendChild(select);
+                
+                // 确定按钮
+                const confirmBtn = document.createElement('button');
+                confirmBtn.textContent = i18n.t('batch_upload.confirm', '确定');
+                confirmBtn.className = 'btn';
+                confirmBtn.style.padding = '5px 10px';
+                confirmBtn.style.fontSize = '12px';
+                
+                confirmBtn.addEventListener('click', function() {
+                    const targetName = select.value;
+                    if (targetName !== 'none') {
+                        // 处理图片文件
+                        handleBatchImageFile(file, targetName);
+                        fileItem.style.backgroundColor = '#d4edda';
+                        confirmBtn.textContent = i18n.t('batch_upload.processed', '已处理');
+                        confirmBtn.disabled = true;
+                    }
+                });
+                
+                fileItem.appendChild(confirmBtn);
+                batchImageList.appendChild(fileItem);
+            }
+        });
+    }
+    
+    // 批量音频上传
+    const batchAudioFile = document.getElementById('batchAudioFile');
+    const batchAudioList = document.getElementById('batchAudioList');
+    
+    if (batchAudioFile && batchAudioList) {
+        batchAudioFile.addEventListener('change', function() {
+            const files = this.files;
+            batchAudioList.innerHTML = '';
+            
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const fileItem = document.createElement('div');
+                fileItem.style.display = 'flex';
+                fileItem.style.alignItems = 'center';
+                fileItem.style.marginBottom = '10px';
+                fileItem.style.padding = '10px';
+                fileItem.style.backgroundColor = '#f0f0f0';
+                fileItem.style.borderRadius = '4px';
+                
+                // 音频图标
+                const audioIcon = document.createElement('div');
+                audioIcon.textContent = '🎵';
+                audioIcon.style.fontSize = '24px';
+                audioIcon.style.marginRight = '10px';
+                fileItem.appendChild(audioIcon);
+                
+                // 文件名
+                const fileName = document.createElement('span');
+                fileName.textContent = file.name;
+                fileName.style.flex = '1';
+                fileItem.appendChild(fileName);
+                
+                // 下拉选择栏
+                const select = document.createElement('select');
+                select.style.margin = '0 10px';
+                select.style.padding = '5px';
+                
+                // 添加选项
+                const defaultOption = document.createElement('option');
+                defaultOption.value = 'none';
+                defaultOption.textContent = i18n.t('batch_upload.no_selection', '暂时不选');
+                select.appendChild(defaultOption);
+                
+                // 添加音频目标文件名选项
+                const audioTargets = [
+                    { value: '11.ogg', text: '11.ogg' },
+                    { value: '13.ogg', text: '13.ogg' },
+                    { value: '5.ogg', text: '5.ogg' },
+                    { value: 'blocks.ogg', text: 'blocks.ogg' },
+                    { value: 'cat.ogg', text: 'cat.ogg' },
+                    { value: 'creator.ogg', text: 'creator.ogg' },
+                    { value: 'creator_music_box.ogg', text: 'creator_music_box.ogg' },
+                    { value: 'mall.ogg', text: 'mall.ogg' },
+                    { value: 'mellohi.ogg', text: 'mellohi.ogg' },
+                    { value: 'otherside.ogg', text: 'otherside.ogg' },
+                    { value: 'pigstep_master.ogg', text: 'pigstep_master.ogg' },
+                    { value: 'precipice.ogg', text: 'precipice.ogg' },
+                    { value: 'relic.ogg', text: 'relic.ogg' },
+                    { value: 'stal.ogg', text: 'stal.ogg' },
+                    { value: 'strad.ogg', text: 'strad.ogg' },
+                    { value: 'wait.ogg', text: 'wait.ogg' },
+                    { value: 'ward.ogg', text: 'ward.ogg' },
+                    { value: 'chirp.ogg', text: 'chirp.ogg' },
+                    { value: 'far.ogg', text: 'far.ogg' },
+                    { value: 'tears.ogg', text: 'tears.ogg' },
+                    { value: 'lava_chicken.ogg', text: 'lava_chicken.ogg' }
+                ];
+                
+                audioTargets.forEach(target => {
+                    const option = document.createElement('option');
+                    option.value = target.value;
+                    option.textContent = target.text;
+                    select.appendChild(option);
+                });
+                
+                fileItem.appendChild(select);
+                
+                // 确定按钮
+                const confirmBtn = document.createElement('button');
+                confirmBtn.textContent = i18n.t('batch_upload.confirm', '确定');
+                confirmBtn.className = 'btn';
+                confirmBtn.style.padding = '5px 10px';
+                confirmBtn.style.fontSize = '12px';
+                
+                confirmBtn.addEventListener('click', function() {
+                    const targetName = select.value;
+                    if (targetName !== 'none') {
+                        // 处理音频文件
+                        handleBatchAudioFile(file, targetName);
+                        fileItem.style.backgroundColor = '#d4edda';
+                        confirmBtn.textContent = i18n.t('batch_upload.processed', '已处理');
+                        confirmBtn.disabled = true;
+                    }
+                });
+                
+                fileItem.appendChild(confirmBtn);
+                batchAudioList.appendChild(fileItem);
+            }
+        });
+    }
+}
+
+// 处理批量上传的图片文件
+function handleBatchImageFile(file, targetName) {
+    // 找到对应的图片输入
+    let imageInputId = null;
+    for (const inputInfo of imageFileInputs) {
+        if (inputInfo.targetName === targetName) {
+            imageInputId = inputInfo.id;
+            break;
+        }
+    }
+    
+    if (imageInputId) {
+        // 模拟文件输入
+        const input = document.getElementById(imageInputId);
+        if (input) {
+            // 创建一个新的 FileList
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(file);
+            input.files = dataTransfer.files;
+            
+            // 触发 change 事件
+            const event = new Event('change');
+            input.dispatchEvent(event);
+        }
+    }
+}
+
+// 处理批量上传的音频文件
+function handleBatchAudioFile(file, targetName) {
+    // 找到对应的音频输入
+    let audioInputId = null;
+    for (const inputInfo of fileInputs) {
+        if (inputInfo.targetName === targetName) {
+            audioInputId = inputInfo.id;
+            break;
+        }
+    }
+    
+    if (audioInputId) {
+        // 模拟文件输入
+        const input = document.getElementById(audioInputId);
+        if (input) {
+            // 创建一个新的 FileList
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(file);
+            input.files = dataTransfer.files;
+            
+            // 触发 change 事件
+            const event = new Event('change');
+            input.dispatchEvent(event);
+        }
+    }
+}
 
 // 音频文件时长限制（秒）
 const audioDurationLimits = {

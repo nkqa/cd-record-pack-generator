@@ -65,6 +65,17 @@
     "detecting_duration": "正在识别音频时间中...",
     "duration_detection_failed": "音频时长检测失败，请确保上传的是有效的音频文件"
   },
+  "batch_upload": {
+    "title": "批量上传",
+    "image_title": "批量上传物品展示图",
+    "audio_title": "批量上传音频",
+    "select_images": "选择多张图片",
+    "select_audios": "选择多个音频",
+    "select_target": "选择目标文件名",
+    "no_selection": "暂时不选",
+    "confirm": "确定",
+    "processed": "已处理"
+  },
   "buttons": {
     "generate": "生成mcpack文件"
   },

@@ -78,6 +78,57 @@
             </div>
         </div>
         
+        <!-- 批量上传区域 -->
+        <div class="batch-upload-section" style="margin-bottom: 30px; padding: 20px; background-color: #f9f9f9; border-radius: 8px;">
+            <h2 id="batchUploadTitle">批量上传</h2>
+            
+            <!-- 批量上传物品展示图 -->
+            <div class="batch-image-upload" style="margin-bottom: 20px;">
+                <h3 id="batchImageTitle">批量上传物品展示图</h3>
+                <div class="custom-file-upload" style="margin-bottom: 15px;">
+                    <input type="file" id="batchImageFile" accept="image/*" multiple>
+                    <div class="custom-btn" id="batchImageBtnText">选择多张图片</div>
+                </div>
+                <div id="batchImageList" style="margin-top: 15px;"></div>
+            </div>
+            
+            <!-- 批量上传音频 -->
+            <div class="batch-audio-upload">
+                <h3 id="batchAudioTitle">批量上传音频</h3>
+                <div class="custom-file-upload" style="margin-bottom: 15px;">
+                    <input type="file" id="batchAudioFile" accept="audio/*" multiple>
+                    <div class="custom-btn" id="batchAudioBtnText">选择多个音频</div>
+                </div>
+                <div id="batchAudioList" style="margin-top: 15px;"></div>
+            </div>
+        </div>
+        <script>
+            // 初始化批量上传区域文本
+            document.addEventListener('DOMContentLoaded', function() {
+                const batchUploadTitle = document.getElementById('batchUploadTitle');
+                const batchImageTitle = document.getElementById('batchImageTitle');
+                const batchAudioTitle = document.getElementById('batchAudioTitle');
+                const batchImageBtnText = document.getElementById('batchImageBtnText');
+                const batchAudioBtnText = document.getElementById('batchAudioBtnText');
+                
+                if (batchUploadTitle) {
+                    batchUploadTitle.textContent = i18n.t('batch_upload.title', '批量上传');
+                }
+                if (batchImageTitle) {
+                    batchImageTitle.textContent = i18n.t('batch_upload.image_title', '批量上传物品展示图');
+                }
+                if (batchAudioTitle) {
+                    batchAudioTitle.textContent = i18n.t('batch_upload.audio_title', '批量上传音频');
+                }
+                if (batchImageBtnText) {
+                    batchImageBtnText.textContent = i18n.t('batch_upload.select_images', '选择多张图片');
+                }
+                if (batchAudioBtnText) {
+                    batchAudioBtnText.textContent = i18n.t('batch_upload.select_audios', '选择多个音频');
+                }
+            });
+        </script>
+        
         <div class="upload-section">
             <h2>上传音乐文件</h2>
             
