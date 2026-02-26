@@ -2219,9 +2219,8 @@ function initBatchUploadFeature() {
                     if (targetName !== 'none') {
                         // 处理图片文件
                         handleBatchImageFile(file, targetName);
-                        fileItem.style.backgroundColor = '#d4edda';
-                        confirmBtn.textContent = i18n.t('batch_upload.processed', '已处理');
-                        confirmBtn.disabled = true;
+                        // 从列表中移除文件项
+                        fileItem.remove();
                     }
                 });
                 
@@ -2320,9 +2319,8 @@ function initBatchUploadFeature() {
                     if (targetName !== 'none') {
                         // 处理音频文件
                         handleBatchAudioFile(file, targetName);
-                        fileItem.style.backgroundColor = '#d4edda';
-                        confirmBtn.textContent = i18n.t('batch_upload.processed', '已处理');
-                        confirmBtn.disabled = true;
+                        // 从列表中移除文件项
+                        fileItem.remove();
                     }
                 });
                 
