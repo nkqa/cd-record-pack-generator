@@ -65,6 +65,22 @@
     "detecting_duration": "오디오 시간 식별 중...",
     "duration_detection_failed": "오디오 길이 감지 실패. 업로드한 파일이 유효한 오디오 파일인지 확인하세요"
   },
+  "batch_upload": {
+    "title": "일괄 업로드",
+    "image_title": "아이템 표시 이미지 일괄 업로드",
+    "audio_title": "오디오 일괄 업로드",
+    "select_images": "여러 이미지 선택",
+    "select_audios": "여러 오디오 선택",
+    "select_target": "대상 파일 이름 선택",
+    "no_selection": "아직 선택하지 않음",
+    "confirm": "확인",
+    "processed": "처리 완료",
+    "confirm_replace_audio": "이 위치에 이미 음악이 있습니다. 선택하시겠습니까？",
+    "confirm_replace_image": "이 위치에 이미 아이템 표시 이미지가 있습니다. 선택하시겠습니까？",
+    "detecting_duration": "재생 시간 감지 중...",
+    "max_duration": "최대",
+    "item_image": "아이템 표시 이미지"
+  },
   "buttons": {
     "generate": "mcpack 파일 생성"
   },

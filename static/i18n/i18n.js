@@ -712,6 +712,29 @@ const i18n = {
       }
     }
     
+    // 更新批量上传区域文本
+    const batchUploadTitle = document.getElementById('batchUploadTitle');
+    const batchImageTitle = document.getElementById('batchImageTitle');
+    const batchAudioTitle = document.getElementById('batchAudioTitle');
+    const batchImageBtnText = document.getElementById('batchImageBtnText');
+    const batchAudioBtnText = document.getElementById('batchAudioBtnText');
+    
+    if (batchUploadTitle) {
+      batchUploadTitle.textContent = this.t('batch_upload.title', '批量上传');
+    }
+    if (batchImageTitle) {
+      batchImageTitle.textContent = this.t('batch_upload.image_title', '批量上传物品展示图');
+    }
+    if (batchAudioTitle) {
+      batchAudioTitle.textContent = this.t('batch_upload.audio_title', '批量上传音频');
+    }
+    if (batchImageBtnText) {
+      batchImageBtnText.textContent = this.t('batch_upload.select_images', '选择多张图片');
+    }
+    if (batchAudioBtnText) {
+      batchAudioBtnText.textContent = this.t('batch_upload.select_audios', '选择多个音频');
+    }
+    
     // 更新语言栏标签和下拉选择框
     const langLabels = document.querySelectorAll('.language-selector span');
     langLabels.forEach(label => {

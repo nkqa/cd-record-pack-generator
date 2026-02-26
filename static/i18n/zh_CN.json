@@ -76,7 +76,10 @@
     "confirm": "确定",
     "processed": "已处理",
     "confirm_replace_audio": "该位置目前已有音乐，确定要选择吗？",
-    "confirm_replace_image": "该位置目前已有物品展示图，确定要选择吗？"
+    "confirm_replace_image": "该位置目前已有物品展示图，确定要选择吗？",
+    "detecting_duration": "检测时长中...",
+    "max_duration": "最多",
+    "item_image": "物品展示图"
   },
   "buttons": {
     "generate": "生成mcpack文件"
@@ -116,6 +119,7 @@
     "confirm_delete": "确认删除",
     "confirm_delete_icon": "确认删除图标吗？",
     "confirm_delete_message": "确定要删除此文件吗？",
+    "delete_confirm": "确定要删除这个文件吗？",
     "delete": {
       "confirm_message": "确定要删除此文件吗？",
       "note": "此操作不会删除本地任何文件"

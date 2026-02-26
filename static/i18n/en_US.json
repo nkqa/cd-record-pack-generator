@@ -66,6 +66,22 @@
     "detecting_duration": "Detecting audio duration...",
     "duration_detection_failed": "Audio duration detection failed, please ensure you uploaded a valid audio file"
   },
+  "batch_upload": {
+    "title": "Batch Upload",
+    "image_title": "Batch Upload Item Display Images",
+    "audio_title": "Batch Upload Audio",
+    "select_images": "Select Multiple Images",
+    "select_audios": "Select Multiple Audios",
+    "select_target": "Select Target Filename",
+    "no_selection": "No Selection Yet",
+    "confirm": "Confirm",
+    "processed": "Processed",
+    "confirm_replace_audio": "There is already music in this position, are you sure you want to select?",
+    "confirm_replace_image": "There is already an item display image in this position, are you sure you want to select?",
+    "detecting_duration": "Detecting duration...",
+    "max_duration": "max",
+    "item_image": "Item Display Image"
+  },
   "buttons": {
     "generate": "Generate mcpack file"
   },

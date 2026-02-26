@@ -63,6 +63,27 @@ function toggleInfo() {
     }
 }
 
+// 切换批量上传区域的显示/隐藏
+function toggleBatchUpload() {
+    const content = document.getElementById('batchUploadContent');
+    const icon = document.getElementById('batchUploadToggleIcon');
+    
+    if (content.style.display === 'none') {
+        content.style.display = 'block';
+        icon.style.transform = 'rotate(180deg)';
+    } else {
+        content.style.display = 'none';
+        icon.style.transform = 'rotate(0deg)';
+    }
+}
+
+// 将秒数转换为分:秒格式
+function formatDuration(seconds) {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+}
+
 // 平滑滚动到指定元素
 function smoothScroll(elementId) {
     // 确保信息部分已展开
@@ -306,7 +327,7 @@ function showDurationCheckWarningModal() {
 }
 
 // 显示音频时长超过限制的警告模态框，带有"仍要选择"按钮
-function showDurationExceededModal(limitMinutes, limitSeconds, input, inputId, inputInfo, file, btnText, deleteBtn, descInput, audioPreview) {
+function showDurationExceededModal(limitMinutes, limitSeconds, input, inputId, inputInfo, file, btnText, deleteBtn, descInput, audioPreview, callback) {
     // 创建弹窗
     const modal = document.createElement('div');
     const modalId = 'durationExceededModal_' + Date.now();
@@ -572,6 +593,11 @@ function showDurationExceededModal(limitMinutes, limitSeconds, input, inputId, i
                 if (currentModal) {
                     document.body.removeChild(currentModal);
                 }
+                
+                // 操作成功，通知调用者
+                if (typeof callback === 'function') {
+                    callback(true);
+                }
             } catch (error) {
                 console.error('处理超过时长的音频文件失败:', error);
                 showErrorModal(`${i18n.t('errors.error', '错误')}：${i18n.t('errors.file_processing_failed', '文件处理失败，请重试')}`);
@@ -614,6 +640,11 @@ function showDurationExceededModal(limitMinutes, limitSeconds, input, inputId, i
                 const currentModal = document.getElementById(modalId);
                 if (currentModal) {
                     document.body.removeChild(currentModal);
+                }
+                
+                // 操作失败，通知调用者
+                if (typeof callback === 'function') {
+                    callback(false);
                 }
             }
         });
@@ -2129,17 +2160,27 @@ function initBatchUploadFeature() {
     if (batchImageFile && batchImageList) {
         batchImageFile.addEventListener('change', function() {
             const files = this.files;
-            batchImageList.innerHTML = '';
             
             for (let i = 0; i < files.length; i++) {
                 const file = files[i];
                 const fileItem = document.createElement('div');
                 fileItem.style.display = 'flex';
                 fileItem.style.alignItems = 'center';
+                fileItem.style.flexWrap = 'wrap';
                 fileItem.style.marginBottom = '10px';
                 fileItem.style.padding = '10px';
                 fileItem.style.backgroundColor = '#f0f0f0';
                 fileItem.style.borderRadius = '4px';
+                
+                // 创建内容容器（包含图标和文件名）
+                const contentContainer = document.createElement('div');
+                contentContainer.style.display = 'flex';
+                contentContainer.style.alignItems = 'center';
+                contentContainer.style.flex = '1';
+                contentContainer.style.minWidth = '200px';
+                contentContainer.style.marginRight = '10px';
+                contentContainer.style.marginBottom = '5px';
+                fileItem.appendChild(contentContainer);
                 
                 // 图片预览
                 if (file.type.startsWith('image/')) {
@@ -2151,7 +2192,7 @@ function initBatchUploadFeature() {
                         img.style.height = '50px';
                         img.style.objectFit = 'cover';
                         img.style.marginRight = '10px';
-                        fileItem.appendChild(img);
+                        contentContainer.appendChild(img);
                     };
                     reader.readAsDataURL(file);
                 }
@@ -2160,11 +2201,15 @@ function initBatchUploadFeature() {
                 const fileName = document.createElement('span');
                 fileName.textContent = file.name;
                 fileName.style.flex = '1';
-                fileItem.appendChild(fileName);
+                fileName.style.whiteSpace = 'nowrap';
+                fileName.style.overflow = 'hidden';
+                fileName.style.textOverflow = 'ellipsis';
+                fileName.style.maxWidth = '200px';
+                contentContainer.appendChild(fileName);
                 
                 // 下拉选择栏
                 const select = document.createElement('select');
-                select.style.margin = '0 10px';
+                select.style.margin = '5px';
                 select.style.padding = '5px';
                 
                 // 添加选项
@@ -2175,33 +2220,33 @@ function initBatchUploadFeature() {
                 
                 // 添加图片目标文件名选项
                 const imageTargets = [
-                    { value: 'record_11.png', text: '11.ogg 物品展示图' },
-                    { value: 'record_13.png', text: '13.ogg 物品展示图' },
-                    { value: 'record_5.png', text: '5.ogg 物品展示图' },
-                    { value: 'record_blocks.png', text: 'blocks.ogg 物品展示图' },
-                    { value: 'record_cat.png', text: 'cat.ogg 物品展示图' },
-                    { value: 'music_disc_creator.png', text: 'creator.ogg 物品展示图' },
-                    { value: 'music_disc_creator_music_box.png', text: 'creator_music_box.ogg 物品展示图' },
-                    { value: 'record_mall.png', text: 'mall.ogg 物品展示图' },
-                    { value: 'record_mellohi.png', text: 'mellohi.ogg 物品展示图' },
-                    { value: 'record_otherside.png', text: 'otherside.ogg 物品展示图' },
-                    { value: 'record_pigstep.png', text: 'pigstep_master.ogg 物品展示图' },
-                    { value: 'music_disc_precipice.png', text: 'precipice.ogg 物品展示图' },
-                    { value: 'music_disc_relic.png', text: 'relic.ogg 物品展示图' },
-                    { value: 'record_stal.png', text: 'stal.ogg 物品展示图' },
-                    { value: 'record_strad.png', text: 'strad.ogg 物品展示图' },
-                    { value: 'record_wait.png', text: 'wait.ogg 物品展示图' },
-                    { value: 'record_ward.png', text: 'ward.ogg 物品展示图' },
-                    { value: 'record_chirp.png', text: 'chirp.ogg 物品展示图' },
-                    { value: 'record_far.png', text: 'far.ogg 物品展示图' },
-                    { value: 'record_tears.png', text: 'tears.ogg 物品展示图' },
-                    { value: 'record_lava_chicken.png', text: 'lava_chicken.ogg 物品展示图' }
+                    { value: 'record_11.png', baseName: '11.ogg' },
+                    { value: 'record_13.png', baseName: '13.ogg' },
+                    { value: 'record_5.png', baseName: '5.ogg' },
+                    { value: 'record_blocks.png', baseName: 'blocks.ogg' },
+                    { value: 'record_cat.png', baseName: 'cat.ogg' },
+                    { value: 'music_disc_creator.png', baseName: 'creator.ogg' },
+                    { value: 'music_disc_creator_music_box.png', baseName: 'creator_music_box.ogg' },
+                    { value: 'record_mall.png', baseName: 'mall.ogg' },
+                    { value: 'record_mellohi.png', baseName: 'mellohi.ogg' },
+                    { value: 'record_otherside.png', baseName: 'otherside.ogg' },
+                    { value: 'record_pigstep.png', baseName: 'pigstep_master.ogg' },
+                    { value: 'music_disc_precipice.png', baseName: 'precipice.ogg' },
+                    { value: 'music_disc_relic.png', baseName: 'relic.ogg' },
+                    { value: 'record_stal.png', baseName: 'stal.ogg' },
+                    { value: 'record_strad.png', baseName: 'strad.ogg' },
+                    { value: 'record_wait.png', baseName: 'wait.ogg' },
+                    { value: 'record_ward.png', baseName: 'ward.ogg' },
+                    { value: 'record_chirp.png', baseName: 'chirp.ogg' },
+                    { value: 'record_far.png', baseName: 'far.ogg' },
+                    { value: 'record_tears.png', baseName: 'tears.ogg' },
+                    { value: 'record_lava_chicken.png', baseName: 'lava_chicken.ogg' }
                 ];
                 
                 imageTargets.forEach(target => {
                     const option = document.createElement('option');
                     option.value = target.value;
-                    option.textContent = target.text;
+                    option.textContent = `${target.baseName} ${i18n.t('batch_upload.item_image', '物品展示图')}`;
                     select.appendChild(option);
                 });
                 
@@ -2209,22 +2254,52 @@ function initBatchUploadFeature() {
                 
                 // 确定按钮
                 const confirmBtn = document.createElement('button');
-                confirmBtn.textContent = i18n.t('batch_upload.confirm', '确定');
+                confirmBtn.textContent = i18n.t('modal.confirm', '确定');
                 confirmBtn.className = 'btn';
                 confirmBtn.style.padding = '5px 10px';
                 confirmBtn.style.fontSize = '12px';
+                confirmBtn.style.margin = '5px';
                 
                 confirmBtn.addEventListener('click', function() {
                     const targetName = select.value;
                     if (targetName !== 'none') {
                         // 处理图片文件
-                        handleBatchImageFile(file, targetName);
-                        // 从列表中移除文件项
-                        fileItem.remove();
+                        handleBatchImageFile(file, targetName, function(success) {
+                            // 只有操作成功时才从列表中移除文件项
+                            if (success) {
+                                fileItem.remove();
+                            }
+                        });
                     }
                 });
                 
+                // 删除按钮
+                const deleteBtn = document.createElement('button');
+                deleteBtn.textContent = i18n.t('upload.delete', '删除');
+                deleteBtn.className = 'btn delete-btn';
+                deleteBtn.style.padding = '5px 10px';
+                deleteBtn.style.fontSize = '12px';
+                deleteBtn.style.backgroundColor = '#f44336';
+                deleteBtn.style.color = 'white';
+                deleteBtn.style.margin = '5px';
+                
+                deleteBtn.addEventListener('click', function() {
+                    // 显示确认弹窗
+                    showConfirmModal(
+                        i18n.t('modal.confirm', '确认'),
+                        i18n.t('modal.delete_confirm', '确定要删除这个文件吗？'),
+                        function() {
+                            // 确认删除
+                            fileItem.remove();
+                        },
+                        function() {
+                            // 取消删除
+                        }
+                    );
+                });
+                
                 fileItem.appendChild(confirmBtn);
+                fileItem.appendChild(deleteBtn);
                 batchImageList.appendChild(fileItem);
             }
         });
@@ -2237,34 +2312,87 @@ function initBatchUploadFeature() {
     if (batchAudioFile && batchAudioList) {
         batchAudioFile.addEventListener('change', function() {
             const files = this.files;
-            batchAudioList.innerHTML = '';
             
             for (let i = 0; i < files.length; i++) {
                 const file = files[i];
                 const fileItem = document.createElement('div');
                 fileItem.style.display = 'flex';
                 fileItem.style.alignItems = 'center';
+                fileItem.style.flexWrap = 'wrap';
                 fileItem.style.marginBottom = '10px';
                 fileItem.style.padding = '10px';
                 fileItem.style.backgroundColor = '#f0f0f0';
                 fileItem.style.borderRadius = '4px';
+                
+                // 创建内容容器（包含图标和文件名）
+                const contentContainer = document.createElement('div');
+                contentContainer.style.display = 'flex';
+                contentContainer.style.alignItems = 'center';
+                contentContainer.style.flex = '1';
+                contentContainer.style.minWidth = '200px';
+                contentContainer.style.marginRight = '10px';
+                contentContainer.style.marginBottom = '5px';
+                fileItem.appendChild(contentContainer);
                 
                 // 音频图标
                 const audioIcon = document.createElement('div');
                 audioIcon.textContent = '🎵';
                 audioIcon.style.fontSize = '24px';
                 audioIcon.style.marginRight = '10px';
-                fileItem.appendChild(audioIcon);
+                contentContainer.appendChild(audioIcon);
+                
+                // 文件名容器
+                const fileNameContainer = document.createElement('div');
+                fileNameContainer.style.display = 'flex';
+                fileNameContainer.style.alignItems = 'center';
+                fileNameContainer.style.flex = '1';
                 
                 // 文件名
                 const fileName = document.createElement('span');
                 fileName.textContent = file.name;
-                fileName.style.flex = '1';
-                fileItem.appendChild(fileName);
+                fileName.style.whiteSpace = 'nowrap';
+                fileName.style.overflow = 'hidden';
+                fileName.style.textOverflow = 'ellipsis';
+                fileName.style.maxWidth = '150px';
+                fileNameContainer.appendChild(fileName);
+                
+                // 显示音频时长检测中
+                const durationInfo = document.createElement('span');
+                durationInfo.textContent = ` (${i18n.t('batch_upload.detecting_duration', '检测时长中...')})`;
+                durationInfo.style.fontSize = '12px';
+                durationInfo.style.color = '#666';
+                durationInfo.style.marginLeft = '5px';
+                fileNameContainer.appendChild(durationInfo);
+                
+                contentContainer.appendChild(fileNameContainer);
+                
+                // 检测音频时长
+                getAudioDuration(file).then(duration => {
+                    // 移除检测中提示
+                    durationInfo.remove();
+                    // 添加时长信息
+                    const formattedDuration = formatDuration(Math.floor(duration));
+                    const durationSpan = document.createElement('span');
+                    durationSpan.textContent = ` (${formattedDuration})`;
+                    durationSpan.style.fontSize = '12px';
+                    durationSpan.style.color = '#666';
+                    durationSpan.style.marginLeft = '5px';
+                    fileNameContainer.appendChild(durationSpan);
+                }).catch(error => {
+                    // 移除检测中提示
+                    durationInfo.remove();
+                    // 添加错误信息
+                    const errorSpan = document.createElement('span');
+                    errorSpan.textContent = ' (无法检测时长)';
+                    errorSpan.style.fontSize = '12px';
+                    errorSpan.style.color = '#f44336';
+                    errorSpan.style.marginLeft = '5px';
+                    fileNameContainer.appendChild(errorSpan);
+                });
                 
                 // 下拉选择栏
                 const select = document.createElement('select');
-                select.style.margin = '0 10px';
+                select.style.margin = '5px';
                 select.style.padding = '5px';
                 
                 // 添加选项
@@ -2275,33 +2403,40 @@ function initBatchUploadFeature() {
                 
                 // 添加音频目标文件名选项
                 const audioTargets = [
-                    { value: '11.ogg', text: '11.ogg' },
-                    { value: '13.ogg', text: '13.ogg' },
-                    { value: '5.ogg', text: '5.ogg' },
-                    { value: 'blocks.ogg', text: 'blocks.ogg' },
-                    { value: 'cat.ogg', text: 'cat.ogg' },
-                    { value: 'creator.ogg', text: 'creator.ogg' },
-                    { value: 'creator_music_box.ogg', text: 'creator_music_box.ogg' },
-                    { value: 'mall.ogg', text: 'mall.ogg' },
-                    { value: 'mellohi.ogg', text: 'mellohi.ogg' },
-                    { value: 'otherside.ogg', text: 'otherside.ogg' },
-                    { value: 'pigstep_master.ogg', text: 'pigstep_master.ogg' },
-                    { value: 'precipice.ogg', text: 'precipice.ogg' },
-                    { value: 'relic.ogg', text: 'relic.ogg' },
-                    { value: 'stal.ogg', text: 'stal.ogg' },
-                    { value: 'strad.ogg', text: 'strad.ogg' },
-                    { value: 'wait.ogg', text: 'wait.ogg' },
-                    { value: 'ward.ogg', text: 'ward.ogg' },
-                    { value: 'chirp.ogg', text: 'chirp.ogg' },
-                    { value: 'far.ogg', text: 'far.ogg' },
-                    { value: 'tears.ogg', text: 'tears.ogg' },
-                    { value: 'lava_chicken.ogg', text: 'lava_chicken.ogg' }
+                    { value: '11.ogg', inputId: 'oggFile_11' },
+                    { value: '13.ogg', inputId: 'oggFile_13' },
+                    { value: '5.ogg', inputId: 'oggFile_5' },
+                    { value: 'blocks.ogg', inputId: 'oggFile_blocks' },
+                    { value: 'cat.ogg', inputId: 'oggFile_cat' },
+                    { value: 'creator.ogg', inputId: 'oggFile_creator' },
+                    { value: 'creator_music_box.ogg', inputId: 'oggFile_creator_music_box' },
+                    { value: 'mall.ogg', inputId: 'oggFile_mall' },
+                    { value: 'mellohi.ogg', inputId: 'oggFile_mellohi' },
+                    { value: 'otherside.ogg', inputId: 'oggFile_otherside' },
+                    { value: 'pigstep_master.ogg', inputId: 'oggFile_pigstep_master' },
+                    { value: 'precipice.ogg', inputId: 'oggFile_precipice' },
+                    { value: 'relic.ogg', inputId: 'oggFile_relic' },
+                    { value: 'stal.ogg', inputId: 'oggFile_stal' },
+                    { value: 'strad.ogg', inputId: 'oggFile_strad' },
+                    { value: 'wait.ogg', inputId: 'oggFile_wait' },
+                    { value: 'ward.ogg', inputId: 'oggFile_ward' },
+                    { value: 'chirp.ogg', inputId: 'oggFile_chirp' },
+                    { value: 'far.ogg', inputId: 'oggFile_far' },
+                    { value: 'tears.ogg', inputId: 'oggFile_tears' },
+                    { value: 'lava_chicken.ogg', inputId: 'oggFile_lava_chicken' }
                 ];
                 
                 audioTargets.forEach(target => {
                     const option = document.createElement('option');
                     option.value = target.value;
-                    option.textContent = target.text;
+                    // 获取时长限制
+                    const limit = audioDurationLimits[target.inputId];
+                    if (limit) {
+                        const formattedDuration = formatDuration(limit);
+                        option.textContent = `${target.value} (${i18n.t('batch_upload.max_duration', '最多')}${formattedDuration})`;
+                    } else {
+                        option.textContent = target.value;
+                    }
                     select.appendChild(option);
                 });
                 
@@ -2309,22 +2444,52 @@ function initBatchUploadFeature() {
                 
                 // 确定按钮
                 const confirmBtn = document.createElement('button');
-                confirmBtn.textContent = i18n.t('batch_upload.confirm', '确定');
+                confirmBtn.textContent = i18n.t('modal.confirm', '确定');
                 confirmBtn.className = 'btn';
                 confirmBtn.style.padding = '5px 10px';
                 confirmBtn.style.fontSize = '12px';
+                confirmBtn.style.margin = '5px';
                 
                 confirmBtn.addEventListener('click', function() {
                     const targetName = select.value;
                     if (targetName !== 'none') {
                         // 处理音频文件
-                        handleBatchAudioFile(file, targetName);
-                        // 从列表中移除文件项
-                        fileItem.remove();
+                        handleBatchAudioFile(file, targetName, function(success) {
+                            // 只有操作成功时才从列表中移除文件项
+                            if (success) {
+                                fileItem.remove();
+                            }
+                        });
                     }
                 });
                 
+                // 删除按钮
+                const deleteBtn = document.createElement('button');
+                deleteBtn.textContent = i18n.t('upload.delete', '删除');
+                deleteBtn.className = 'btn delete-btn';
+                deleteBtn.style.padding = '5px 10px';
+                deleteBtn.style.fontSize = '12px';
+                deleteBtn.style.backgroundColor = '#f44336';
+                deleteBtn.style.color = 'white';
+                deleteBtn.style.margin = '5px';
+                
+                deleteBtn.addEventListener('click', function() {
+                    // 显示确认弹窗
+                    showConfirmModal(
+                        i18n.t('modal.confirm', '确认'),
+                        i18n.t('modal.delete_confirm', '确定要删除这个文件吗？'),
+                        function() {
+                            // 确认删除
+                            fileItem.remove();
+                        },
+                        function() {
+                            // 取消删除
+                        }
+                    );
+                });
+                
                 fileItem.appendChild(confirmBtn);
+                fileItem.appendChild(deleteBtn);
                 batchAudioList.appendChild(fileItem);
             }
         });
@@ -2332,7 +2497,7 @@ function initBatchUploadFeature() {
 }
 
 // 处理批量上传的图片文件
-function handleBatchImageFile(file, targetName) {
+function handleBatchImageFile(file, targetName, callback) {
     // 找到对应的图片输入
     let imageInputId = null;
     let inputInfo = null;
@@ -2353,16 +2518,28 @@ function handleBatchImageFile(file, targetName) {
             
             if (hasExistingFile) {
                 // 显示确认弹窗
-                if (confirm(i18n.t('batch_upload.confirm_replace_image', '该位置目前已有物品展示图，确定要选择吗？'))) {
-                    // 模拟文件输入
-                    const dataTransfer = new DataTransfer();
-                    dataTransfer.items.add(file);
-                    input.files = dataTransfer.files;
-                    
-                    // 触发 change 事件
-                    const event = new Event('change');
-                    input.dispatchEvent(event);
-                }
+                showConfirmModal(
+                    i18n.t('modal.confirm', '确认'),
+                    i18n.t('batch_upload.confirm_replace_image', '该位置目前已有物品展示图，确定要选择吗？'),
+                    function() {
+                        // 模拟文件输入
+                        const dataTransfer = new DataTransfer();
+                        dataTransfer.items.add(file);
+                        input.files = dataTransfer.files;
+                        
+                        // 触发 change 事件
+                        const event = new Event('change');
+                        input.dispatchEvent(event);
+                        if (typeof callback === 'function') {
+                            callback(true); // 操作成功
+                        }
+                    },
+                    function() {
+                        if (typeof callback === 'function') {
+                            callback(false); // 用户取消操作
+                        }
+                    }
+                );
             } else {
                 // 模拟文件输入
                 const dataTransfer = new DataTransfer();
@@ -2372,13 +2549,24 @@ function handleBatchImageFile(file, targetName) {
                 // 触发 change 事件
                 const event = new Event('change');
                 input.dispatchEvent(event);
+                if (typeof callback === 'function') {
+                    callback(true); // 操作成功
+                }
             }
+        } else {
+            if (typeof callback === 'function') {
+                callback(false); // 操作失败
+            }
+        }
+    } else {
+        if (typeof callback === 'function') {
+            callback(false); // 操作失败
         }
     }
 }
 
 // 处理批量上传的音频文件
-function handleBatchAudioFile(file, targetName) {
+function handleBatchAudioFile(file, targetName, callback) {
     // 找到对应的音频输入
     let audioInputId = null;
     let inputInfo = null;
@@ -2392,14 +2580,76 @@ function handleBatchAudioFile(file, targetName) {
     
     if (audioInputId && inputInfo) {
         const input = document.getElementById(audioInputId);
-        if (input) {
-            // 检查目标位置是否已有文件
-            const btnText = document.getElementById(inputInfo.btnId);
-            const hasExistingFile = btnText && btnText.textContent !== i18n.t('upload.select_audio', '选择音频（不上传即为保持原版音乐）');
+        const btnText = document.getElementById(inputInfo.btnId);
+        const deleteBtn = input ? input.parentElement.querySelector('.delete-btn') : null;
+        const descInput = document.getElementById(`desc_${inputInfo.id.replace('oggFile_', '')}`);
+        const audioPreviewId = `audioPreview_${inputInfo.id.replace('oggFile_', '')}`;
+        const audioPreview = document.getElementById(audioPreviewId);
+        
+        // 保存当前文件信息，以便在用户取消时恢复
+        const originalBtnText = btnText.textContent;
+        const originalDescValue = descInput ? descInput.value : '';
+        const originalPreviewContent = audioPreview ? audioPreview.innerHTML : '';
+        
+        // 检查音频时长
+        getAudioDuration(file).then(duration => {
+            const limit = audioDurationLimits[audioInputId];
+            if (limit && duration > limit) {
+                const minutes = Math.floor(limit / 60);
+                const seconds = limit % 60;
+                
+                // 显示音频时长超过限制的弹窗
+                showDurationExceededModal(
+                    minutes, 
+                    seconds, 
+                    input, 
+                    audioInputId, 
+                    inputInfo, 
+                    file, 
+                    btnText, 
+                    deleteBtn, 
+                    descInput, 
+                    audioPreview,
+                    callback
+                );
+                // 不立即调用callback，因为用户可能会选择继续
+                // 而是在showDurationExceededModal中处理完成后再决定
+                return;
+            }
             
-            if (hasExistingFile) {
-                // 显示确认弹窗
-                if (confirm(i18n.t('batch_upload.confirm_replace_audio', '该位置目前已有音乐，确定要选择吗？'))) {
+            if (input) {
+                // 检查目标位置是否已有文件
+                const hasExistingFile = btnText && btnText.textContent !== i18n.t('upload.select_audio', '选择音频（不上传即为保持原版音乐）');
+                
+                if (hasExistingFile) {
+                    // 显示确认弹窗
+                    showConfirmModal(
+                        i18n.t('modal.confirm', '确认'),
+                        i18n.t('batch_upload.confirm_replace_audio', '该位置目前已有音乐，确定要选择吗？'),
+                        function() {
+                            // 模拟文件输入
+                            const dataTransfer = new DataTransfer();
+                            dataTransfer.items.add(file);
+                            input.files = dataTransfer.files;
+                            
+                            // 触发 change 事件
+                            const event = new Event('change');
+                            input.dispatchEvent(event);
+                            if (typeof callback === 'function') {
+                                callback(true); // 操作成功
+                            }
+                        },
+                        function() {
+                            // 恢复原始状态
+                            if (btnText) btnText.textContent = originalBtnText;
+                            if (descInput) descInput.value = originalDescValue;
+                            if (audioPreview) audioPreview.innerHTML = originalPreviewContent;
+                            if (typeof callback === 'function') {
+                                callback(false); // 用户取消操作
+                            }
+                        }
+                    );
+                } else {
                     // 模拟文件输入
                     const dataTransfer = new DataTransfer();
                     dataTransfer.items.add(file);
@@ -2408,17 +2658,71 @@ function handleBatchAudioFile(file, targetName) {
                     // 触发 change 事件
                     const event = new Event('change');
                     input.dispatchEvent(event);
+                    if (typeof callback === 'function') {
+                        callback(true); // 操作成功
+                    }
                 }
             } else {
-                // 模拟文件输入
-                const dataTransfer = new DataTransfer();
-                dataTransfer.items.add(file);
-                input.files = dataTransfer.files;
-                
-                // 触发 change 事件
-                const event = new Event('change');
-                input.dispatchEvent(event);
+                if (typeof callback === 'function') {
+                    callback(false); // 操作失败
+                }
             }
+        }).catch(error => {
+            // 无法检测时长，继续处理
+            if (input) {
+                // 检查目标位置是否已有文件
+                const hasExistingFile = btnText && btnText.textContent !== i18n.t('upload.select_audio', '选择音频（不上传即为保持原版音乐）');
+                
+                if (hasExistingFile) {
+                    // 显示确认弹窗
+                    showConfirmModal(
+                        i18n.t('modal.confirm', '确认'),
+                        i18n.t('batch_upload.confirm_replace_audio', '该位置目前已有音乐，确定要选择吗？'),
+                        function() {
+                            // 模拟文件输入
+                            const dataTransfer = new DataTransfer();
+                            dataTransfer.items.add(file);
+                            input.files = dataTransfer.files;
+                            
+                            // 触发 change 事件
+                            const event = new Event('change');
+                            input.dispatchEvent(event);
+                            if (typeof callback === 'function') {
+                                callback(true); // 操作成功
+                            }
+                        },
+                        function() {
+                            // 恢复原始状态
+                            if (btnText) btnText.textContent = originalBtnText;
+                            if (descInput) descInput.value = originalDescValue;
+                            if (audioPreview) audioPreview.innerHTML = originalPreviewContent;
+                            if (typeof callback === 'function') {
+                                callback(false); // 用户取消操作
+                            }
+                        }
+                    );
+                } else {
+                    // 模拟文件输入
+                    const dataTransfer = new DataTransfer();
+                    dataTransfer.items.add(file);
+                    input.files = dataTransfer.files;
+                    
+                    // 触发 change 事件
+                    const event = new Event('change');
+                    input.dispatchEvent(event);
+                    if (typeof callback === 'function') {
+                        callback(true); // 操作成功
+                    }
+                }
+            } else {
+                if (typeof callback === 'function') {
+                    callback(false); // 操作失败
+                }
+            }
+        });
+    } else {
+        if (typeof callback === 'function') {
+            callback(false); // 操作失败
         }
     }
 }
@@ -4540,6 +4844,52 @@ function openDeleteModal(target, type) {
     
     // 取消删除
     cancelBtn.onclick = function() {
+        modal.style.display = 'none';
+    };
+}
+
+// 显示确认弹窗
+function showConfirmModal(title, message, confirmCallback, cancelCallback) {
+    const modal = document.getElementById('deleteModal');
+    const confirmBtn = document.getElementById('confirmDeleteBtn');
+    const cancelBtn = document.getElementById('cancelDeleteBtn');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalContent = document.getElementById('deleteConfirmMessage');
+    const deleteNote = document.getElementById('deleteNote');
+    
+    // 确保所有必要的元素都存在
+    if (!modal || !confirmBtn || !cancelBtn || !modalTitle || !modalContent) {
+        return;
+    }
+    
+    // 设置弹窗内容
+    modalTitle.textContent = title;
+    modalContent.textContent = message;
+    
+    // 隐藏删除提示
+    if (deleteNote) {
+        deleteNote.style.display = 'none';
+    }
+    
+    // 设置按钮文本
+    confirmBtn.textContent = i18n.t('modal.confirm', '确认');
+    cancelBtn.textContent = i18n.t('modal.cancel', '取消');
+    
+    modal.style.display = 'block';
+    
+    // 确认操作
+    confirmBtn.onclick = function() {
+        if (typeof confirmCallback === 'function') {
+            confirmCallback();
+        }
+        modal.style.display = 'none';
+    };
+    
+    // 取消操作
+    cancelBtn.onclick = function() {
+        if (typeof cancelCallback === 'function') {
+            cancelCallback();
+        }
         modal.style.display = 'none';
     };
 }

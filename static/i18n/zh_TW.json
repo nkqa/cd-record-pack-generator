@@ -66,6 +66,22 @@
     "detecting_duration": "正在識別音頻時間中...",
     "duration_detection_failed": "音頻時長檢測失敗，請確保上傳的是有效的音頻文件"
   },
+  "batch_upload": {
+    "title": "批量上傳",
+    "image_title": "批量上傳物品展示圖",
+    "audio_title": "批量上傳音頻",
+    "select_images": "選擇多張圖片",
+    "select_audios": "選擇多個音頻",
+    "select_target": "選擇目標文件名",
+    "no_selection": "暫時不選",
+    "confirm": "確定",
+    "processed": "已處理",
+    "confirm_replace_audio": "該位置目前已有音樂，確定要選擇嗎？",
+    "confirm_replace_image": "該位置目前已有物品展示圖，確定要選擇嗎？",
+    "detecting_duration": "檢測時長中...",
+    "max_duration": "最多",
+    "item_image": "物品展示圖"
+  },
   "buttons": {
     "generate": "生成mcpack文件"
   },

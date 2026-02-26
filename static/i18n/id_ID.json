@@ -65,6 +65,22 @@
     "detecting_duration": "Mendeteksi durasi audio...",
     "duration_detection_failed": "Gagal mendeteksi durasi audio, pastikan Anda mengunggah file audio yang valid"
   },
+  "batch_upload": {
+    "title": "Unggah Batch",
+    "image_title": "Unggah Batch Gambar Tampilan Item",
+    "audio_title": "Unggah Batch Audio",
+    "select_images": "Pilih Beberapa Gambar",
+    "select_audios": "Pilih Beberapa Audio",
+    "select_target": "Pilih Nama File Target",
+    "no_selection": "Belum Dipilih",
+    "confirm": "Konfirmasi",
+    "processed": "Telah Diproses",
+    "confirm_replace_audio": "Posisi ini sudah memiliki musik, apakah Anda yakin ingin memilih？",
+    "confirm_replace_image": "Posisi ini sudah memiliki gambar tampilan item, apakah Anda yakin ingin memilih？",
+    "detecting_duration": "Mendeteksi durasi...",
+    "max_duration": "maks",
+    "item_image": "Gambar Tampilan Item"
+  },
   "buttons": {
     "generate": "Hasilkan file mcpack"
   },

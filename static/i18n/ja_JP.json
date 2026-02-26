@@ -66,6 +66,22 @@
     "detecting_duration": "オーディオ再生時間を検出中...",
     "duration_detection_failed": "オーディオ再生時間の検出に失敗しました。有効なオーディオファイルをアップロードしていることを確認してください"
   },
+  "batch_upload": {
+    "title": "一括アップロード",
+    "image_title": "アイテム表示画像の一括アップロード",
+    "audio_title": "オーディオの一括アップロード",
+    "select_images": "複数の画像を選択",
+    "select_audios": "複数のオーディオを選択",
+    "select_target": "ターゲットファイル名を選択",
+    "no_selection": "まだ選択されていません",
+    "confirm": "確認",
+    "processed": "処理済み",
+    "confirm_replace_audio": "この位置にはすでに音楽があります、選択してもよろしいですか？",
+    "confirm_replace_image": "この位置にはすでにアイテム表示画像があります、選択してもよろしいですか？",
+    "detecting_duration": "再生時間を検出中...",
+    "max_duration": "最大",
+    "item_image": "アイテム表示画像"
+  },
   "buttons": {
     "generate": "mcpackファイルを生成"
   },
