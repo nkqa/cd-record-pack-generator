@@ -2335,25 +2335,44 @@ function initBatchUploadFeature() {
 function handleBatchImageFile(file, targetName) {
     // 找到对应的图片输入
     let imageInputId = null;
-    for (const inputInfo of imageFileInputs) {
-        if (inputInfo.targetName === targetName) {
-            imageInputId = inputInfo.id;
+    let inputInfo = null;
+    for (const info of imageFileInputs) {
+        if (info.targetName === targetName) {
+            imageInputId = info.id;
+            inputInfo = info;
             break;
         }
     }
     
-    if (imageInputId) {
-        // 模拟文件输入
+    if (imageInputId && inputInfo) {
         const input = document.getElementById(imageInputId);
         if (input) {
-            // 创建一个新的 FileList
-            const dataTransfer = new DataTransfer();
-            dataTransfer.items.add(file);
-            input.files = dataTransfer.files;
+            // 检查目标位置是否已有文件
+            const btnText = document.getElementById(inputInfo.btnId);
+            const hasExistingFile = btnText && btnText.textContent !== i18n.t('upload.item_image', '选择物品展示图（不上传即为保持原版材质）');
             
-            // 触发 change 事件
-            const event = new Event('change');
-            input.dispatchEvent(event);
+            if (hasExistingFile) {
+                // 显示确认弹窗
+                if (confirm(i18n.t('batch_upload.confirm_replace_image', '该位置目前已有物品展示图，确定要选择吗？'))) {
+                    // 模拟文件输入
+                    const dataTransfer = new DataTransfer();
+                    dataTransfer.items.add(file);
+                    input.files = dataTransfer.files;
+                    
+                    // 触发 change 事件
+                    const event = new Event('change');
+                    input.dispatchEvent(event);
+                }
+            } else {
+                // 模拟文件输入
+                const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(file);
+                input.files = dataTransfer.files;
+                
+                // 触发 change 事件
+                const event = new Event('change');
+                input.dispatchEvent(event);
+            }
         }
     }
 }
@@ -2362,25 +2381,44 @@ function handleBatchImageFile(file, targetName) {
 function handleBatchAudioFile(file, targetName) {
     // 找到对应的音频输入
     let audioInputId = null;
-    for (const inputInfo of fileInputs) {
-        if (inputInfo.targetName === targetName) {
-            audioInputId = inputInfo.id;
+    let inputInfo = null;
+    for (const info of fileInputs) {
+        if (info.targetName === targetName) {
+            audioInputId = info.id;
+            inputInfo = info;
             break;
         }
     }
     
-    if (audioInputId) {
-        // 模拟文件输入
+    if (audioInputId && inputInfo) {
         const input = document.getElementById(audioInputId);
         if (input) {
-            // 创建一个新的 FileList
-            const dataTransfer = new DataTransfer();
-            dataTransfer.items.add(file);
-            input.files = dataTransfer.files;
+            // 检查目标位置是否已有文件
+            const btnText = document.getElementById(inputInfo.btnId);
+            const hasExistingFile = btnText && btnText.textContent !== i18n.t('upload.select_audio', '选择音频（不上传即为保持原版音乐）');
             
-            // 触发 change 事件
-            const event = new Event('change');
-            input.dispatchEvent(event);
+            if (hasExistingFile) {
+                // 显示确认弹窗
+                if (confirm(i18n.t('batch_upload.confirm_replace_audio', '该位置目前已有音乐，确定要选择吗？'))) {
+                    // 模拟文件输入
+                    const dataTransfer = new DataTransfer();
+                    dataTransfer.items.add(file);
+                    input.files = dataTransfer.files;
+                    
+                    // 触发 change 事件
+                    const event = new Event('change');
+                    input.dispatchEvent(event);
+                }
+            } else {
+                // 模拟文件输入
+                const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(file);
+                input.files = dataTransfer.files;
+                
+                // 触发 change 事件
+                const event = new Event('change');
+                input.dispatchEvent(event);
+            }
         }
     }
 }

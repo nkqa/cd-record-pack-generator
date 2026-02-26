@@ -74,7 +74,9 @@
     "select_target": "选择目标文件名",
     "no_selection": "暂时不选",
     "confirm": "确定",
-    "processed": "已处理"
+    "processed": "已处理",
+    "confirm_replace_audio": "该位置目前已有音乐，确定要选择吗？",
+    "confirm_replace_image": "该位置目前已有物品展示图，确定要选择吗？"
   },
   "buttons": {
     "generate": "生成mcpack文件"
