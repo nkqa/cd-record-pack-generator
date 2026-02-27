@@ -82,6 +82,14 @@ h1 {
     box-sizing: border-box;
     transition: all 0.3s ease;
 }
+/* 资源包上传按钮特殊样式 */
+#resourcePackBtnText {
+    position: relative;
+    z-index: 3;
+}
+#resourcePackFile {
+    z-index: 1 !important;
+}
 .custom-btn:hover {
     background-color: #e9ecef;
     border-color: #adb5bd;

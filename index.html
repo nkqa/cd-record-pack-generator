@@ -78,6 +78,23 @@
             </div>
         </div>
         
+
+        <!-- 上传资源包区域 -->
+        <div class="upload-resource-pack-section" style="margin-bottom: 30px; background-color: #f9f9f9; border-radius: 8px; padding: 20px;">
+            <h3 id="resourcePackTitle">上传资源包</h3>
+            <p style="color: #666; font-size: 14px; margin-top: 5px;" id="resourcePackNote">仅适用于之前在此工具生成的资源包</p>
+            <div class="custom-file-upload" style="margin-top: 15px;">
+                <input type="file" id="resourcePackFile">
+                <div class="custom-btn" id="resourcePackBtnText">选择资源包</div>
+            </div>
+        </div>
+        <script>
+            // 更新上传资源包区域文本
+            document.getElementById('resourcePackTitle').textContent = i18n.t('upload.resource_pack_title', '上传资源包');
+            document.getElementById('resourcePackNote').textContent = i18n.t('upload.resource_pack_note', '仅适用于之前在此工具生成的资源包');
+            document.getElementById('resourcePackBtnText').textContent = i18n.t('upload.select_resource_pack', '选择资源包');
+        </script>
+        
         <!-- 批量上传区域 -->
         <div class="batch-upload-section" style="margin-bottom: 30px; background-color: #f9f9f9; border-radius: 8px;">
             <button class="info-toggle" onclick="toggleBatchUpload()" style="width: 100%; text-align: left; padding: 10px 20px; border: none; background: none; font-size: 18px; font-weight: bold; cursor: pointer;">

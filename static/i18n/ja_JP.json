@@ -64,7 +64,12 @@
     "use_first_item_image_as_icon": "最初にアップロードしたアイテム表示画像を音楽パックアイコンとして使用する",
     "processing": "処理中",
     "detecting_duration": "オーディオ再生時間を検出中...",
-    "duration_detection_failed": "オーディオ再生時間の検出に失敗しました。有効なオーディオファイルをアップロードしていることを確認してください"
+    "duration_detection_failed": "オーディオ再生時間の検出に失敗しました。有効なオーディオファイルをアップロードしていることを確認してください",
+    "resource_pack_title": "リソースパックをアップロード",
+    "select_resource_pack": "リソースパックを選択",
+    "resource_pack_note": "このツールで以前生成されたリソースパックのみ対応",
+    "confirm_upload": "アップロードを確認",
+    "confirm_upload_message": "リソースパックをアップロードすると、現在選択されている音楽とアイテム表示画像が選択解除されます。リソースパックをアップロードしてもよろしいですか？"
   },
   "batch_upload": {
     "title": "一括アップロード",
@@ -83,7 +88,7 @@
     "item_image": "アイテム表示画像"
   },
   "buttons": {
-    "generate": "mcpackファイルを生成"
+    "generate": "mcpack音楽パックを生成"
   },
   "notices": {
     "title": "注意事項",
@@ -103,6 +108,7 @@
     "ogg_format_disabled": "エラー：.ogg形式ではない",
     "png_format": "エラー：形式は.pngでなければなりません",
     "duration_exceeded": "エラー：オーディオの長さは",
+    "duration_exceeded_label": "（制限時間を超えています）",
     "no_files": "まずオーディオをアップロードしてください",
     "error": "エラー",
     "must_be_image": "選択したファイルは画像でなければなりません",
@@ -140,7 +146,12 @@
       "title": "オーディオ変換",
       "cancel": "変換をキャンセル",
       "processing": "変換中: ",
-      "to": " → "
+      "to": " → ",
+      "converting": "変換中..."
+    },
+    "resource_pack": {
+      "importing": "インポート中...",
+      "import_success": "リソースパックのインポートに成功しました！"
     },
     "crop": {
       "title": "画像を切り抜く",
@@ -213,5 +224,10 @@
       "no_audio": "まずオーディオファイルをアップロードしてください"
     },
     "copied": "コマンドがクリップボードにコピーされました！"
+  },
+  "reset": {
+    "button": "すべてのアップロードをリセット",
+    "confirm_message": "すべてのアップロードされたファイルと設定をリセットしますか？この操作は元に戻すことができません。",
+    "success": "リセットに成功しました！すべてのアップロードされたファイルと設定がデフォルト状態に復元されました。"
   }
 }

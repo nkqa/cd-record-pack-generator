@@ -433,7 +433,7 @@ const i18n = {
     // 更新生成按钮
     const packBtn = document.getElementById('packBtn');
     if (packBtn) {
-      packBtn.textContent = this.t('buttons.generate', 'Generate mcpack file');
+      packBtn.textContent = this.t('buttons.generate', 'Generate mcpack music pack');
     }
     
     // 更新注意事项
@@ -712,6 +712,21 @@ const i18n = {
       }
     }
     
+    // 更新上传资源包区域文本
+    const resourcePackTitle = document.querySelector('.upload-resource-pack-section h3');
+    const resourcePackBtnText = document.getElementById('resourcePackBtnText');
+    const resourcePackNote = document.getElementById('resourcePackNote');
+    
+    if (resourcePackTitle) {
+      resourcePackTitle.textContent = this.t('upload.resource_pack_title', '上传资源包');
+    }
+    if (resourcePackBtnText) {
+      resourcePackBtnText.textContent = this.t('upload.select_resource_pack', '选择资源包');
+    }
+    if (resourcePackNote) {
+      resourcePackNote.textContent = this.t('upload.resource_pack_note', '仅适用于之前在此工具生成的资源包');
+    }
+    
     // 更新批量上传区域文本
     const batchUploadTitle = document.getElementById('batchUploadTitle');
     const batchImageTitle = document.getElementById('batchImageTitle');
@@ -748,6 +763,57 @@ const i18n = {
     if (langSelect && langSelect.value !== this.currentLang) {
       langSelect.value = this.currentLang;
     }
+    
+    // 更新超过时长警告文本
+    const durationExceededWarnings = document.querySelectorAll('.duration-exceeded-warning');
+    durationExceededWarnings.forEach(warning => {
+      warning.textContent = this.t('errors.duration_exceeded_label', '（超过限制时长）');
+    });
+    
+    // 更新批量上传区域的下拉选择栏
+    const batchUploadSelects = document.querySelectorAll('#batchImageList select, #batchAudioList select');
+    batchUploadSelects.forEach(select => {
+      // 更新"暂时不选"选项
+      const defaultOption = select.querySelector('option[value="none"]');
+      if (defaultOption) {
+        defaultOption.textContent = this.t('batch_upload.no_selection', '暂时不选');
+      }
+      
+      // 更新图片上传的"物品展示图"选项
+      if (select.closest('#batchImageList')) {
+        const imageOptions = select.querySelectorAll('option:not([value="none"])');
+        imageOptions.forEach(option => {
+          const text = option.textContent;
+          const baseName = text.replace(/\s*物品展示图$|\s*item image$/i, '').trim();
+          option.textContent = `${baseName} ${this.t('batch_upload.item_image', '物品展示图')}`;
+        });
+      }
+      
+      // 更新音频上传的"最多"选项
+      if (select.closest('#batchAudioList')) {
+        const audioOptions = select.querySelectorAll('option:not([value="none"])');
+        audioOptions.forEach(option => {
+          const text = option.textContent;
+          const match = text.match(/^(.+?)\s*\((最多|max).*?\)$/);
+          if (match) {
+            const baseName = match[1].trim();
+            const duration = text.match(/\((最多|max)(.+?)\)/)[2].trim();
+            option.textContent = `${baseName} (${this.t('batch_upload.max_duration', '最多')}${duration})`;
+          }
+        });
+      }
+    });
+    
+    // 更新批量上传区域的确认按钮
+    const batchConfirmButtons = document.querySelectorAll('#batchImageList .btn:not(.delete-btn), #batchAudioList .btn:not(.delete-btn)');
+    batchConfirmButtons.forEach(button => {
+      // 只更新确认按钮，不更新删除按钮
+      if (!button.classList.contains('delete-btn')) {
+        button.textContent = this.t('modal.confirm', '确认');
+      }
+    });
+    
+
   }
 };
 

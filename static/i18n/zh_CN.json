@@ -63,7 +63,12 @@
     "use_first_item_image_as_icon": "使用第一个上传的物品展示图作为音乐包图标",
     "processing": "处理中",
     "detecting_duration": "正在识别音频时间中...",
-    "duration_detection_failed": "音频时长检测失败，请确保上传的是有效的音频文件"
+    "duration_detection_failed": "音频时长检测失败，请确保上传的是有效的音频文件",
+    "resource_pack_title": "上传资源包",
+    "select_resource_pack": "选择资源包",
+    "resource_pack_note": "仅适用于之前在此工具生成的资源包",
+    "confirm_upload": "确认上传",
+    "confirm_upload_message": "上传资源包后将会把目前选择的音乐和物品展示图取消选择，确定要上传资源包吗？"
   },
   "batch_upload": {
     "title": "批量上传",
@@ -82,7 +87,7 @@
     "item_image": "物品展示图"
   },
   "buttons": {
-    "generate": "生成mcpack文件"
+    "generate": "生成mcpack音乐包"
   },
   "notices": {
     "title": "注意事项",
@@ -102,6 +107,7 @@
     "ogg_format_disabled": "错误：非ogg格式",
     "png_format": "错误：格式必须为 .png",
     "duration_exceeded": "错误：音频时长不能超过",
+    "duration_exceeded_label": "（超过限制时长）",
     "no_files": "请先上传音频",
     "error": "错误",
     "must_be_image": "选择的必须是图片",
@@ -140,7 +146,12 @@
       "title": "音频转换",
       "cancel": "取消转换",
       "processing": "正在将",
-      "to": "转换成"
+      "to": "转换成",
+      "converting": "转换中..."
+    },
+    "resource_pack": {
+      "importing": "正在导入中...",
+      "import_success": "资源包导入成功！"
     },
     "crop": {
       "title": "裁剪图片",
@@ -210,5 +221,10 @@
       "no_audio": "请先上传音频文件"
     },
     "copied": "指令已复制到剪贴板！"
+  },
+  "reset": {
+    "button": "重置所有上传",
+    "confirm_message": "确定要重置所有上传的文件和设置吗？此操作不可撤销。",
+    "success": "重置成功！所有上传的文件和设置已恢复默认状态。"
   }
 }

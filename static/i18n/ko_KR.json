@@ -63,7 +63,12 @@
     "use_first_item_image_as_icon": "첫 번째 업로드한 아이템 표시 이미지를 음악 패키지 아이콘으로 사용",
     "processing": "처리 중",
     "detecting_duration": "오디오 시간 식별 중...",
-    "duration_detection_failed": "오디오 길이 감지 실패. 업로드한 파일이 유효한 오디오 파일인지 확인하세요"
+    "duration_detection_failed": "오디오 길이 감지 실패. 업로드한 파일이 유효한 오디오 파일인지 확인하세요",
+    "resource_pack_title": "리소스 팩 업로드",
+    "select_resource_pack": "리소스 팩 선택",
+    "resource_pack_note": "이 도구로 이전에 생성된 리소스 팩만 적용 가능",
+    "confirm_upload": "업로드 확인",
+    "confirm_upload_message": "리소스 팩을 업로드하면 현재 선택된 음악과 아이템 표시 이미지가 선택 해제됩니다. 리소스 팩을 업로드하시겠습니까？"
   },
   "batch_upload": {
     "title": "일괄 업로드",
@@ -82,7 +87,7 @@
     "item_image": "아이템 표시 이미지"
   },
   "buttons": {
-    "generate": "mcpack 파일 생성"
+    "generate": "mcpack 음악 팩 생성"
   },
   "notices": {
     "title": "주의 사항",
@@ -102,6 +107,7 @@
     "ogg_format_disabled": "오류：ogg가 아닌 형식",
     "png_format": "오류：형식은 .png이어야 합니다",
     "duration_exceeded": "오류：오디오 길이는 초과할 수 없습니다",
+    "duration_exceeded_label": "（제한 시간 초과）",
     "no_files": "먼저 오디오를 업로드하세요",
     "error": "오류",
     "must_be_image": "선택한 파일은 이미지여야 합니다",
@@ -139,7 +145,12 @@
       "title": "오디오 변환",
       "cancel": "변환 취소",
       "processing": "변환 중",
-      "to": "로 변환"
+      "to": "로 변환",
+      "converting": "변환 중..."
+    },
+    "resource_pack": {
+      "importing": "가져오는 중...",
+      "import_success": "리소스 팩 가져오기 성공！"
     },
     "crop": {
       "title": "이미지 자르기",
@@ -209,5 +220,10 @@
       "no_audio": "먼저 오디오를 업로드하세요"
     },
     "copied": "명령이 클립보드에 복사되었습니다！"
+  },
+  "reset": {
+    "button": "모든 업로드 초기화",
+    "confirm_message": "모든 업로드된 파일과 설정을 초기화하시겠습니까？이 작업은 취소할 수 없습니다.",
+    "success": "초기화 성공！모든 업로드된 파일과 설정이 기본 상태로 복원되었습니다."
   }
 }

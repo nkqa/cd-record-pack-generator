@@ -63,7 +63,12 @@
     "use_first_item_image_as_icon": "Gunakan gambar tampilan item pertama yang diunggah sebagai ikon paket musik",
     "processing": "Memproses",
     "detecting_duration": "Mendeteksi durasi audio...",
-    "duration_detection_failed": "Gagal mendeteksi durasi audio, pastikan Anda mengunggah file audio yang valid"
+    "duration_detection_failed": "Gagal mendeteksi durasi audio, pastikan Anda mengunggah file audio yang valid",
+    "resource_pack_title": "Unggah Paket Sumber Daya",
+    "select_resource_pack": "Pilih Paket Sumber Daya",
+    "resource_pack_note": "Hanya berlaku untuk paket sumber daya yang dihasilkan oleh alat ini sebelumnya",
+    "confirm_upload": "Konfirmasi Unggah",
+    "confirm_upload_message": "Setelah mengunggah paket sumber daya, musik dan gambar tampilan item yang saat ini dipilih akan dibatalkan. Apakah Anda yakin ingin mengunggah paket sumber daya？"
   },
   "batch_upload": {
     "title": "Unggah Batch",
@@ -82,7 +87,7 @@
     "item_image": "Gambar Tampilan Item"
   },
   "buttons": {
-    "generate": "Hasilkan file mcpack"
+    "generate": "Hasilkan paket musik mcpack"
   },
   "notices": {
     "title": "Catatan",
@@ -102,6 +107,7 @@
     "ogg_format_disabled": "Error：bukan format ogg",
     "png_format": "Error：format harus berupa .png",
     "duration_exceeded": "Error：durasi audio tidak boleh melebihi",
+    "duration_exceeded_label": "（melebihi batas durasi）",
     "no_files": "Harap unggah audio terlebih dahulu",
     "error": "Error",
     "must_be_image": "Yang dipilih harus berupa gambar",
@@ -139,7 +145,12 @@
       "title": "Konversi Audio",
       "cancel": "Batal Konversi",
       "processing": "Mengonversi",
-      "to": "ke"
+      "to": "ke",
+      "converting": "Konversi..."
+    },
+    "resource_pack": {
+      "importing": "Mengimpor...",
+      "import_success": "Paket sumber daya berhasil diimpor！"
     },
     "crop": {
       "title": "Potong Gambar",
@@ -209,5 +220,10 @@
       "no_audio": "Harap unggah file audio terlebih dahulu"
     },
     "copied": "Perintah telah disalin ke clipboard！"
+  },
+  "reset": {
+    "button": "Reset Semua Unggahan",
+    "confirm_message": "Apakah Anda yakin ingin mereset semua file dan pengaturan yang diunggah？Tindakan ini tidak dapat dibatalkan.",
+    "success": "Reset berhasil！Semua file dan pengaturan yang diunggah telah dikembalikan ke status default."
   }
 }
