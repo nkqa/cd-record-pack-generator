@@ -2155,7 +2155,7 @@ function handleResourcePackUpload(file) {
     importModal.innerHTML = `
         <div class="modal-content">
             <h3>${i18n.t('upload.resource_pack_title', '上传资源包')}</h3>
-            <p>${i18n.t('resource_pack.importing', '正在导入中...')}</p>
+            <p>${i18n.t('modal.resource_pack.importing', '正在导入中...')}</p>
         </div>
     `;
     document.body.appendChild(importModal);
@@ -2389,7 +2389,7 @@ function handleResourcePackUpload(file) {
         })
         .then(function() {
             const status = document.getElementById('status');
-            status.textContent = i18n.t('resource_pack.import_success', '资源包导入成功！');
+            status.textContent = i18n.t('modal.resource_pack.import_success', '资源包导入成功！');
             status.style.color = '#4CAF50';
             
             // 移除导入窗口
@@ -3026,8 +3026,11 @@ function handleBatchAudioFile(file, targetName, callback) {
         const originalDescValue = descInput ? descInput.value : '';
         const originalPreviewContent = audioPreview ? audioPreview.innerHTML : '';
         
-        // 检查音频时长（如果不是从资源包上传的文件）
-        if (!file.fromResourcePack) {
+        // 检查音频时长（如果时长检查开关开启且不是从资源包上传的文件）
+        const durationCheckToggle = document.getElementById('durationCheckToggle');
+        const isDurationCheckEnabled = durationCheckToggle ? durationCheckToggle.checked : true; // 默认开启
+        
+        if (isDurationCheckEnabled && !file.fromResourcePack) {
             getAudioDuration(file).then(duration => {
                 const limit = audioDurationLimits[audioInputId];
                 if (limit && duration > limit) {
@@ -3059,7 +3062,7 @@ function handleBatchAudioFile(file, targetName, callback) {
                 processAudioFile();
             });
         } else {
-            // 从资源包上传的文件，直接处理
+            // 从资源包上传的文件或时长检查开关关闭，直接处理
             processAudioFile();
         }
         
