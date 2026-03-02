@@ -135,6 +135,7 @@
     "audio_title": "Batch Upload Audio",
     "select_images": "Select Multiple Images",
     "select_audios": "Select Multiple Audios",
+    "select_all": "One-click Select",
     "select_all_images": "One-click select all images to target locations",
     "select_all_audios": "One-click select all music to target locations",
     "select_target": "Select Target Filename",

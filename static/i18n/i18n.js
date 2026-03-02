@@ -750,10 +750,14 @@ const i18n = {
       batchAudioBtnText.textContent = this.t('batch_upload.select_audios', '选择多个音频');
     }
     
-    // 更新一键选择按钮
+    // 更新一键选择标题和按钮
+    const selectAllTitle = document.getElementById('selectAllTitle');
     const selectAllImagesBtn = document.getElementById('selectAllImagesBtn');
     const selectAllAudiosBtn = document.getElementById('selectAllAudiosBtn');
     
+    if (selectAllTitle) {
+      selectAllTitle.textContent = this.t('batch_upload.select_all', '一键选择');
+    }
     if (selectAllImagesBtn) {
       selectAllImagesBtn.textContent = this.t('batch_upload.select_all_images', '一键选择所有图片到目标位置');
     }
