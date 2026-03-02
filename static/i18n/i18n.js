@@ -750,6 +750,33 @@ const i18n = {
       batchAudioBtnText.textContent = this.t('batch_upload.select_audios', '选择多个音频');
     }
     
+    // 更新一键选择按钮
+    const selectAllImagesBtn = document.getElementById('selectAllImagesBtn');
+    const selectAllAudiosBtn = document.getElementById('selectAllAudiosBtn');
+    
+    if (selectAllImagesBtn) {
+      selectAllImagesBtn.textContent = this.t('batch_upload.select_all_images', '一键选择所有图片到目标位置');
+    }
+    if (selectAllAudiosBtn) {
+      selectAllAudiosBtn.textContent = this.t('batch_upload.select_all_audios', '一键选择所有音乐到目标位置');
+    }
+    
+    // 更新单个音乐上传和上传唱片音乐标题
+    const singleUploadTitle = document.getElementById('singleUploadTitle');
+    const discUploadTitle = document.getElementById('discUploadTitle');
+    const backgroundMusicUploadTitle = document.getElementById('backgroundMusicUploadTitle');
+    const musicPackInfoTitle = document.getElementById('musicPackInfoTitle');
+    
+    if (singleUploadTitle) {
+      singleUploadTitle.textContent = this.t('upload.single_upload', '单个音乐上传');
+    }
+    if (discUploadTitle) {
+      discUploadTitle.textContent = this.t('upload.disc_upload', '上传唱片音乐');
+    }
+    if (musicPackInfoTitle) {
+      musicPackInfoTitle.textContent = this.t('upload.music_pack_info', '音乐包信息');
+    }
+    
     // 更新语言栏标签和下拉选择框
     const langLabels = document.querySelectorAll('.language-selector span');
     langLabels.forEach(label => {
@@ -784,25 +811,55 @@ const i18n = {
         const imageOptions = select.querySelectorAll('option:not([value="none"])');
         imageOptions.forEach(option => {
           const text = option.textContent;
-          const baseName = text.replace(/\s*物品展示图$|\s*item image$/i, '').trim();
+          // 移除所有语言的"[已选择]"标记和"物品展示图"文本
+          // 保留基础文件名（如 "11.ogg"、"13.ogg" 等）
+          const baseName = text.split(' ')[0].replace(/\s*\[已选择\]$|\s*\[Selected\]$/i, '').trim();
           option.textContent = `${baseName} ${this.t('batch_upload.item_image', '物品展示图')}`;
         });
       }
       
-      // 更新音频上传的"最多"选项
+      // 更新音频上传的选项
       if (select.closest('#batchAudioList')) {
-        const audioOptions = select.querySelectorAll('option:not([value="none"])');
+        // 更新"唱片音乐"禁用选项
+        const discMusicOption = select.querySelector('option[value="disc_music"]');
+        if (discMusicOption) {
+          discMusicOption.textContent = this.t('upload.disc_upload', '唱片音乐');
+        }
+        
+        // 更新音频选项（唱片音乐）
+        const audioOptions = select.querySelectorAll('option:not([value="none"]):not([value="disc_music"])');
         audioOptions.forEach(option => {
           const text = option.textContent;
-          const match = text.match(/^(.+?)\s*\((最多|max).*?\)$/);
-          if (match) {
-            const baseName = match[1].trim();
-            const duration = text.match(/\((最多|max)(.+?)\)/)[2].trim();
-            option.textContent = `${baseName} (${this.t('batch_upload.max_duration', '最多')}${duration})`;
-          }
+          
+          // 移除所有语言的"[已选择]"标记
+          let cleanText = text.replace(/\s*\[已选择\]$|\s*\[Selected\]$/i, '').trim();
+          
+          // 检查是否是唱片音乐选项（包含时长限制）
+            const match = cleanText.match(/^(.+?)\s*\((最多|max).*?\)$/);
+            if (match) {
+              const baseName = match[1].trim();
+              const duration = cleanText.match(/\((最多|max)(.+?)\)/)[2].trim();
+              option.textContent = `${baseName} (${this.t('batch_upload.max_duration', '最多')}${duration})`;
+            } else if (option.getAttribute('data-input-id')) {
+              // 检查是否是唱片音乐选项（使用data-input-id属性）
+              const inputId = option.getAttribute('data-input-id');
+              const limit = window.audioDurationLimits ? window.audioDurationLimits[inputId] : null;
+              if (limit) {
+                const baseName = option.value;
+                const formattedDuration = window.formatDuration ? window.formatDuration(limit) : `${Math.floor(limit / 60)}:${(limit % 60).toString().padStart(2, '0')}`;
+                option.textContent = `${baseName} (${this.t('batch_upload.max_duration', '最多')}${formattedDuration})`;
+              }
+            }
+          
+
         });
       }
     });
+    
+    // 语言切换后，更新批量上传选项的"[已选择]"标记
+    if (window.updateBatchUploadOptions) {
+      window.updateBatchUploadOptions();
+    }
     
     // 更新批量上传区域的确认按钮
     const batchConfirmButtons = document.querySelectorAll('#batchImageList .btn:not(.delete-btn), #batchAudioList .btn:not(.delete-btn)');
@@ -812,7 +869,6 @@ const i18n = {
         button.textContent = this.t('modal.confirm', '确认');
       }
     });
-    
 
   }
 };

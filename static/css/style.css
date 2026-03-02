@@ -58,8 +58,51 @@ h1 {
 /* 自定义文件上传按钮样式 */
 .custom-file-upload {
     position: relative;
+    display: flex;
+    align-items: center;
     flex: 1;
     min-width: 0;
+}
+
+/* 背景音乐上传区域的文件选择按钮样式 */
+#backgroundMusicInputsContainer .custom-file-upload {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex: 1;
+    min-width: 0;
+}
+
+#backgroundMusicInputsContainer .custom-file-upload input[type="file"] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 2;
+}
+
+/* 背景音乐上传区域的自定义按钮样式 */
+#backgroundMusicInputsContainer .custom-btn {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f8f9fa;
+    color: #333;
+    cursor: pointer;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+    text-align: center;
+    word-wrap: break-word;
+    white-space: normal;
+}
+
+#backgroundMusicInputsContainer .custom-btn:hover {
+    background-color: #e9ecef;
+    border-color: #adb5bd;
 }
 .custom-file-upload input[type="file"] {
     position: absolute;

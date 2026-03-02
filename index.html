@@ -7,6 +7,14 @@
     <meta name="keywords" content="Minecraft,我的世界,基岩版,Bedrock,音乐,唱片,替换,工具,mcpack,资源包,音乐包">
     <link rel="icon" href="./favicon.ico" type="image/x-icon">
     <title>我的世界音乐唱片替换工具（基岩版）</title>
+    <script>
+        // 页面加载时更新meta标签内容
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelector('meta[name="description"]').setAttribute('content', i18n.t('meta.description', '我的世界基岩版音乐唱片替换工具，支持上传ogg格式音频和PNG格式图片，生成mcpack资源包'));
+            document.querySelector('meta[name="keywords"]').setAttribute('content', i18n.t('meta.keywords', 'Minecraft,我的世界,基岩版,Bedrock,音乐,唱片,替换,工具,mcpack,资源包,音乐包'));
+            document.querySelector('title').textContent = i18n.t('title', '我的世界音乐唱片替换工具（基岩版）');
+        });
+    </script>
     <script src="./static/jszip/jszip.min.js"></script>
     <script src="./static/jszip/FileSaver.min.js"></script>
     <script src="./static/i18n/i18n.js"></script>
@@ -34,7 +42,12 @@
             <div id="loadingBar" style="width: 0%; height: 100%; background-color: #4CAF50; transition: width 0.3s ease;"></div>
         </div>
         <div style="margin-top: 20px; font-size: 16px; color: #333;">Loading...</div>
-        <div id="ffmpegLoading" style="margin-top: 10px; font-size: 14px; color: #666; display: none;">正在加载FFmpeg库...</div>
+        <div id="ffmpegLoading" style="margin-top: 10px; font-size: 14px; color: #666; display: none;"></div>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                document.getElementById('ffmpegLoading').textContent = i18n.t('ffmpeg.loading_library', '正在加载FFmpeg库...');
+            });
+        </script>
         <div style="width: 300px; height: 2px; background-color: #f0f0f0; border-radius: 1px; overflow: hidden; margin-top: 5px; display: none;">
             <div id="ffmpegLoadingBar" style="width: 0%; height: 100%; background-color: #2196F3; transition: width 0.1s ease;"></div>
         </div>
@@ -55,7 +68,12 @@
         <!-- 介绍部分 -->
         <div class="info-section">
             <button class="info-toggle" onclick="toggleInfo()">
-                <span class="toggle-icon">▼</span> 信息
+                <span class="toggle-icon">▼</span> <span id="infoTitle">信息</span>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        document.getElementById('infoTitle').textContent = i18n.t('info.info', '信息');
+                    });
+                </script>
             </button>
             <div class="info-content" style="display: none;">
                 <p>开发者：<a href="https://meowco.cn" target="_blank">Meowco</a></p>
@@ -99,6 +117,11 @@
         <div class="batch-upload-section" style="margin-bottom: 30px; background-color: #f9f9f9; border-radius: 8px;">
             <button class="info-toggle" onclick="toggleBatchUpload()" style="width: 100%; text-align: left; padding: 10px 20px; border: none; background: none; font-size: 18px; font-weight: bold; cursor: pointer;">
                 <span class="toggle-icon" id="batchUploadToggleIcon">▼</span> <span id="batchUploadTitle">批量上传</span>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        document.getElementById('batchUploadTitle').textContent = i18n.t('batch_upload.title', '批量上传');
+                    });
+                </script>
             </button>
             <div id="batchUploadContent" style="padding: 0 20px 20px 20px; display: none;">
                 <!-- 批量上传物品展示图 -->
@@ -120,14 +143,43 @@
                     </div>
                     <div id="batchAudioList" style="margin-top: 15px;"></div>
                 </div>
+                
+                <!-- 一键选择按钮 -->
+                <div class="batch-upload-buttons" style="margin: 20px 0; padding: 15px; background-color: #f0f0f0; border-radius: 8px;">
+                    <h4 style="margin-bottom: 10px; font-size: 16px;"><span id="selectAllTitle">一键选择</span></h4>
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            document.getElementById('selectAllTitle').textContent = i18n.t('batch_upload.select_all', '一键选择');
+                        });
+                    </script>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <button id="selectAllImagesBtn" class="btn" style="padding: 8px 16px; font-size: 14px;">一键选择所有图片到目标位置</button>
+                        <button id="selectAllAudiosBtn" class="btn" style="padding: 8px 16px; font-size: 14px;">一键选择所有音乐到目标位置</button>
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                                document.getElementById('selectAllImagesBtn').textContent = i18n.t('batch_upload.select_all_images', '一键选择所有图片到目标位置');
+                                document.getElementById('selectAllAudiosBtn').textContent = i18n.t('batch_upload.select_all_audios', '一键选择所有音乐到目标位置');
+                            });
+                        </script>
+                    </div>
+                </div>
             </div>
         </div>
 
+        <!-- 单个音乐上传 -->
+        <div style="margin-bottom: 30px;">
+            <h2 id="singleUploadTitle" style="font-size: 18px; font-weight: bold; margin-bottom: 10px;">单个音乐上传</h2>
+        </div>
         
-        <div class="upload-section">
-            <h2>上传音乐文件</h2>
+        <div class="upload-section" style="margin-bottom: 30px; background-color: #f9f9f9; border-radius: 8px;">
+            <button class="info-toggle" onclick="toggleFileInputs()" style="width: 100%; text-align: left; padding: 10px 20px; border: none; background: none; font-size: 18px; font-weight: bold; cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
+                <span id="discUploadTitle">上传唱片音乐</span>
+                <span class="toggle-icon" id="toggleIcon">▼</span>
+            </button>
             
-            <div class="file-input">
+            <div id="fileInputsContainer" style="padding: 0 20px 20px 20px; display: none;">
+                <div style="margin-top: 20px;">
+                <div class="file-input">
                 <label>11.ogg</label>
                 <!-- 图片上传区域 -->
                 <div class="image-upload-section">
@@ -651,7 +703,13 @@
                 <div class="duration-warning">此名字的乐曲对应时长不能超过 2:15</div>
                 <input type="text" id="desc_lava_chicken" placeholder="自定义描述（默认自动填入文件名）" style="margin-top: 5px;">
             </div>
-            
+                </div>
+        </div>
+        
+
+
+        <div style="margin-top: 60px; padding: 20px; border: 1px solid #ddd; border-radius: 5px; background-color: white;">
+            <h2 id="musicPackInfoTitle" style="font-size: 18px; font-weight: bold; margin-bottom: 20px;">音乐包信息</h2>
             <div class="file-input">
                 <label>音乐包图标</label>
                 <div class="custom-file-upload">
@@ -708,13 +766,13 @@
                 </div>
             </div>
             <div class="audio-processing-option" style="margin-left: 20px;">
-                <input type="number" id="imageSizeInput" value="32" min="1" max="1024" style="width: 100px; margin-left: 10px;">
+                <input type="number" id="imageSizeInput" value="32" min="1" max="1024" style="width: 100px; padding: 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; margin-left: 10px;">
                 <span style="margin-left: 5px;">像素</span>
             </div>
-        </div>
-        
-        <div style="display: flex; justify-content: flex-end; margin-top: 20px;">
-            <button class="btn" id="packBtn">生成mcpack文件</button>
+            
+            <div style="display: flex; justify-content: flex-end; margin-top: 20px;">
+                <button class="btn" id="packBtn">生成mcpack文件</button>
+            </div>
         </div>
         
         <div class="status" id="status"></div>

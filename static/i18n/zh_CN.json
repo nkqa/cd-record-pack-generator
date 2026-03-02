@@ -1,10 +1,15 @@
 {
   "title": "我的世界音乐唱片替换工具（基岩版）",
+  "meta": {
+    "description": "我的世界基岩版音乐唱片替换工具，支持上传ogg格式音频和PNG格式图片，生成mcpack资源包",
+    "keywords": "Minecraft,我的世界,基岩版,Bedrock,音乐,唱片,替换,工具,mcpack,资源包,音乐包"
+  },
   "header": {
     "title": "我的世界音乐唱片替换工具（基岩版）"
   },
   "info": {
     "toggle": "介绍信息",
+    "info": "信息",
     "developer": "开发者：",
     "community": "社区：",
     "source_code": "源代码：",
@@ -36,6 +41,9 @@
   },
   "upload": {
     "title": "上传音乐文件",
+    "single_upload": "单个音乐上传",
+    "disc_upload": "上传唱片音乐",
+    "music_pack_info": "音乐包信息",
     "select_audio": "选择音频（不上传即为保持原版音乐）",
     "duration_warning": "此名字的乐曲对应时长不能超过",
     "custom_desc": "自定义描述（默认自动填入文件名）",
@@ -76,15 +84,26 @@
     "audio_title": "批量上传音频",
     "select_images": "选择多张图片",
     "select_audios": "选择多个音频",
+    "select_all_images": "一键选择所有图片到目标位置",
+    "select_all_audios": "一键选择所有音乐到目标位置",
+    "select_all": "一键选择",
     "select_target": "选择目标文件名",
     "no_selection": "暂时不选",
+    "no_selection_error": "您还没有选择目标音乐或物品展示图",
+    "no_files_uploaded": "您需要先上传音乐或图片",
     "confirm": "确定",
     "processed": "已处理",
     "confirm_replace_audio": "该位置目前已有音乐，确定要选择吗？",
     "confirm_replace_image": "该位置目前已有物品展示图，确定要选择吗？",
     "detecting_duration": "检测时长中...",
     "max_duration": "最多",
-    "item_image": "物品展示图"
+    "item_image": "物品展示图",
+    "selected": "[已选择]",
+    "select_all_success": "选择操作已完成",
+    "duration_exceeded_confirm": "有音乐超过了限制时长，确定要继续吗？",
+    "select_normal": "仅选择不超过时长",
+    "select_all": "选择所有",
+    "no_normal_files": "没有不超过时长的文件"
   },
   "buttons": {
     "generate": "生成mcpack音乐包"
@@ -119,7 +138,8 @@
     "image_processing_failed": "图片处理失败，请重试",
     "image_format_not_supported": "图片格式不支持",
     "please_upload_image": "请上传图片文件",
-    "audio_conversion_cannot_disable": "音频格式转换功能不能关闭"
+    "audio_conversion_cannot_disable": "音频格式转换功能不能关闭",
+    "browser_not_support_media_recorder": "浏览器不支持音频转换"
   },
   "modal": {
     "confirm_delete": "确认删除",
@@ -171,6 +191,7 @@
     "loading": "FFmpeg加载中...",
     "checking_status": "FFmpeg状态检查中...",
     "loading_text": "加载中...",
+    "loading_library": "正在加载FFmpeg库...",
     "required_note": "转换音频格式必须的东西，如果不下载将无法转换音频格式",
     "first_load_note": "首次加载较慢，需要耐心等待",
     "auto_select_countdown": "{seconds} 秒后，将自动选择最快的源",
