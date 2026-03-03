@@ -103,7 +103,12 @@
     "duration_exceeded_confirm": "有音乐超过了限制时长，确定要继续吗？",
     "select_normal": "仅选择不超过时长",
     "select_all": "选择所有",
-    "no_normal_files": "没有不超过时长的文件"
+    "no_normal_files": "没有不超过时长的文件",
+    "confirm_replace_audio_plural": "有 {{count}} 个音乐 目标已有选择，确定覆盖吗？",
+    "confirm_replace_image_plural": "有 {{count}} 个图片 目标已有选择，确定覆盖吗？",
+    "duration_exceeded_confirm_plural": "有 {{count}} 首音乐超过了时间限制，确定要选择吗？",
+    "process_normal_duration": "仅处理合理时长",
+    "success": "成功"
   },
   "buttons": {
     "generate": "生成mcpack音乐包"

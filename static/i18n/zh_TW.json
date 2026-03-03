@@ -151,7 +151,12 @@
     "item_image": "物品展示圖",
     "selected": "[已選擇]",
     "select_all_success": "選擇操作已完成",
-    "duration_exceeded_confirm": "有音樂超過了限制時長，確定要繼續嗎？"
+    "duration_exceeded_confirm": "有音樂超過了限制時長，確定要繼續嗎？",
+    "confirm_replace_audio_plural": "有 {{count}} 個音樂 目標已有選擇，確定覆蓋嗎？",
+    "confirm_replace_image_plural": "有 {{count}} 個圖片 目標已有選擇，確定覆蓋嗎？",
+    "duration_exceeded_confirm_plural": "有 {{count}} 首音樂超過了時間限制，確定要選擇嗎？",
+    "process_normal_duration": "僅處理合理時長",
+    "success": "成功"
   },
   "buttons": {
     "generate": "生成mcpack音樂包"

@@ -154,7 +154,12 @@
     "duration_exceeded_confirm": "Some music exceeds the duration limit, do you want to continue?",
     "select_normal": "Only select those within duration",
     "select_all": "Select all",
-    "no_normal_files": "No files within duration limit"
+    "no_normal_files": "No files within duration limit",
+    "confirm_replace_audio_plural": "There are {{count}} music files with existing selections, do you want to overwrite them?",
+    "confirm_replace_image_plural": "There are {{count}} images with existing selections, do you want to overwrite them?",
+    "duration_exceeded_confirm_plural": "There are {{count}} music files exceeding the time limit, do you want to select them?",
+    "process_normal_duration": "Only process files with reasonable duration",
+    "success": "Success"
   },
   "buttons": {
     "generate": "Generate mcpack music pack"

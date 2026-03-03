@@ -150,7 +150,12 @@
     "item_image": "아이템 표시 이미지",
     "selected": "[선택됨]",
     "select_all_success": "선택 작업이 완료되었습니다",
-    "duration_exceeded_confirm": "일부 음악이 시간 제한을 초과했습니다. 계속하시겠습니까?"
+    "duration_exceeded_confirm": "일부 음악이 시간 제한을 초과했습니다. 계속하시겠습니까?",
+    "confirm_replace_audio_plural": "{{count}} 개의 음악에 이미 선택이 있습니다. 덮어쓰시겠습니까?",
+    "confirm_replace_image_plural": "{{count}} 개의 이미지에 이미 선택이 있습니다. 덮어쓰시겠습니까?",
+    "duration_exceeded_confirm_plural": "{{count}} 곡의 음악이 시간 제한을 초과했습니다. 선택하시겠습니까?",
+    "process_normal_duration": "적절한 길이만 처리",
+    "success": "성공"
   },
   "buttons": {
     "generate": "mcpack 음악 팩 생성"

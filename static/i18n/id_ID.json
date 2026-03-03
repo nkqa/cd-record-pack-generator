@@ -150,7 +150,12 @@
     "item_image": "Gambar Item",
     "selected": "[Dipilih]",
     "select_all_success": "Operasi pemilihan selesai",
-    "duration_exceeded_confirm": "Beberapa musik melebihi batas durasi. Apakah Anda ingin melanjutkan?"
+    "duration_exceeded_confirm": "Beberapa musik melebihi batas durasi. Apakah Anda ingin melanjutkan?",
+    "confirm_replace_audio_plural": "Ada {{count}} musik dengan pilihan yang sudah ada, apakah Anda yakin ingin menimpa?",
+    "confirm_replace_image_plural": "Ada {{count}} gambar dengan pilihan yang sudah ada, apakah Anda yakin ingin menimpa?",
+    "duration_exceeded_confirm_plural": "Ada {{count}} musik yang melebihi batas waktu, apakah Anda yakin ingin memilihnya?",
+    "process_normal_duration": "Hanya proses durasi yang wajar",
+    "success": "Sukses"
   },
   "buttons": {
     "generate": "Hasilkan paket musik mcpack"

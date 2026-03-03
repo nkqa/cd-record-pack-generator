@@ -151,7 +151,12 @@
     "item_image": "アイテム表示画像",
     "selected": "[選択済み]",
     "select_all_success": "選択操作が完了しました",
-    "duration_exceeded_confirm": "一部の音楽が時間制限を超えています。続行しますか？"
+    "duration_exceeded_confirm": "一部の音楽が時間制限を超えています。続行しますか？",
+    "confirm_replace_audio_plural": "{{count}} 曲の音楽が既に選択されています。上書きしますか？",
+    "confirm_replace_image_plural": "{{count}} 枚の画像が既に選択されています。上書きしますか？",
+    "duration_exceeded_confirm_plural": "{{count}} 曲の音楽が時間制限を超えています。選択しますか？",
+    "process_normal_duration": "適切な長さのファイルのみ処理",
+    "success": "成功"
   },
   "buttons": {
     "generate": "mcpack音楽パックを生成"
