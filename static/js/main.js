@@ -2610,7 +2610,7 @@ window.addEventListener('DOMContentLoaded', function() {
         
         if (previewElement) {
             // 检查本地是否存在对应的图片文件
-            const imagePath = `./static/img/items/${targetName}`;
+            const imagePath = `https://cdn.jsdmirror.com/gh/nkqa/cd-record-pack-generator@master/static/img/items/${targetName}`;
             
             // 创建图片元素
             const img = document.createElement('img');
