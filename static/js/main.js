@@ -773,11 +773,6 @@ let currentConversionFile = null;
 
 // 显示音频转换进度模态框
 function showConversionModal(sourceFileName, targetFileName) {
-    // 如果正在批量处理，不显示单个转换窗口
-    if (window.isBatchProcessing) {
-        return;
-    }
-    
     const conversionModal = document.getElementById('conversionModal');
     const conversionMessage = document.getElementById('conversionMessage');
     
@@ -825,38 +820,29 @@ function showConversionModal(sourceFileName, targetFileName) {
             console.log('Initializing conversion progress');
             
             // 重置进度条样式
-            progressBar.style.transition = 'none';
+            progressBar.style.transition = 'width 0.3s ease';
             progressBar.style.width = '100%'; // 容器宽度
-            progressBar.style.height = '100%'; // 容器高度
+            progressBar.style.height = '20px'; // 固定高度
             progressBar.style.position = 'relative';
             progressBar.style.overflow = 'hidden'; // 隐藏溢出部分
-            progressBar.style.backgroundColor = 'transparent'; // 透明背景
+            progressBar.style.backgroundColor = '#f0f0f0'; // 背景色
+            progressBar.style.borderRadius = '10px'; // 圆角
             
             // 清空进度条内容
             progressBar.innerHTML = '';
             
             // 创建绿条元素
             const greenBar = document.createElement('div');
-            greenBar.style.width = '20%'; // 绿条宽度
+            greenBar.style.width = '0%'; // 初始宽度
             greenBar.style.height = '100%'; // 绿条高度
             greenBar.style.backgroundColor = '#4CAF50'; // 绿色
             greenBar.style.position = 'absolute';
-            greenBar.style.left = '-20%'; // 初始位置在左侧外
+            greenBar.style.left = '0'; // 初始位置
             greenBar.style.top = '0';
-            greenBar.style.animation = 'loopProgress 2s linear infinite'; // 循环动画
+            greenBar.style.borderRadius = '10px'; // 圆角
             
             // 添加绿条到进度条容器
             progressBar.appendChild(greenBar);
-            
-            // 添加CSS动画
-            const style = document.createElement('style');
-            style.textContent = `
-                @keyframes loopProgress {
-                    0% { transform: translateX(0); }
-                    100% { transform: translateX(600%); }
-                }
-            `;
-            document.head.appendChild(style);
             
             // 初始化进度文本
             progressText.textContent = i18n.t('modal.conversion.converting', '转换中...');
@@ -900,16 +886,14 @@ function updateConversionProgress(progress) {
         if (progressBar && progressText) {
             // 处理所有进度值
             const roundedProgress = Math.round(progress);
-            // 显示"转换中..."而不是百分比
-            progressText.textContent = i18n.t('modal.conversion.converting', '转换中...');
+            // 显示进度百分比
+            progressText.textContent = `${roundedProgress}%`;
             console.log('Progress update:', roundedProgress);
             
-            // 当进度达到100%时，确保进度条显示完成
-            if (progress >= 100) {
-                // 重置过渡效果
-                progressBar.style.transition = 'width 1s ease-in-out';
-                // 直接设置到100%
-                progressBar.style.width = '100%';
+            // 更新进度条
+            const greenBar = progressBar.querySelector('div');
+            if (greenBar) {
+                greenBar.style.width = `${roundedProgress}%`;
             }
         }
     }
@@ -2862,6 +2846,9 @@ function showOverwriteConfirmModal(audioOverwriteCount, imageOverwriteCount, sel
                 document.body.removeChild(currentModal);
             }
             
+            // 设置批量覆盖确认标志
+            userConfirmedBatchOverwrite = true;
+            
             // 继续处理
             if (type === 'audio') {
                 checkDurationAndProcess(selectedItems, noneSelectedCount);
@@ -3037,6 +3024,9 @@ let userConfirmedExceededDuration = false;
 // 全局标志，标识是否正在进行批量处理
 let isBatchProcessing = false;
 
+// 全局标志，标识用户是否已经确认了批量覆盖
+let userConfirmedBatchOverwrite = false;
+
 // 处理所有文件
 function processAllFiles(selectedItems, noneSelectedCount) {
     // 跟踪成功和失败的文件数量
@@ -3060,6 +3050,7 @@ function processAllFiles(selectedItems, noneSelectedCount) {
             // 所有文件处理完成，重置全局标志
             userConfirmedExceededDuration = false;
             isBatchProcessing = false;
+            userConfirmedBatchOverwrite = false;
             
             // 隐藏进度模态框
             hideBatchProcessingModal();
@@ -3095,43 +3086,24 @@ function processAllFiles(selectedItems, noneSelectedCount) {
         if (document.contains(item)) {
             const select = item.querySelector('select');
             const confirmBtn = item.querySelector('.btn:not(.delete-btn)');
-            if (select && confirmBtn && select.value !== 'none') {
+            if (select && confirmBtn && select.value !== 'none' && item.file) {
                 // 获取当前文件名
-                const currentFile = item.file ? item.file.name : '未知文件';
+                const currentFile = item.file.name;
                 
                 // 更新进度，显示当前文件名
                 updateBatchProcessingProgress(successCount + failureCount, totalSelectedCount, currentFile);
                 
-                // 保存原始点击事件
-                const originalClick = confirmBtn.onclick;
-                
-                // 重写点击事件，添加成功计数
-                confirmBtn.onclick = function() {
-                    // 调用原始点击事件
-                    if (typeof originalClick === 'function') {
-                        // 模拟原始点击的回调函数
-                        const originalCallback = function(success) {
-                            if (success) {
-                                successCount++;
-                            } else {
-                                failureCount++;
-                            }
-                            // 处理下一个文件
-                            setTimeout(processNextItem, 100);
-                        };
-                        
-                        // 调用原始点击事件，传入自定义回调
-                        originalClick.call(this, originalCallback);
+                // 直接调用handleBatchAudioFile处理文件
+                const targetName = select.value;
+                handleBatchAudioFile(item.file, targetName, function(success) {
+                    if (success) {
+                        successCount++;
                     } else {
-                        // 如果没有原始点击事件，视为失败
                         failureCount++;
-                        // 处理下一个文件
-                        setTimeout(processNextItem, 100);
                     }
-                };
-                
-                // 触发确认按钮点击
-                confirmBtn.click();
+                    // 处理下一个文件
+                    setTimeout(processNextItem, 100);
+                });
             } else {
                 // 如果没有选择或确认按钮，视为失败
                 failureCount++;
@@ -3415,7 +3387,6 @@ function initBatchUploadFeature() {
                 contentContainer.style.minWidth = '200px';
                 contentContainer.style.marginRight = '10px';
                 contentContainer.style.marginBottom = '5px';
-                contentContainer.style.order = '0'; // 竖屏时在最上方
                 fileItem.appendChild(contentContainer);
                 
                 // 音频图标
@@ -3455,7 +3426,6 @@ function initBatchUploadFeature() {
                 audioPreview.className = 'batch-audio-preview';
                 audioPreview.style.width = '100%';
                 audioPreview.style.margin = '5px 0';
-                audioPreview.style.order = '1'; // 竖屏时在中间
                 fileItem.appendChild(audioPreview);
                 
                 // 创建音频元素
@@ -3501,7 +3471,6 @@ function initBatchUploadFeature() {
                 const select = document.createElement('select');
                 select.style.margin = '5px';
                 select.style.padding = '5px';
-                select.style.order = '2'; // 竖屏时在预览下方
                 
                 // 添加选项
                 const defaultOption = document.createElement('option');
@@ -3575,7 +3544,6 @@ function initBatchUploadFeature() {
                 confirmBtn.style.padding = '5px 10px';
                 confirmBtn.style.fontSize = '12px';
                 confirmBtn.style.margin = '5px';
-                confirmBtn.style.order = '3'; // 竖屏时在选择栏下方
                 
                 confirmBtn.addEventListener('click', (function(select, file, fileItem) {
                     return function() {
@@ -3602,7 +3570,6 @@ function initBatchUploadFeature() {
                 deleteBtn.style.backgroundColor = '#f44336';
                 deleteBtn.style.color = 'white';
                 deleteBtn.style.margin = '5px';
-                deleteBtn.style.order = '4'; // 竖屏时在最下方
                 
                 deleteBtn.addEventListener('click', function() {
                     // 显示确认弹窗
@@ -3647,7 +3614,7 @@ function handleBatchImageFile(file, targetName, callback) {
             const btnText = document.getElementById(inputInfo.btnId);
             const hasExistingFile = btnText && btnText.textContent !== i18n.t('upload.item_image', '选择物品展示图（不上传即为保持原版材质）');
             
-            if (hasExistingFile) {
+            if (hasExistingFile && !userConfirmedBatchOverwrite) {
                 // 显示确认弹窗
                 showConfirmModal(
                     i18n.t('modal.confirm', '确认'),
@@ -3734,7 +3701,7 @@ function handleBatchAudioFile(file, targetName, callback) {
         // 先检查目标位置是否已有文件
         const hasExistingFile = btnText && btnText.textContent !== i18n.t('upload.select_audio', '选择音频（不上传即为保持原版音乐）');
         
-        if (hasExistingFile) {
+        if (hasExistingFile && !userConfirmedBatchOverwrite) {
             // 显示确认替换弹窗
             showConfirmModal(
                 i18n.t('modal.confirm', '确认'),
@@ -3751,7 +3718,7 @@ function handleBatchAudioFile(file, targetName, callback) {
                 }
             );
         } else {
-            // 目标位置没有文件，直接检查时长
+            // 目标位置没有文件，或用户已确认批量覆盖，直接检查时长
             checkDurationAndProcess();
         }
         
@@ -3832,7 +3799,7 @@ function handleBatchAudioFile(file, targetName, callback) {
         function processAudioFile() {
             if (input) {
                 // 直接处理音频文件，而不是通过触发input的change事件
-                processAudioFileDirectly(file);
+                processAudioFileDirectly(file, callback);
             } else {
                 if (typeof callback === 'function') {
                     callback(false); // 操作失败
@@ -3840,7 +3807,7 @@ function handleBatchAudioFile(file, targetName, callback) {
             }
         }
         
-        async function processAudioFileDirectly(file) {
+        async function processAudioFileDirectly(file, callback) {
             try {
                 let finalFile = file;
                 let isConverted = false;
@@ -3903,7 +3870,7 @@ function handleBatchAudioFile(file, targetName, callback) {
                             // 检查浏览器是否支持MediaRecorder API
                             if (typeof MediaRecorder === 'undefined') {
                                 console.log('浏览器不支持MediaRecorder API');
-                                throw new Error(i18n.t('errors.browser_not_support_media_recorder', '浏览器不支持音频转换'));
+                                throw new Error(i18n.t('errors.browser_not_support_conversion', '浏览器不支持音频转换，将直接使用原始文件'));
                             }
                             
                             // 显示转换进度模态框
@@ -3930,38 +3897,10 @@ function handleBatchAudioFile(file, targetName, callback) {
                             // 隐藏转换进度模态框
                             hideConversionModal();
                             
+                            // 显示错误提示
                             showErrorModal(`${i18n.t('errors.error', '错误')}：${i18n.t('errors.audio_conversion_failed', '音频转换失败，请确保上传的是有效的音频文件')}`);
                             
-                            // 保持上一次成功上传的文件
-                            if (window.lastValidAudioFiles[inputInfo.id]) {
-                                const lastValidFile = window.lastValidAudioFiles[inputInfo.id];
-                                // 更新按钮文本
-                                if (btnText) {
-                                    const displayName = lastValidFile.originalName || lastValidFile.name;
-                                    if (lastValidFile.isConverted) {
-                                        btnText.textContent = `${i18n.t('upload.selected_audio', '已选择音频：')}${displayName}${i18n.t('upload.converted', '（已转换）')}`;
-                                    } else {
-                                        btnText.textContent = `${i18n.t('upload.selected_audio', '已选择音频：')}${displayName}`;
-                                    }
-                                }
-                                // 显示上一次的预览
-                                if (audioPreview && lastValidFile.preview) {
-                                    audioPreview.innerHTML = lastValidFile.preview;
-                                }
-                                // 显示删除按钮
-                                if (deleteBtn) {
-                                    deleteBtn.style.display = 'block';
-                                }
-                            } else {
-                                // 重置按钮文本
-                                if (btnText) {
-                                    btnText.textContent = i18n.t('upload.select_audio', '选择音频（不上传即为保持原版音乐）');
-                                }
-                                // 隐藏删除按钮
-                                if (deleteBtn) {
-                                    deleteBtn.style.display = 'none';
-                                }
-                            }
+                            // 操作失败，通知调用者
                             if (typeof callback === 'function') {
                                 callback(false); // 操作失败
                             }
@@ -4169,6 +4108,7 @@ async function convertAudioToOgg(file, targetName, progressCallback) {
             // 检查文件类型
             if (!file.type.startsWith('audio/')) {
                 console.error('不是音频文件:', file.type);
+                hideConversionModal();
                 reject(new Error('不是音频文件'));
                 return;
             }
@@ -4199,24 +4139,32 @@ async function convertAudioToOgg(file, targetName, progressCallback) {
                 }).catch((error) => {
                     console.error('FFmpeg转换失败:', error);
                     
-                    // 显示错误弹窗
-                    showFfmpegErrorModal();
-                    reject(new Error('FFmpeg转换失败'));
+                    // 隐藏转换模态框
+                    hideConversionModal();
+                    
+                    // 尝试使用备用方案
+                    console.log('尝试使用备用方案进行音频转换');
+                    fallbackConvertAudioToOgg(file, targetName, progressCallback).then(resolve).catch(reject);
                 });
             } else {
-                console.error('FFmpeg未加载');
+                console.error('FFmpeg未加载，尝试使用备用方案');
                 
-                // 显示错误弹窗
-                showFfmpegErrorModal();
-                reject(new Error('FFmpeg未加载'));
+                // 隐藏FFmpeg错误弹窗
+                // showFfmpegErrorModal();
+                
+                // 使用备用方案
+                fallbackConvertAudioToOgg(file, targetName, progressCallback).then(resolve).catch(reject);
             }
             
         } catch (error) {
             console.error('音频转换失败:', error);
             
-            // 显示错误弹窗
-            showFfmpegErrorModal();
-            reject(new Error('音频转换失败'));
+            // 隐藏转换模态框
+            hideConversionModal();
+            
+            // 尝试使用备用方案
+            console.log('尝试使用备用方案进行音频转换');
+            fallbackConvertAudioToOgg(file, targetName, progressCallback).then(resolve).catch(reject);
         }
     });
 }
@@ -4727,10 +4675,10 @@ fileInputs.forEach(inputInfo => {
                         deleteBtn.style.display = 'block';
                     }
                     
-                    // 保持上一次的描述
-                    if (descInput) {
-                        descInput.value = lastValidFile.description;
-                    }
+                    // 取消选择文件时，不更新描述输入框，保留用户手动修改的内容
+                    // if (descInput) {
+                    //     descInput.value = lastValidFile.description;
+                    // }
                 } else {
                     btnText.textContent = i18n.t('upload.select_audio', '选择音频（不上传即为保持原版音乐）');
                     if (deleteBtn) {
@@ -6241,6 +6189,8 @@ function showConfirmModal(title, message, confirmCallback, cancelCallback) {
     confirmBtn.textContent = i18n.t('modal.confirm', '确认');
     cancelBtn.textContent = i18n.t('modal.cancel', '取消');
     
+    // 提高z-index，确保在批量处理进度弹窗之上
+    modal.style.zIndex = '1004';
     modal.style.display = 'block';
     
     // 确认操作

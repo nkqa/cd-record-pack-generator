@@ -456,6 +456,69 @@ h1 {
     }
 }
 
+/* 批量上传音频布局 */
+.batch-audio-preview {
+    width: 100%;
+    margin: 5px 0;
+}
+
+/* 横屏布局 */
+@media (min-width: 768px) {
+    .batch-audio-list > div {
+        flex-wrap: nowrap;
+        align-items: center;
+    }
+    
+    .batch-audio-list > div > div:first-child {
+        flex: 1;
+        min-width: 200px;
+        margin-right: 10px;
+    }
+    
+    .batch-audio-list > div > .batch-audio-preview {
+        flex: 2;
+        min-width: 300px;
+        margin: 0 10px;
+    }
+    
+    .batch-audio-list > div > select {
+        margin: 0 10px;
+    }
+    
+    .batch-audio-list > div > button {
+        margin: 0 5px;
+    }
+}
+
+/* 竖屏布局 */
+@media (max-width: 767px) {
+    .batch-audio-list > div {
+        flex-wrap: wrap;
+    }
+    
+    .batch-audio-list > div > div:first-child {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    
+    .batch-audio-list > div > .batch-audio-preview {
+        width: 100%;
+        margin: 10px 0;
+        order: 1;
+    }
+    
+    .batch-audio-list > div > select {
+        width: 100%;
+        margin: 10px 0;
+        order: 2;
+    }
+    
+    .batch-audio-list > div > button {
+        margin: 5px;
+        order: 3;
+    }
+}
+
 .toggle-switch {
     position: relative;
     display: inline-block;
