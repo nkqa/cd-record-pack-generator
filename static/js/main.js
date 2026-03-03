@@ -3415,6 +3415,7 @@ function initBatchUploadFeature() {
                 contentContainer.style.minWidth = '200px';
                 contentContainer.style.marginRight = '10px';
                 contentContainer.style.marginBottom = '5px';
+                contentContainer.style.order = '0'; // 竖屏时在最上方
                 fileItem.appendChild(contentContainer);
                 
                 // 音频图标
@@ -3449,6 +3450,27 @@ function initBatchUploadFeature() {
                 
                 contentContainer.appendChild(fileNameContainer);
                 
+                // 音频预览区域
+                const audioPreview = document.createElement('div');
+                audioPreview.className = 'batch-audio-preview';
+                audioPreview.style.width = '100%';
+                audioPreview.style.margin = '5px 0';
+                audioPreview.style.order = '1'; // 竖屏时在中间
+                fileItem.appendChild(audioPreview);
+                
+                // 创建音频元素
+                const audio = document.createElement('audio');
+                audio.controls = true;
+                audio.style.width = '100%';
+                audio.style.marginTop = '5px';
+                
+                // 创建音频URL
+                const audioUrl = URL.createObjectURL(file);
+                audio.src = audioUrl;
+                
+                // 添加到预览区域
+                audioPreview.appendChild(audio);
+                
                 // 检测音频时长
                 getAudioDuration(file).then(duration => {
                     // 存储时长到file对象
@@ -3479,6 +3501,7 @@ function initBatchUploadFeature() {
                 const select = document.createElement('select');
                 select.style.margin = '5px';
                 select.style.padding = '5px';
+                select.style.order = '2'; // 竖屏时在预览下方
                 
                 // 添加选项
                 const defaultOption = document.createElement('option');
@@ -3552,6 +3575,7 @@ function initBatchUploadFeature() {
                 confirmBtn.style.padding = '5px 10px';
                 confirmBtn.style.fontSize = '12px';
                 confirmBtn.style.margin = '5px';
+                confirmBtn.style.order = '3'; // 竖屏时在选择栏下方
                 
                 confirmBtn.addEventListener('click', (function(select, file, fileItem) {
                     return function() {
@@ -3578,6 +3602,7 @@ function initBatchUploadFeature() {
                 deleteBtn.style.backgroundColor = '#f44336';
                 deleteBtn.style.color = 'white';
                 deleteBtn.style.margin = '5px';
+                deleteBtn.style.order = '4'; // 竖屏时在最下方
                 
                 deleteBtn.addEventListener('click', function() {
                     // 显示确认弹窗
