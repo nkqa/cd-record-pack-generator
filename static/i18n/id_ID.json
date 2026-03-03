@@ -126,7 +126,8 @@
     "select_resource_pack": "Pilih Paket Sumber Daya",
     "resource_pack_note": "Hanya berlaku untuk paket sumber daya yang dihasilkan oleh alat ini sebelumnya",
     "confirm_upload": "Konfirmasi Unggah",
-    "confirm_upload_message": "Setelah mengunggah paket sumber daya, musik dan gambar tampilan item yang saat ini dipilih akan dibatalkan. Apakah Anda yakin ingin mengunggah paket sumber daya？"
+    "confirm_upload_message": "Setelah mengunggah paket sumber daya, musik dan gambar tampilan item yang saat ini dipilih akan dibatalkan. Apakah Anda yakin ingin mengunggah paket sumber daya？",
+    "select_mcpack_zip_format": "Silakan pilih file dalam format .mcpack atau .zip"
   },
   "batch_upload": {
     "title": "Unggah Batch",

@@ -126,7 +126,8 @@
     "select_resource_pack": "리소스 팩 선택",
     "resource_pack_note": "이 도구로 이전에 생성된 리소스 팩만 적용 가능",
     "confirm_upload": "업로드 확인",
-    "confirm_upload_message": "리소스 팩을 업로드하면 현재 선택된 음악과 아이템 표시 이미지가 선택 해제됩니다. 리소스 팩을 업로드하시겠습니까？"
+    "confirm_upload_message": "리소스 팩을 업로드하면 현재 선택된 음악과 아이템 표시 이미지가 선택 해제됩니다. 리소스 팩을 업로드하시겠습니까？",
+    "select_mcpack_zip_format": ".mcpack 또는 .zip 형식의 파일을 선택하세요"
   },
   "batch_upload": {
     "title": "일괄 업로드",

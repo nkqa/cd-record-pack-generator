@@ -2521,7 +2521,7 @@ window.addEventListener('DOMContentLoaded', function() {
                 if (fileName.endsWith('.mcpack') || fileName.endsWith('.zip')) {
                     handleResourcePackUpload(file);
                 } else {
-                    showErrorModal('请选择 .mcpack 或 .zip 格式的文件');
+                    showErrorModal(i18n.t('upload.select_mcpack_zip_format', '请选择 .mcpack 或 .zip 格式的文件'));
                     // 重置文件输入
                     this.value = '';
                 }
