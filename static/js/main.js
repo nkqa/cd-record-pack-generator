@@ -612,6 +612,22 @@ function showDurationExceededModal(limitMinutes, limitSeconds, input, inputId, i
                         durationExceeded: true // 标记为超过时长限制
                     };
                     
+                    // 保存到子包文件存储
+                    if (window.currentSubpackId) {
+                        if (!window.subpackFiles[window.currentSubpackId]) {
+                            window.subpackFiles[window.currentSubpackId] = { audio: {}, image: {} };
+                        }
+                        window.subpackFiles[window.currentSubpackId].audio[inputInfo.id] = {
+                            file: finalFile,
+                            name: finalFile.name,
+                            originalName: file.name,
+                            description: descInput ? descInput.value : '',
+                            targetName: inputInfo.targetName,
+                            isConverted: isConverted,
+                            durationExceeded: true
+                        };
+                    }
+                    
                     // 自动填充描述为新文件的文件名（不含扩展名），但从资源包上传的文件除外
                     if (descInput && !file.fromResourcePack) {
                         const fileNameWithoutExt = file.name.replace(/\.[^/.]+$/, "");
@@ -2665,6 +2681,106 @@ window.addEventListener('DOMContentLoaded', function() {
             saveSubpacks(subpacks);
         }
         refreshSubpackSelect();
+        
+        // 初始化当前子包ID
+        if (subpacks.length > 0) {
+            window.currentSubpackId = subpackSelect.value;
+        }
+    }
+    
+    // 子包切换事件
+    if (subpackSelect) {
+        subpackSelect.addEventListener('change', function() {
+            const newSubpackId = this.value;
+            window.currentSubpackId = newSubpackId;
+            
+            // 切换显示的文件
+            loadSubpackFiles(newSubpackId);
+        });
+    }
+    
+    // 加载子包文件
+    function loadSubpackFiles(subpackId) {
+        // 清空当前显示
+        clearFileInputs();
+        
+        // 加载子包的音频文件
+        const subpackData = window.subpackFiles[subpackId];
+        if (subpackData && subpackData.audio) {
+            for (const [inputId, audioData] of Object.entries(subpackData.audio)) {
+                const input = document.getElementById(inputId);
+                if (input) {
+                    const dataTransfer = new DataTransfer();
+                    dataTransfer.items.add(audioData.file);
+                    input.files = dataTransfer.files;
+                    
+                    // 更新预览
+                    updateAudioPreview(inputId, audioData.file);
+                    
+                    // 更新描述框
+                    const descInput = document.getElementById(`desc_${inputId.replace('oggFile_', '')}`);
+                    if (descInput && audioData.description) {
+                        descInput.value = audioData.description;
+                    }
+                }
+            }
+        }
+        
+        // 加载子包的图片文件
+        if (subpackData && subpackData.image) {
+            for (const [inputId, imageData] of Object.entries(subpackData.image)) {
+                const input = document.getElementById(inputId);
+                if (input) {
+                    const dataTransfer = new DataTransfer();
+                    dataTransfer.items.add(imageData.file);
+                    input.files = dataTransfer.files;
+                    
+                    // 更新预览
+                    updateImagePreview(inputId, imageData.file);
+                }
+            }
+        }
+    }
+    
+    // 清空文件输入
+    function clearFileInputs() {
+        // 清空音频文件
+        fileInputs.forEach(inputInfo => {
+            const input = document.getElementById(inputInfo.id);
+            if (input) {
+                input.value = '';
+                
+                // 清空预览
+                const previewId = inputInfo.previewId;
+                const preview = document.getElementById(previewId);
+                if (preview) {
+                    preview.src = '';
+                    preview.style.display = 'none';
+                }
+                
+                // 清空描述框
+                const descInput = document.getElementById(`desc_${inputInfo.id.replace('oggFile_', '')}`);
+                if (descInput) {
+                    descInput.value = '';
+                }
+            }
+        });
+        
+        // 清空图片文件
+        imageFileInputs.forEach(inputInfo => {
+            const input = document.getElementById(inputInfo.id);
+            if (input) {
+                input.value = '';
+                
+                // 清空预览
+                const previewId = inputInfo.previewId;
+                const preview = document.getElementById(previewId);
+                if (preview) {
+                    preview.src = '';
+                    preview.style.display = 'none';
+                }
+            }
+        });
     }
     
     // 新增子包
@@ -4183,6 +4299,21 @@ function handleBatchAudioFile(file, targetName, callback) {
                     isConverted: isConverted
                 };
                 
+                // 保存到子包文件存储
+                if (window.currentSubpackId) {
+                    if (!window.subpackFiles[window.currentSubpackId]) {
+                        window.subpackFiles[window.currentSubpackId] = { audio: {}, image: {} };
+                    }
+                    window.subpackFiles[window.currentSubpackId].audio[inputInfo.id] = {
+                        file: finalFile,
+                        name: finalFile.name,
+                        originalName: file.name,
+                        description: descInput ? descInput.value : '',
+                        targetName: inputInfo.targetName,
+                        isConverted: isConverted
+                    };
+                }
+                
                 // 自动填充描述为新文件的文件名（不含扩展名），但从资源包上传的文件除外
                 if (!file.fromResourcePack && descInput) {
                     const fileNameWithoutExt = file.name.replace(/\.[^/.]+$/, "");
@@ -4291,6 +4422,12 @@ window.lastValidAudioFiles = {};
 
 // 保存额外子包的文件（用于增加子包功能）
 window.extraSubpackFiles = {};
+
+// 按子包存储文件
+window.subpackFiles = {}; // 结构: { subpackId: { audio: {}, image: {} } }
+
+// 当前选中的子包ID
+window.currentSubpackId = '';
 
 // 保存每个文件输入的上一次选择的文件信息
 const lastSelectedFiles = {};
@@ -4864,6 +5001,21 @@ fileInputs.forEach(inputInfo => {
                         isConverted: isConverted
                     };
                     
+                    // 保存到子包文件存储
+                    if (window.currentSubpackId) {
+                        if (!window.subpackFiles[window.currentSubpackId]) {
+                            window.subpackFiles[window.currentSubpackId] = { audio: {}, image: {} };
+                        }
+                        window.subpackFiles[window.currentSubpackId].audio[inputInfo.id] = {
+                            file: finalFile,
+                            name: finalFile.name,
+                            originalName: originalFileName,
+                            description: fileNameWithoutExt,
+                            targetName: inputInfo.targetName,
+                            isConverted: isConverted
+                        };
+                    }
+                    
                     if (isConverted) {
                         btnText.textContent = `${i18n.t('upload.selected_audio', '已选择音频：')}${file.name}${i18n.t('upload.converted', '（已转换）')}`;
                     } else {
@@ -5191,6 +5343,22 @@ imageFileInputs.forEach(inputInfo => {
                                         isResized: false
                                     };
                                     
+                                    // 保存到子包文件存储
+                                    if (window.currentSubpackId) {
+                                        if (!window.subpackFiles[window.currentSubpackId]) {
+                                            window.subpackFiles[window.currentSubpackId] = { audio: {}, image: {} };
+                                        }
+                                        window.subpackFiles[window.currentSubpackId].image[inputInfo.id] = {
+                                            file: convertedFile,
+                                            name: convertedFile.name,
+                                            originalName: file.name,
+                                            preview: previewUrl,
+                                            targetName: inputInfo.targetName,
+                                            isConverted: true,
+                                            isResized: false
+                                        };
+                                    }
+                                    
                                     let statusText = '';
                                     statusText = i18n.t('upload.converted', '（已转换）');
                                     btnText.textContent = `${i18n.t('upload.selected_image', '已选择图片：')}${file.name}${statusText}`;
@@ -5214,6 +5382,22 @@ imageFileInputs.forEach(inputInfo => {
                                 isConverted: false,
                                 isResized: false
                             };
+                            
+                            // 保存到子包文件存储
+                            if (window.currentSubpackId) {
+                                if (!window.subpackFiles[window.currentSubpackId]) {
+                                    window.subpackFiles[window.currentSubpackId] = { audio: {}, image: {} };
+                                }
+                                window.subpackFiles[window.currentSubpackId].image[inputInfo.id] = {
+                                    file: file,
+                                    name: file.name,
+                                    originalName: file.name,
+                                    preview: previewUrl,
+                                    targetName: inputInfo.targetName,
+                                    isConverted: false,
+                                    isResized: false
+                                };
+                            }
                             
                             btnText.textContent = `${i18n.t('upload.selected_image', '已选择图片：')}${file.name}`;
                             toggleImageButtons(inputInfo, true);
@@ -5877,36 +6061,6 @@ if (packBtn) {
             // 先生成播放指令
             generateCommands();
             
-            // 收集所有上传的文件
-            const uploadedFiles = [];
-            fileInputs.forEach(input => {
-                let file = null;
-                let targetName = input.targetName;
-                
-                // 优先使用lastValidAudioFiles中保存的有效文件
-                if (window.lastValidAudioFiles[input.id]) {
-                    file = window.lastValidAudioFiles[input.id].file;
-                    // 使用保存的目标文件名
-                    if (window.lastValidAudioFiles[input.id].targetName) {
-                        targetName = window.lastValidAudioFiles[input.id].targetName;
-                    }
-                } else {
-                    const fileInput = document.getElementById(input.id);
-                    if (fileInput) {
-                        file = fileInput.files[0];
-                    }
-                }
-                
-                if (file) {
-                    uploadedFiles.push({ file, targetName });
-                }
-            });
-            
-            // 检查是否至少上传了一个文件
-            if (uploadedFiles.length === 0) {
-                throw new Error(i18n.t('errors.no_files', '必须上传一个音频文件'));
-            }
-            
             // 获取音乐包名称
             let packName = '';
             const zipNameInput = document.getElementById('zipNameInput');
@@ -5924,44 +6078,14 @@ if (packBtn) {
                     }
                 }
                 
-                // 如果所有自定义描述输入框都为空，使用第一个上传文件的名称（不含扩展名）
+                // 如果所有自定义描述输入框都为空，使用默认名称
                 if (!packName) {
-                    if (uploadedFiles.length > 0) {
-                        const firstFile = uploadedFiles[0].file;
-                        packName = firstFile.name.replace(/\.ogg$/, '');
-                    } else {
-                        packName = 'music_pack';
-                    }
+                    packName = 'music_pack';
                 }
             }
             
             // 创建压缩包
             const zip = new JSZip();
-            
-            // 获取选中的子包ID和名称
-            const subpackSelect = document.getElementById('subpackSelect');
-            const selectedSubpackId = subpackSelect ? subpackSelect.value : '';
-            
-            // 获取子包名称
-            let subpackId = selectedSubpackId;
-            let subpackName = '';
-            const savedSubpacks = localStorage.getItem('subpacks');
-            if (savedSubpacks) {
-                const subpacks = JSON.parse(savedSubpacks);
-                const subpack = subpacks.find(s => s.id === selectedSubpackId);
-                if (subpack) {
-                    subpackName = subpack.name;
-                }
-            }
-            
-            // 添加音频文件到压缩包
-            uploadedFiles.forEach(item => {
-                const file = item.file;
-                const targetName = item.targetName;
-                zip.file(`subpack/${subpackId}/sounds/music/game/records/${targetName}`, file);
-            });
-            
-
             
             // 图片像素调整函数
             function resizeImage(imageFile, maxSize) {
@@ -6004,28 +6128,64 @@ if (packBtn) {
                 });
             }
             
-            // 添加图片文件到压缩包
-            for (const inputInfo of imageFileInputs) {
-                const inputId = inputInfo.id;
-                if (window.lastValidImageFiles[inputId]) {
-                    const imageFile = window.lastValidImageFiles[inputId].file;
-                    const targetName = window.lastValidImageFiles[inputId].targetName;
-                    
-                    // 检查是否启用像素修改
-                    const imageSizeToggle = document.getElementById('imageSizeToggle');
-                    const isImageSizeEnabled = imageSizeToggle ? imageSizeToggle.checked : true; // 默认打开
-                    const imageSizeInput = document.getElementById('imageSizeInput');
-                    const maxSize = isImageSizeEnabled && imageSizeInput ? parseInt(imageSizeInput.value) || 32 : 32;
-                    
-                    if (isImageSizeEnabled) {
-                        // 调整图片像素
-                        const resizedFile = await resizeImage(imageFile, maxSize);
-                        zip.file(`subpack/${subpackId}/textures/items/${targetName}`, resizedFile);
-                    } else {
-                        // 直接使用原始文件，不调整像素
-                        zip.file(`subpack/${subpackId}/textures/items/${targetName}`, imageFile);
+            // 获取所有子包
+            const savedSubpacks = localStorage.getItem('subpacks');
+            const allSubpacks = savedSubpacks ? JSON.parse(savedSubpacks) : [];
+            
+            // 检查是否至少有一个子包
+            if (allSubpacks.length === 0) {
+                throw new Error(i18n.t('errors.no_subpacks', '必须至少有一个子包'));
+            }
+            
+            // 为每个子包添加文件
+            let hasFiles = false;
+            for (const subpack of allSubpacks) {
+                const subpackId = subpack.id;
+                
+                // 获取子包的文件
+                const subpackData = window.subpackFiles[subpackId];
+                
+                // 添加音频文件
+                if (subpackData && subpackData.audio) {
+                    for (const [inputId, audioData] of Object.entries(subpackData.audio)) {
+                        const file = audioData.file;
+                        const targetName = audioData.targetName;
+                        if (file && targetName) {
+                            zip.file(`subpack/${subpackId}/sounds/music/game/records/${targetName}`, file);
+                            hasFiles = true;
+                        }
                     }
                 }
+                
+                // 添加图片文件
+                if (subpackData && subpackData.image) {
+                    for (const [inputId, imageData] of Object.entries(subpackData.image)) {
+                        const imageFile = imageData.file;
+                        const targetName = imageData.targetName;
+                        if (imageFile && targetName) {
+                            // 检查是否启用像素修改
+                            const imageSizeToggle = document.getElementById('imageSizeToggle');
+                            const isImageSizeEnabled = imageSizeToggle ? imageSizeToggle.checked : true; // 默认打开
+                            const imageSizeInput = document.getElementById('imageSizeInput');
+                            const maxSize = isImageSizeEnabled && imageSizeInput ? parseInt(imageSizeInput.value) || 32 : 32;
+                            
+                            if (isImageSizeEnabled) {
+                                // 调整图片像素
+                                const resizedFile = await resizeImage(imageFile, maxSize);
+                                zip.file(`subpack/${subpackId}/textures/items/${targetName}`, resizedFile);
+                            } else {
+                                // 直接使用原始文件，不调整像素
+                                zip.file(`subpack/${subpackId}/textures/items/${targetName}`, imageFile);
+                            }
+                            hasFiles = true;
+                        }
+                    }
+                }
+            }
+            
+            // 检查是否至少上传了一个文件
+            if (!hasFiles) {
+                throw new Error(i18n.t('errors.no_files', '必须上传一个音频文件'));
             }
             
             // 处理额外子包的文件（用于增加子包功能）
@@ -6150,32 +6310,13 @@ if (packBtn) {
                     manifestJson.header.uuid = generateUUID();
                     manifestJson.modules[0].uuid = generateUUID();
                     
-                    // 获取所有子包列表
-                    let allSubpacks = [
-                        {
-                            "folder_name": subpackId,
-                            "name": subpackName,
-                            "memory_tier": 1
-                        }
-                    ];
-                    
-                    // 添加额外子包的配置
-                    if (window.extraSubpackFiles && Object.keys(window.extraSubpackFiles).length > 0) {
-                        const savedSubpacks = localStorage.getItem('subpacks');
-                        if (savedSubpacks) {
-                            const savedSubpacksList = JSON.parse(savedSubpacks);
-                            for (const extraSubpackId of Object.keys(window.extraSubpackFiles)) {
-                                const extraSubpack = savedSubpacksList.find(s => s.id === extraSubpackId);
-                                if (extraSubpack) {
-                                    allSubpacks.push({
-                                        "folder_name": extraSubpackId,
-                                        "name": extraSubpack.name,
-                                        "memory_tier": 1
-                                    });
-                                }
-                            }
-                        }
-                    }
+                    // 获取所有子包配置
+                    const savedSubpacks = localStorage.getItem('subpacks');
+                    const allSubpacks = savedSubpacks ? JSON.parse(savedSubpacks).map(subpack => ({
+                        "folder_name": subpack.id,
+                        "name": subpack.name,
+                        "memory_tier": 1
+                    })) : [];
                     
                     // 添加subpacks配置
                     manifestJson.subpacks = allSubpacks;
@@ -6204,34 +6345,15 @@ if (packBtn) {
                         ]
                     };
                     
-                    // 添加subpacks配置（同样处理额外子包）
-                    let defaultSubpacks = [
-                        {
-                            "folder_name": subpackId,
-                            "name": subpackName,
-                            "memory_tier": 1
-                        }
-                    ];
+                    // 获取所有子包配置
+                    const savedSubpacks = localStorage.getItem('subpacks');
+                    const allSubpacks = savedSubpacks ? JSON.parse(savedSubpacks).map(subpack => ({
+                        "folder_name": subpack.id,
+                        "name": subpack.name,
+                        "memory_tier": 1
+                    })) : [];
                     
-                    // 添加额外子包的配置
-                    if (window.extraSubpackFiles && Object.keys(window.extraSubpackFiles).length > 0) {
-                        const savedSubpacks = localStorage.getItem('subpacks');
-                        if (savedSubpacks) {
-                            const savedSubpacksList = JSON.parse(savedSubpacks);
-                            for (const extraSubpackId of Object.keys(window.extraSubpackFiles)) {
-                                const extraSubpack = savedSubpacksList.find(s => s.id === extraSubpackId);
-                                if (extraSubpack) {
-                                    defaultSubpacks.push({
-                                        "folder_name": extraSubpackId,
-                                        "name": extraSubpack.name,
-                                        "memory_tier": 1
-                                    });
-                                }
-                            }
-                        }
-                    }
-                    
-                    manifestJson.subpacks = defaultSubpacks;
+                    manifestJson.subpacks = allSubpacks;
                     
                     zip.file('manifest.json', JSON.stringify(manifestJson, null, 2));
                 }
@@ -6258,34 +6380,15 @@ if (packBtn) {
                     ]
                 };
                 
-                // 添加subpacks配置（同样处理额外子包）
-                let catchSubpacks = [
-                    {
-                        "folder_name": subpackId,
-                        "name": subpackName,
-                        "memory_tier": 1
-                    }
-                ];
+                // 获取所有子包配置
+                const savedSubpacks = localStorage.getItem('subpacks');
+                const allSubpacks = savedSubpacks ? JSON.parse(savedSubpacks).map(subpack => ({
+                    "folder_name": subpack.id,
+                    "name": subpack.name,
+                    "memory_tier": 1
+                })) : [];
                 
-                // 添加额外子包的配置
-                if (window.extraSubpackFiles && Object.keys(window.extraSubpackFiles).length > 0) {
-                    const savedSubpacks = localStorage.getItem('subpacks');
-                    if (savedSubpacks) {
-                        const savedSubpacksList = JSON.parse(savedSubpacks);
-                        for (const extraSubpackId of Object.keys(window.extraSubpackFiles)) {
-                            const extraSubpack = savedSubpacksList.find(s => s.id === extraSubpackId);
-                            if (extraSubpack) {
-                                catchSubpacks.push({
-                                    "folder_name": extraSubpackId,
-                                    "name": extraSubpack.name,
-                                    "memory_tier": 1
-                                });
-                            }
-                        }
-                    }
-                }
-                
-                manifestJson.subpacks = catchSubpacks;
+                manifestJson.subpacks = allSubpacks;
                 
                 zip.file('manifest.json', JSON.stringify(manifestJson, null, 2));
             }
