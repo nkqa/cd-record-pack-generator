@@ -5877,6 +5877,18 @@ if (packBtn) {
                     // 生成新的uuid
                     manifestJson.header.uuid = generateUUID();
                     manifestJson.modules[0].uuid = generateUUID();
+                    
+                    // 如果启用子包切换，添加subpacks配置
+                    if (isSubpackEnabled) {
+                        manifestJson.subpacks = [
+                            {
+                                "folder_name": subpackId,
+                                "name": packName,
+                                "memory_tier": 1
+                            }
+                        ];
+                    }
+                    
                     // 添加修改后的manifest.json文件
                     zip.file('manifest.json', JSON.stringify(manifestJson, null, 2));
                 } else {
@@ -5900,6 +5912,18 @@ if (packBtn) {
                             }
                         ]
                     };
+                    
+                    // 如果启用子包切换，添加subpacks配置
+                    if (isSubpackEnabled) {
+                        manifestJson.subpacks = [
+                            {
+                                "folder_name": subpackId,
+                                "name": packName,
+                                "memory_tier": 1
+                            }
+                        ];
+                    }
+                    
                     zip.file('manifest.json', JSON.stringify(manifestJson, null, 2));
                 }
             } catch (error) {
@@ -5924,6 +5948,18 @@ if (packBtn) {
                         }
                     ]
                 };
+                
+                // 如果启用子包切换，添加subpacks配置
+                if (isSubpackEnabled) {
+                    manifestJson.subpacks = [
+                        {
+                            "folder_name": subpackId,
+                            "name": packName,
+                            "memory_tier": 1
+                        }
+                    ];
+                }
+                
                 zip.file('manifest.json', JSON.stringify(manifestJson, null, 2));
             }
             
