@@ -2686,6 +2686,13 @@ window.addEventListener('DOMContentLoaded', function() {
         if (subpacks.length > 0) {
             window.currentSubpackId = subpackSelect.value;
         }
+        
+        // 初始化子包文件存储
+        subpacks.forEach(subpack => {
+            if (!window.subpackFiles[subpack.id]) {
+                window.subpackFiles[subpack.id] = { audio: {}, image: {} };
+            }
+        });
     }
     
     // 子包切换事件
@@ -2793,6 +2800,10 @@ window.addEventListener('DOMContentLoaded', function() {
                 const subpacks = getSubpacks();
                 subpacks.push({ id: subpackId, name: subpackName.trim() });
                 saveSubpacks(subpacks);
+                
+                // 为新子包初始化文件存储
+                window.subpackFiles[subpackId] = { audio: {}, image: {} };
+                
                 refreshSubpackSelect();
                 
                 // 自动选中新创建的子包
@@ -2841,6 +2852,10 @@ window.addEventListener('DOMContentLoaded', function() {
                 if (confirm(confirmMsg)) {
                     const newSubpacks = subpacks.filter(s => s.id !== selectedId);
                     saveSubpacks(newSubpacks);
+                    
+                    // 删除对应的文件存储
+                    delete window.subpackFiles[selectedId];
+                    
                     refreshSubpackSelect();
                     // 重置选择
                     subpackSelect.value = '';
