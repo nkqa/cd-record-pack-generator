@@ -105,74 +105,13 @@
                 <input type="file" id="resourcePackFile">
                 <div class="custom-btn" id="resourcePackBtnText">选择资源包</div>
             </div>
-            <div style="margin-top: 15px;">
-                <p style="margin-bottom: 8px;" id="resourcePackOptionText">请选择导入方式：</p>
-                <div style="display: flex; gap: 15px; align-items: center;">
-                    <label style="display: flex; align-items: center; gap: 5px; cursor: pointer;">
-                        <input type="radio" name="importOption" value="full" checked style="margin: 0;">
-                        <span id="fullImportText">全量上传</span>
-                    </label>
-                    <label style="display: flex; align-items: center; gap: 5px; cursor: pointer;">
-                        <input type="radio" name="importOption" value="addSubpack" style="margin: 0;">
-                        <span id="addSubpackImportText">增加子包</span>
-                    </label>
-                </div>
-            </div>
         </div>
         <script>
             // 更新上传资源包区域文本
             document.getElementById('resourcePackTitle').textContent = i18n.t('upload.resource_pack_title', '上传资源包');
             document.getElementById('resourcePackNote').textContent = i18n.t('upload.resource_pack_note', '仅适用于之前在此工具生成的资源包');
             document.getElementById('resourcePackBtnText').textContent = i18n.t('upload.select_resource_pack', '选择资源包');
-            document.getElementById('resourcePackOptionText').textContent = i18n.t('upload.resource_pack_option', '请选择导入方式：');
-            document.getElementById('fullImportText').textContent = i18n.t('upload.full_import', '全量上传');
-            document.getElementById('addSubpackImportText').textContent = i18n.t('upload.add_subpack_import', '增加子包');
         </script>
-        
-        <!-- 子包切换区域 -->
-        <div class="subpack-section" style="margin-bottom: 30px; background-color: #f9f9f9; border-radius: 8px; padding: 20px;">
-            <h3 id="subpackTitle">子包切换</h3>
-            <div class="subpack-container" style="margin-top: 15px;">
-                <div class="subpack-select-wrapper" style="margin-bottom: 10px;">
-                    <label for="subpackSelect" style="display: block; margin-bottom: 5px;" id="subpackSelectLabel">选择子包</label>
-                    <select id="subpackSelect" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;">
-                    </select>
-                </div>
-                <div class="subpack-buttons" style="display: flex; gap: 10px;">
-                    <div style="flex: 1;">
-                        <button class="btn" id="renameSubpackBtn" style="width: 100%;">重命名</button>
-                    </div>
-                    <div style="flex: 1;">
-                        <button class="btn" id="addSubpackBtn" style="width: 100%;">新增子包</button>
-                    </div>
-                    <div style="flex: 1;">
-                        <button class="btn" id="deleteSubpackBtn" style="width: 100%;">删除</button>
-                    </div>
-                </div>
-            </div>
-            <style>
-                /* 默认布局（竖屏） */
-                .subpack-container {
-                    display: block;
-                }
-                
-                /* 横屏时的布局 */
-                @media (orientation: landscape) {
-                    .subpack-container {
-                        display: flex;
-                        align-items: center;
-                        gap: 10px;
-                    }
-                    .subpack-select-wrapper {
-                        flex: 1;
-                        margin-bottom: 0;
-                    }
-                    .subpack-buttons {
-                        flex: 2;
-                    }
-                }
-            </style>
-        </div>
         
         <!-- 批量上传区域 -->
         <div class="batch-upload-section" style="margin-bottom: 30px; background-color: #f9f9f9; border-radius: 8px;">

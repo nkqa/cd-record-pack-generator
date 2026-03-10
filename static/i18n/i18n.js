@@ -508,42 +508,6 @@ const i18n = {
       imageSizeLabel.textContent = this.t('upload.image_size_modify', '启用物品展示图像素修改');
     }
     
-    // 更新子包切换区域文本
-    const subpackTitle = document.getElementById('subpackTitle');
-    console.log('subpackTitle:', subpackTitle);
-    if (subpackTitle) {
-      console.log('Updating subpackTitle text');
-      subpackTitle.textContent = this.t('upload.subpack_title', '子包切换');
-    }
-    
-    const subpackSelectLabel = document.getElementById('subpackSelectLabel');
-    console.log('subpackSelectLabel:', subpackSelectLabel);
-    if (subpackSelectLabel) {
-      console.log('Updating subpackSelectLabel text');
-      subpackSelectLabel.textContent = this.t('upload.select_subpack', '选择子包');
-    }
-    
-    const addSubpackBtn = document.getElementById('addSubpackBtn');
-    console.log('addSubpackBtn:', addSubpackBtn);
-    if (addSubpackBtn) {
-      console.log('Updating addSubpackBtn text');
-      addSubpackBtn.textContent = this.t('upload.add_subpack', '新增子包');
-    }
-    
-    const renameSubpackBtn = document.getElementById('renameSubpackBtn');
-    console.log('renameSubpackBtn:', renameSubpackBtn);
-    if (renameSubpackBtn) {
-      console.log('Updating renameSubpackBtn text');
-      renameSubpackBtn.textContent = this.t('upload.rename_subpack', '重命名');
-    }
-    
-    const deleteSubpackBtn = document.getElementById('deleteSubpackBtn');
-    console.log('deleteSubpackBtn:', deleteSubpackBtn);
-    if (deleteSubpackBtn) {
-      console.log('Updating deleteSubpackBtn text');
-      deleteSubpackBtn.textContent = this.t('upload.delete_subpack', '删除');
-    }
-    
     // 更新像素输入框占位符
     const imageSizeInput = document.getElementById('imageSizeInput');
     console.log('imageSizeInput:', imageSizeInput);

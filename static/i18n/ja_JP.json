@@ -128,17 +128,7 @@
     "resource_pack_note": "このツールで以前生成されたリソースパックのみ対応",
     "confirm_upload": "アップロードを確認",
     "confirm_upload_message": "リソースパックをアップロードすると、現在選択されている音楽とアイテム表示画像が選択解除されます。リソースパックをアップロードしてもよろしいですか？",
-    "select_mcpack_zip_format": ".mcpack または .zip 形式のファイルを選択してください",
-    "subpack_title": "サブパック切り替え",
-    "select_subpack": "サブパックを選択",
-    "no_subpack": "サブパックを使用しない",
-    "add_subpack": "サブパックを追加",
-    "rename_subpack": "名前変更",
-    "delete_subpack": "削除",
-    "select_subpack_first": "先にサブパックを選択してください",
-    "confirm_delete_subpack": "サブパック「{name}」を削除してもよろしいですか？",
-    "input_subpack_name": "サブパック名を入力してください:",
-    "input_new_subpack_name": "新しいサブパック名を入力してください:"
+    "select_mcpack_zip_format": ".mcpack または .zip 形式のファイルを選択してください"
   },
   "batch_upload": {
     "title": "一括アップロード",

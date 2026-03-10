@@ -127,17 +127,7 @@
     "resource_pack_note": "Hanya berlaku untuk paket sumber daya yang dihasilkan oleh alat ini sebelumnya",
     "confirm_upload": "Konfirmasi Unggah",
     "confirm_upload_message": "Setelah mengunggah paket sumber daya, musik dan gambar tampilan item yang saat ini dipilih akan dibatalkan. Apakah Anda yakin ingin mengunggah paket sumber daya？",
-    "select_mcpack_zip_format": "Silakan pilih file dalam format .mcpack atau .zip",
-    "subpack_title": "Perpindahan Subpack",
-    "select_subpack": "Pilih Subpack",
-    "no_subpack": "Tanpa Subpack",
-    "add_subpack": "Tambah Subpack",
-    "rename_subpack": "Ganti Nama",
-    "delete_subpack": "Hapus",
-    "select_subpack_first": "Silakan pilih subpack terlebih dahulu",
-    "confirm_delete_subpack": "Apakah Anda yakin ingin menghapus subpack \"{name}\"?",
-    "input_subpack_name": "Silakan masukkan nama subpack:",
-    "input_new_subpack_name": "Silakan masukkan nama subpack baru:"
+    "select_mcpack_zip_format": "Silakan pilih file dalam format .mcpack atau .zip"
   },
   "batch_upload": {
     "title": "Unggah Batch",
