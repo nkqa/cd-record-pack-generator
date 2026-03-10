@@ -131,7 +131,13 @@
     "subpack_title": "Переключение подпакетов",
     "select_subpack": "Выбрать подпакет",
     "no_subpack": "Без подпакета",
-    "add_subpack": "Добавить подпакет"
+    "add_subpack": "Добавить подпакет",
+    "rename_subpack": "Переименовать",
+    "delete_subpack": "Удалить",
+    "select_subpack_first": "Пожалуйста, сначала выберите подпакет",
+    "confirm_delete_subpack": "Вы уверены, что хотите удалить подпакет \"{name}\"?",
+    "input_subpack_name": "Пожалуйста, введите имя подпакета:",
+    "input_new_subpack_name": "Пожалуйста, введите новое имя подпакета:"
   },
   "batch_upload": {
     "title": "Пакетная загрузка",

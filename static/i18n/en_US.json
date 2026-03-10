@@ -132,7 +132,13 @@
     "subpack_title": "Subpack Switching",
     "select_subpack": "Select Subpack",
     "no_subpack": "No Subpack",
-    "add_subpack": "Add Subpack"
+    "add_subpack": "Add Subpack",
+    "rename_subpack": "Rename",
+    "delete_subpack": "Delete",
+    "select_subpack_first": "Please select a subpack first",
+    "confirm_delete_subpack": "Are you sure you want to delete subpack \"{name}\"?",
+    "input_subpack_name": "Please enter subpack name:",
+    "input_new_subpack_name": "Please enter new subpack name:"
   },
   "batch_upload": {
     "title": "Batch Upload",

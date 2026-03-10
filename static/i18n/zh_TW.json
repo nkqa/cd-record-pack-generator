@@ -132,7 +132,13 @@
     "subpack_title": "子包切換",
     "select_subpack": "選擇子包",
     "no_subpack": "不使用子包",
-    "add_subpack": "新增子包"
+    "add_subpack": "新增子包",
+    "rename_subpack": "重新命名",
+    "delete_subpack": "刪除",
+    "select_subpack_first": "請先選擇一個子包",
+    "confirm_delete_subpack": "確定要刪除子包「{name}」嗎？",
+    "input_subpack_name": "請輸入子包名稱:",
+    "input_new_subpack_name": "請輸入新的子包名稱:"
   },
   "batch_upload": {
     "title": "批量上傳",

@@ -2500,41 +2500,133 @@ window.addEventListener('DOMContentLoaded', function() {
     // 子包管理
     const subpackSelect = document.getElementById('subpackSelect');
     const addSubpackBtn = document.getElementById('addSubpackBtn');
+    const renameSubpackBtn = document.getElementById('renameSubpackBtn');
+    const deleteSubpackBtn = document.getElementById('deleteSubpackBtn');
+    
+    // 获取子包列表
+    function getSubpacks() {
+        const savedSubpacks = localStorage.getItem('subpacks');
+        return savedSubpacks ? JSON.parse(savedSubpacks) : [];
+    }
+    
+    // 保存子包列表
+    function saveSubpacks(subpacks) {
+        localStorage.setItem('subpacks', JSON.stringify(subpacks));
+    }
+    
+    // 获取下一个子包名称
+    function getNextSubpackName() {
+        const subpacks = getSubpacks();
+        if (subpacks.length === 0) {
+            return 'MusicPack';
+        }
+        
+        let maxNum = 0;
+        subpacks.forEach(subpack => {
+            if (subpack.name === 'MusicPack') {
+                maxNum = Math.max(maxNum, 1);
+            } else if (subpack.name.startsWith('MusicPack')) {
+                const num = parseInt(subpack.name.replace('MusicPack', ''));
+                if (!isNaN(num)) {
+                    maxNum = Math.max(maxNum, num);
+                }
+            }
+        });
+        
+        return maxNum === 0 ? 'MusicPack' : `MusicPack${maxNum + 1}`;
+    }
+    
+    // 刷新子包下拉列表
+    function refreshSubpackSelect() {
+        const subpacks = getSubpacks();
+        const currentValue = subpackSelect.value;
+        
+        // 清空现有选项（保留"不使用子包"选项）
+        while (subpackSelect.options.length > 1) {
+            subpackSelect.remove(1);
+        }
+        
+        // 添加子包选项
+        subpacks.forEach(subpack => {
+            const option = document.createElement('option');
+            option.value = subpack.id;
+            option.textContent = subpack.name;
+            subpackSelect.appendChild(option);
+        });
+        
+        // 恢复之前的选择
+        if (currentValue) {
+            subpackSelect.value = currentValue;
+        }
+    }
     
     // 初始化子包列表
     function initSubpacks() {
-        const savedSubpacks = localStorage.getItem('subpacks');
-        if (savedSubpacks) {
-            const subpacks = JSON.parse(savedSubpacks);
-            subpacks.forEach(subpack => {
-                const option = document.createElement('option');
-                option.value = subpack.id;
-                option.textContent = subpack.name;
-                subpackSelect.appendChild(option);
-            });
-        }
+        refreshSubpackSelect();
     }
     
     // 新增子包
     if (addSubpackBtn) {
         addSubpackBtn.addEventListener('click', function() {
             const subpackId = generateRandomId(8);
-            const subpackName = prompt('请输入子包名称:', `子包 ${subpackId}`);
+            const subpackName = prompt(i18n.t('upload.input_subpack_name', '请输入子包名称:'), getNextSubpackName());
             
             if (subpackName !== null && subpackName.trim() !== '') {
-                const option = document.createElement('option');
-                option.value = subpackId;
-                option.textContent = subpackName.trim();
-                subpackSelect.appendChild(option);
-                
-                // 保存到localStorage
-                const savedSubpacks = localStorage.getItem('subpacks');
-                const subpacks = savedSubpacks ? JSON.parse(savedSubpacks) : [];
+                const subpacks = getSubpacks();
                 subpacks.push({ id: subpackId, name: subpackName.trim() });
-                localStorage.setItem('subpacks', JSON.stringify(subpacks));
+                saveSubpacks(subpacks);
+                refreshSubpackSelect();
                 
                 // 自动选中新创建的子包
                 subpackSelect.value = subpackId;
+            }
+        });
+    }
+    
+    // 重命名子包
+    if (renameSubpackBtn) {
+        renameSubpackBtn.addEventListener('click', function() {
+            const selectedId = subpackSelect.value;
+            if (!selectedId) {
+                alert(i18n.t('upload.select_subpack_first', '请先选择一个子包'));
+                return;
+            }
+            
+            const subpacks = getSubpacks();
+            const subpack = subpacks.find(s => s.id === selectedId);
+            if (subpack) {
+                const newName = prompt(i18n.t('upload.input_new_subpack_name', '请输入新的子包名称:'), subpack.name);
+                if (newName !== null && newName.trim() !== '') {
+                    subpack.name = newName.trim();
+                    saveSubpacks(subpacks);
+                    refreshSubpackSelect();
+                    // 保持选中状态
+                    subpackSelect.value = selectedId;
+                }
+            }
+        });
+    }
+    
+    // 删除子包
+    if (deleteSubpackBtn) {
+        deleteSubpackBtn.addEventListener('click', function() {
+            const selectedId = subpackSelect.value;
+            if (!selectedId) {
+                alert(i18n.t('upload.select_subpack_first', '请先选择一个子包'));
+                return;
+            }
+            
+            const subpacks = getSubpacks();
+            const subpack = subpacks.find(s => s.id === selectedId);
+            if (subpack) {
+                const confirmMsg = i18n.t('upload.confirm_delete_subpack', '确定要删除子包 "{name}" 吗？').replace('{name}', subpack.name);
+                if (confirm(confirmMsg)) {
+                    const newSubpacks = subpacks.filter(s => s.id !== selectedId);
+                    saveSubpacks(newSubpacks);
+                    refreshSubpackSelect();
+                    // 重置选择
+                    subpackSelect.value = '';
+                }
             }
         });
     }
@@ -5743,13 +5835,24 @@ if (packBtn) {
             // 创建压缩包
             const zip = new JSZip();
             
-            // 获取选中的子包ID
+            // 获取选中的子包ID和名称
             const subpackSelect = document.getElementById('subpackSelect');
             const selectedSubpackId = subpackSelect ? subpackSelect.value : '';
             const isSubpackEnabled = selectedSubpackId !== '';
             
-            // 生成随机字母数字字符串标识
+            // 获取子包名称
             let subpackId = selectedSubpackId;
+            let subpackName = '';
+            if (isSubpackEnabled) {
+                const savedSubpacks = localStorage.getItem('subpacks');
+                if (savedSubpacks) {
+                    const subpacks = JSON.parse(savedSubpacks);
+                    const subpack = subpacks.find(s => s.id === selectedSubpackId);
+                    if (subpack) {
+                        subpackName = subpack.name;
+                    }
+                }
+            }
             
             // 添加音频文件到压缩包
             uploadedFiles.forEach(item => {
@@ -5926,7 +6029,7 @@ if (packBtn) {
                         manifestJson.subpacks = [
                             {
                                 "folder_name": subpackId,
-                                "name": packName,
+                                "name": subpackName,
                                 "memory_tier": 1
                             }
                         ];
@@ -5961,7 +6064,7 @@ if (packBtn) {
                         manifestJson.subpacks = [
                             {
                                 "folder_name": subpackId,
-                                "name": packName,
+                                "name": subpackName,
                                 "memory_tier": 1
                             }
                         ];
@@ -5997,7 +6100,7 @@ if (packBtn) {
                     manifestJson.subpacks = [
                         {
                             "folder_name": subpackId,
-                            "name": packName,
+                            "name": subpackName,
                             "memory_tier": 1
                         }
                     ];
