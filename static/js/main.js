@@ -2541,10 +2541,8 @@ window.addEventListener('DOMContentLoaded', function() {
         const subpacks = getSubpacks();
         const currentValue = subpackSelect.value;
         
-        // 清空现有选项（保留"不使用子包"选项）
-        while (subpackSelect.options.length > 1) {
-            subpackSelect.remove(1);
-        }
+        // 清空现有选项
+        subpackSelect.innerHTML = '';
         
         // 添加子包选项
         subpacks.forEach(subpack => {
@@ -2554,14 +2552,23 @@ window.addEventListener('DOMContentLoaded', function() {
             subpackSelect.appendChild(option);
         });
         
-        // 恢复之前的选择
-        if (currentValue) {
+        // 恢复之前的选择，如果没有则选中第一个
+        if (currentValue && subpacks.find(s => s.id === currentValue)) {
             subpackSelect.value = currentValue;
+        } else if (subpacks.length > 0) {
+            subpackSelect.value = subpacks[0].id;
         }
     }
     
     // 初始化子包列表
     function initSubpacks() {
+        const subpacks = getSubpacks();
+        // 如果没有子包，自动创建一个默认子包
+        if (subpacks.length === 0) {
+            const defaultSubpackId = generateRandomId(8);
+            subpacks.push({ id: defaultSubpackId, name: 'MusicPack' });
+            saveSubpacks(subpacks);
+        }
         refreshSubpackSelect();
     }
     
@@ -5838,19 +5845,16 @@ if (packBtn) {
             // 获取选中的子包ID和名称
             const subpackSelect = document.getElementById('subpackSelect');
             const selectedSubpackId = subpackSelect ? subpackSelect.value : '';
-            const isSubpackEnabled = selectedSubpackId !== '';
             
             // 获取子包名称
             let subpackId = selectedSubpackId;
             let subpackName = '';
-            if (isSubpackEnabled) {
-                const savedSubpacks = localStorage.getItem('subpacks');
-                if (savedSubpacks) {
-                    const subpacks = JSON.parse(savedSubpacks);
-                    const subpack = subpacks.find(s => s.id === selectedSubpackId);
-                    if (subpack) {
-                        subpackName = subpack.name;
-                    }
+            const savedSubpacks = localStorage.getItem('subpacks');
+            if (savedSubpacks) {
+                const subpacks = JSON.parse(savedSubpacks);
+                const subpack = subpacks.find(s => s.id === selectedSubpackId);
+                if (subpack) {
+                    subpackName = subpack.name;
                 }
             }
             
@@ -5858,11 +5862,7 @@ if (packBtn) {
             uploadedFiles.forEach(item => {
                 const file = item.file;
                 const targetName = item.targetName;
-                if (isSubpackEnabled) {
-                    zip.file(`subpack/${subpackId}/sounds/music/game/records/${targetName}`, file);
-                } else {
-                    zip.file(`sounds/music/game/records/${targetName}`, file);
-                }
+                zip.file(`subpack/${subpackId}/sounds/music/game/records/${targetName}`, file);
             });
             
 
@@ -5924,18 +5924,10 @@ if (packBtn) {
                     if (isImageSizeEnabled) {
                         // 调整图片像素
                         const resizedFile = await resizeImage(imageFile, maxSize);
-                        if (isSubpackEnabled) {
-                            zip.file(`subpack/${subpackId}/textures/items/${targetName}`, resizedFile);
-                        } else {
-                            zip.file(`textures/items/${targetName}`, resizedFile);
-                        }
+                        zip.file(`subpack/${subpackId}/textures/items/${targetName}`, resizedFile);
                     } else {
                         // 直接使用原始文件，不调整像素
-                        if (isSubpackEnabled) {
-                            zip.file(`subpack/${subpackId}/textures/items/${targetName}`, imageFile);
-                        } else {
-                            zip.file(`textures/items/${targetName}`, imageFile);
-                        }
+                        zip.file(`subpack/${subpackId}/textures/items/${targetName}`, imageFile);
                     }
                 }
             }
@@ -6025,15 +6017,14 @@ if (packBtn) {
                     manifestJson.modules[0].uuid = generateUUID();
                     
                     // 如果启用子包切换，添加subpacks配置
-                    if (isSubpackEnabled) {
-                        manifestJson.subpacks = [
-                            {
-                                "folder_name": subpackId,
-                                "name": subpackName,
-                                "memory_tier": 1
-                            }
-                        ];
-                    }
+                    // 添加subpacks配置
+                    manifestJson.subpacks = [
+                        {
+                            "folder_name": subpackId,
+                            "name": subpackName,
+                            "memory_tier": 1
+                        }
+                    ];
                     
                     // 添加修改后的manifest.json文件
                     zip.file('manifest.json', JSON.stringify(manifestJson, null, 2));
@@ -6059,16 +6050,14 @@ if (packBtn) {
                         ]
                     };
                     
-                    // 如果启用子包切换，添加subpacks配置
-                    if (isSubpackEnabled) {
-                        manifestJson.subpacks = [
-                            {
-                                "folder_name": subpackId,
-                                "name": subpackName,
-                                "memory_tier": 1
-                            }
-                        ];
-                    }
+                    // 添加subpacks配置
+                    manifestJson.subpacks = [
+                        {
+                            "folder_name": subpackId,
+                            "name": subpackName,
+                            "memory_tier": 1
+                        }
+                    ];
                     
                     zip.file('manifest.json', JSON.stringify(manifestJson, null, 2));
                 }
@@ -6095,16 +6084,14 @@ if (packBtn) {
                     ]
                 };
                 
-                // 如果启用子包切换，添加subpacks配置
-                if (isSubpackEnabled) {
-                    manifestJson.subpacks = [
-                        {
-                            "folder_name": subpackId,
-                            "name": subpackName,
-                            "memory_tier": 1
-                        }
-                    ];
-                }
+                // 添加subpacks配置
+                manifestJson.subpacks = [
+                    {
+                        "folder_name": subpackId,
+                        "name": subpackName,
+                        "memory_tier": 1
+                    }
+                ];
                 
                 zip.file('manifest.json', JSON.stringify(manifestJson, null, 2));
             }
@@ -6131,11 +6118,7 @@ if (packBtn) {
                             recordKey = 'pigstep';
                         }
                         const descriptionContent = `${recordKey}=${descInput.value.trim()}`;
-                        if (isSubpackEnabled) {
-                            zip.file(`subpack/${subpackId}/texts/description.txt`, descriptionContent, { append: true });
-                        } else {
-                            zip.file(`texts/description.txt`, descriptionContent, { append: true });
-                        }
+                        zip.file(`subpack/${subpackId}/texts/description.txt`, descriptionContent, { append: true });
                     }
                 }
             });
@@ -6196,11 +6179,7 @@ if (packBtn) {
                     }
                 });
                 
-                if (isSubpackEnabled) {
-                    zip.file(`subpack/${subpackId}/texts/${lang}.lang`, langContent.trim());
-                } else {
-                    zip.file(`texts/${lang}.lang`, langContent.trim());
-                }
+                zip.file(`subpack/${subpackId}/texts/${lang}.lang`, langContent.trim());
             });
             
             // 添加command.txt文件，内容与播放指令生成输入框相同

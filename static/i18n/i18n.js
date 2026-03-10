@@ -523,13 +523,6 @@ const i18n = {
       subpackSelectLabel.textContent = this.t('upload.select_subpack', '选择子包');
     }
     
-    const subpackNoOption = document.getElementById('subpackNoOption');
-    console.log('subpackNoOption:', subpackNoOption);
-    if (subpackNoOption) {
-      console.log('Updating subpackNoOption text');
-      subpackNoOption.textContent = this.t('upload.no_subpack', '不使用子包');
-    }
-    
     const addSubpackBtn = document.getElementById('addSubpackBtn');
     console.log('addSubpackBtn:', addSubpackBtn);
     if (addSubpackBtn) {
