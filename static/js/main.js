@@ -2189,39 +2189,9 @@ const fileInputs = [
 
 // 处理上传资源包
 function handleResourcePackUpload(file) {
-    // 创建导入选项窗口
-    const importModal = document.createElement('div');
-    importModal.id = 'resourcePackImportModal';
-    importModal.className = 'modal';
-    importModal.style.display = 'block';
-    importModal.style.zIndex = '1002';
-    importModal.innerHTML = `
-        <div class="modal-content">
-            <h3>${i18n.t('upload.resource_pack_title', '上传资源包')}</h3>
-            <p>${i18n.t('upload.resource_pack_option', '请选择导入方式：')}</p>
-            <div style="display: flex; gap: 10px; margin-top: 20px;">
-                <button class="btn" id="fullImportBtn" style="flex: 1;">${i18n.t('upload.full_import', '全量上传')}</button>
-                <button class="btn" id="addSubpackBtn" style="flex: 1;">${i18n.t('upload.add_subpack_import', '增加子包')}</button>
-                <button class="btn" id="cancelImportBtn" style="flex: 1;">${i18n.t('modal.cancel', '取消')}</button>
-            </div>
-        </div>
-    `;
-    document.body.appendChild(importModal);
-    
-    // 绑定按钮事件
-    document.getElementById('fullImportBtn').addEventListener('click', function() {
-        document.body.removeChild(importModal);
-        processResourcePackImport(file, 'full');
-    });
-    
-    document.getElementById('addSubpackBtn').addEventListener('click', function() {
-        document.body.removeChild(importModal);
-        processResourcePackImport(file, 'addSubpack');
-    });
-    
-    document.getElementById('cancelImportBtn').addEventListener('click', function() {
-        document.body.removeChild(importModal);
-    });
+    // 获取单选按钮的选择
+    const importOption = document.querySelector('input[name="importOption"]:checked').value;
+    processResourcePackImport(file, importOption);
 }
 
 function processResourcePackImport(file, importType) {

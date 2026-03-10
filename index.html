@@ -105,12 +105,28 @@
                 <input type="file" id="resourcePackFile">
                 <div class="custom-btn" id="resourcePackBtnText">选择资源包</div>
             </div>
+            <div style="margin-top: 15px;">
+                <p style="margin-bottom: 8px;" id="resourcePackOptionText">请选择导入方式：</p>
+                <div style="display: flex; gap: 15px; align-items: center;">
+                    <label style="display: flex; align-items: center; gap: 5px; cursor: pointer;">
+                        <input type="radio" name="importOption" value="full" checked style="margin: 0;">
+                        <span id="fullImportText">全量上传</span>
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 5px; cursor: pointer;">
+                        <input type="radio" name="importOption" value="addSubpack" style="margin: 0;">
+                        <span id="addSubpackImportText">增加子包</span>
+                    </label>
+                </div>
+            </div>
         </div>
         <script>
             // 更新上传资源包区域文本
             document.getElementById('resourcePackTitle').textContent = i18n.t('upload.resource_pack_title', '上传资源包');
             document.getElementById('resourcePackNote').textContent = i18n.t('upload.resource_pack_note', '仅适用于之前在此工具生成的资源包');
             document.getElementById('resourcePackBtnText').textContent = i18n.t('upload.select_resource_pack', '选择资源包');
+            document.getElementById('resourcePackOptionText').textContent = i18n.t('upload.resource_pack_option', '请选择导入方式：');
+            document.getElementById('fullImportText').textContent = i18n.t('upload.full_import', '全量上传');
+            document.getElementById('addSubpackImportText').textContent = i18n.t('upload.add_subpack_import', '增加子包');
         </script>
         
         <!-- 子包切换区域 -->
