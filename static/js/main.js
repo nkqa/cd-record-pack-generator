@@ -2715,6 +2715,9 @@ window.addEventListener('DOMContentLoaded', function() {
             
             // 切换显示的文件
             loadSubpackFiles(newSubpackId);
+            
+            // 确保所有后续操作都使用新的子包ID
+            console.log('Switched to subpack:', newSubpackId);
         });
     }
     
@@ -2723,9 +2726,12 @@ window.addEventListener('DOMContentLoaded', function() {
         // 清空当前显示
         clearFileInputs();
         
+        console.log('Loading files for subpack:', subpackId);
+        
         // 加载子包的音频文件
         const subpackData = window.subpackFiles[subpackId];
         if (subpackData && subpackData.audio) {
+            console.log('Loading audio files:', Object.keys(subpackData.audio));
             for (const [inputId, audioData] of Object.entries(subpackData.audio)) {
                 const input = document.getElementById(inputId);
                 if (input) {
@@ -2734,7 +2740,13 @@ window.addEventListener('DOMContentLoaded', function() {
                     input.files = dataTransfer.files;
                     
                     // 更新预览
-                    updateAudioPreview(inputId, audioData.file);
+                    const previewId = inputId.replace('oggFile_', 'audioPreview_');
+                    const preview = document.getElementById(previewId);
+                    if (preview) {
+                        const url = URL.createObjectURL(audioData.file);
+                        preview.src = url;
+                        preview.style.display = 'block';
+                    }
                     
                     // 更新描述框
                     const descInput = document.getElementById(`desc_${inputId.replace('oggFile_', '')}`);
@@ -2747,6 +2759,7 @@ window.addEventListener('DOMContentLoaded', function() {
         
         // 加载子包的图片文件
         if (subpackData && subpackData.image) {
+            console.log('Loading image files:', Object.keys(subpackData.image));
             for (const [inputId, imageData] of Object.entries(subpackData.image)) {
                 const input = document.getElementById(inputId);
                 if (input) {
@@ -2755,7 +2768,13 @@ window.addEventListener('DOMContentLoaded', function() {
                     input.files = dataTransfer.files;
                     
                     // 更新预览
-                    updateImagePreview(inputId, imageData.file);
+                    const previewId = inputId.replace('imageFile_', 'imagePreview_');
+                    const preview = document.getElementById(previewId);
+                    if (preview) {
+                        const url = URL.createObjectURL(imageData.file);
+                        preview.src = url;
+                        preview.style.display = 'block';
+                    }
                 }
             }
         }
