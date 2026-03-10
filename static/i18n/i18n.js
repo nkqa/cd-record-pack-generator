@@ -508,12 +508,33 @@ const i18n = {
       imageSizeLabel.textContent = this.t('upload.image_size_modify', '启用物品展示图像素修改');
     }
     
-    // 更新子包切换标签
-    const subpackLabel = document.getElementById('subpackText');
-    console.log('subpackLabel:', subpackLabel);
-    if (subpackLabel) {
-      console.log('Updating subpackLabel text');
-      subpackLabel.textContent = this.t('upload.enable_subpack', '启用子包切换');
+    // 更新子包切换区域文本
+    const subpackTitle = document.getElementById('subpackTitle');
+    console.log('subpackTitle:', subpackTitle);
+    if (subpackTitle) {
+      console.log('Updating subpackTitle text');
+      subpackTitle.textContent = this.t('upload.subpack_title', '子包切换');
+    }
+    
+    const subpackSelectLabel = document.getElementById('subpackSelectLabel');
+    console.log('subpackSelectLabel:', subpackSelectLabel);
+    if (subpackSelectLabel) {
+      console.log('Updating subpackSelectLabel text');
+      subpackSelectLabel.textContent = this.t('upload.select_subpack', '选择子包');
+    }
+    
+    const subpackNoOption = document.getElementById('subpackNoOption');
+    console.log('subpackNoOption:', subpackNoOption);
+    if (subpackNoOption) {
+      console.log('Updating subpackNoOption text');
+      subpackNoOption.textContent = this.t('upload.no_subpack', '不使用子包');
+    }
+    
+    const addSubpackBtn = document.getElementById('addSubpackBtn');
+    console.log('addSubpackBtn:', addSubpackBtn);
+    if (addSubpackBtn) {
+      console.log('Updating addSubpackBtn text');
+      addSubpackBtn.textContent = this.t('upload.add_subpack', '新增子包');
     }
     
     // 更新像素输入框占位符

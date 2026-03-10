@@ -113,6 +113,22 @@
             document.getElementById('resourcePackBtnText').textContent = i18n.t('upload.select_resource_pack', '选择资源包');
         </script>
         
+        <!-- 子包切换区域 -->
+        <div class="subpack-section" style="margin-bottom: 30px; background-color: #f9f9f9; border-radius: 8px; padding: 20px;">
+            <h3 id="subpackTitle">子包切换</h3>
+            <div style="display: flex; align-items: center; gap: 10px; margin-top: 15px;">
+                <div style="flex: 1;">
+                    <label for="subpackSelect" style="display: block; margin-bottom: 5px;" id="subpackSelectLabel">选择子包</label>
+                    <select id="subpackSelect" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;">
+                        <option value="" id="subpackNoOption">不使用子包</option>
+                    </select>
+                </div>
+                <div style="flex: 1;">
+                    <button class="btn" id="addSubpackBtn" style="width: 100%;">新增子包</button>
+                </div>
+            </div>
+        </div>
+        
         <!-- 批量上传区域 -->
         <div class="batch-upload-section" style="margin-bottom: 30px; background-color: #f9f9f9; border-radius: 8px;">
             <button class="info-toggle" onclick="toggleBatchUpload()" style="width: 100%; text-align: left; padding: 10px 20px; border: none; background: none; font-size: 18px; font-weight: bold; cursor: pointer;">
@@ -768,14 +784,6 @@
             <div class="audio-processing-option" style="margin-left: 20px;">
                 <input type="number" id="imageSizeInput" value="32" min="1" max="1024" style="width: 100px; padding: 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; margin-left: 10px;">
                 <span style="margin-left: 5px;">像素</span>
-            </div>
-            
-            <div class="audio-processing-option">
-                <span id="subpackText">启用子包切换</span>
-                <div class="toggle-switch">
-                    <input type="checkbox" id="subpackToggle">
-                    <label for="subpackToggle" class="toggle-label"></label>
-                </div>
             </div>
             
             <div style="display: flex; justify-content: flex-end; margin-top: 20px;">

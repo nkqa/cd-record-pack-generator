@@ -2497,6 +2497,51 @@ function parseLangFile(content) {
 
 // 页面加载完成后初始化
 window.addEventListener('DOMContentLoaded', function() {
+    // 子包管理
+    const subpackSelect = document.getElementById('subpackSelect');
+    const addSubpackBtn = document.getElementById('addSubpackBtn');
+    
+    // 初始化子包列表
+    function initSubpacks() {
+        const savedSubpacks = localStorage.getItem('subpacks');
+        if (savedSubpacks) {
+            const subpacks = JSON.parse(savedSubpacks);
+            subpacks.forEach(subpack => {
+                const option = document.createElement('option');
+                option.value = subpack.id;
+                option.textContent = subpack.name;
+                subpackSelect.appendChild(option);
+            });
+        }
+    }
+    
+    // 新增子包
+    if (addSubpackBtn) {
+        addSubpackBtn.addEventListener('click', function() {
+            const subpackId = generateRandomId(8);
+            const subpackName = prompt('请输入子包名称:', `子包 ${subpackId}`);
+            
+            if (subpackName !== null && subpackName.trim() !== '') {
+                const option = document.createElement('option');
+                option.value = subpackId;
+                option.textContent = subpackName.trim();
+                subpackSelect.appendChild(option);
+                
+                // 保存到localStorage
+                const savedSubpacks = localStorage.getItem('subpacks');
+                const subpacks = savedSubpacks ? JSON.parse(savedSubpacks) : [];
+                subpacks.push({ id: subpackId, name: subpackName.trim() });
+                localStorage.setItem('subpacks', JSON.stringify(subpacks));
+                
+                // 自动选中新创建的子包
+                subpackSelect.value = subpackId;
+            }
+        });
+    }
+    
+    // 初始化子包列表
+    initSubpacks();
+    
     // 为资源包上传添加事件监听器
     const resourcePackFile = document.getElementById('resourcePackFile');
     if (resourcePackFile) {
@@ -5698,15 +5743,13 @@ if (packBtn) {
             // 创建压缩包
             const zip = new JSZip();
             
-            // 检查是否启用子包切换
-            const subpackToggle = document.getElementById('subpackToggle');
-            const isSubpackEnabled = subpackToggle ? subpackToggle.checked : false;
+            // 获取选中的子包ID
+            const subpackSelect = document.getElementById('subpackSelect');
+            const selectedSubpackId = subpackSelect ? subpackSelect.value : '';
+            const isSubpackEnabled = selectedSubpackId !== '';
             
             // 生成随机字母数字字符串标识
-            let subpackId = '';
-            if (isSubpackEnabled) {
-                subpackId = generateRandomId(8);
-            }
+            let subpackId = selectedSubpackId;
             
             // 添加音频文件到压缩包
             uploadedFiles.forEach(item => {
