@@ -132,22 +132,46 @@
         <!-- 子包切换区域 -->
         <div class="subpack-section" style="margin-bottom: 30px; background-color: #f9f9f9; border-radius: 8px; padding: 20px;">
             <h3 id="subpackTitle">子包切换</h3>
-            <div style="display: flex; align-items: center; gap: 10px; margin-top: 15px;">
-                <div style="flex: 1;">
+            <div class="subpack-container" style="margin-top: 15px;">
+                <div class="subpack-select-wrapper" style="margin-bottom: 10px;">
                     <label for="subpackSelect" style="display: block; margin-bottom: 5px;" id="subpackSelectLabel">选择子包</label>
                     <select id="subpackSelect" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;">
                     </select>
                 </div>
-                <div style="flex: 1;">
-                    <button class="btn" id="renameSubpackBtn" style="width: 100%;">重命名</button>
-                </div>
-                <div style="flex: 1;">
-                    <button class="btn" id="addSubpackBtn" style="width: 100%;">新增子包</button>
-                </div>
-                <div style="flex: 1;">
-                    <button class="btn" id="deleteSubpackBtn" style="width: 100%;">删除</button>
+                <div class="subpack-buttons" style="display: flex; gap: 10px;">
+                    <div style="flex: 1;">
+                        <button class="btn" id="renameSubpackBtn" style="width: 100%;">重命名</button>
+                    </div>
+                    <div style="flex: 1;">
+                        <button class="btn" id="addSubpackBtn" style="width: 100%;">新增子包</button>
+                    </div>
+                    <div style="flex: 1;">
+                        <button class="btn" id="deleteSubpackBtn" style="width: 100%;">删除</button>
+                    </div>
                 </div>
             </div>
+            <style>
+                /* 默认布局（竖屏） */
+                .subpack-container {
+                    display: block;
+                }
+                
+                /* 横屏时的布局 */
+                @media (orientation: landscape) {
+                    .subpack-container {
+                        display: flex;
+                        align-items: center;
+                        gap: 10px;
+                    }
+                    .subpack-select-wrapper {
+                        flex: 1;
+                        margin-bottom: 0;
+                    }
+                    .subpack-buttons {
+                        flex: 2;
+                    }
+                }
+            </style>
         </div>
         
         <!-- 批量上传区域 -->
