@@ -128,7 +128,8 @@
     "resource_pack_note": "このツールで以前生成されたリソースパックのみ対応",
     "confirm_upload": "アップロードを確認",
     "confirm_upload_message": "リソースパックをアップロードすると、現在選択されている音楽とアイテム表示画像が選択解除されます。リソースパックをアップロードしてもよろしいですか？",
-    "select_mcpack_zip_format": ".mcpack または .zip 形式のファイルを選択してください"
+    "select_mcpack_zip_format": ".mcpack または .zip 形式のファイルを選択してください",
+    "enable_subpack": "サブパック切り替えを有効にする"
   },
   "batch_upload": {
     "title": "一括アップロード",

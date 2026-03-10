@@ -178,6 +178,15 @@ function generateUUID() {
     });
 }
 
+function generateRandomId(length) {
+    const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let result = '';
+    for (let i = 0; i < length; i++) {
+        result += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return result;
+}
+
 
 
 
@@ -5689,11 +5698,25 @@ if (packBtn) {
             // 创建压缩包
             const zip = new JSZip();
             
+            // 检查是否启用子包切换
+            const subpackToggle = document.getElementById('subpackToggle');
+            const isSubpackEnabled = subpackToggle ? subpackToggle.checked : false;
+            
+            // 生成随机字母数字字符串标识
+            let subpackId = '';
+            if (isSubpackEnabled) {
+                subpackId = generateRandomId(8);
+            }
+            
             // 添加音频文件到压缩包
             uploadedFiles.forEach(item => {
                 const file = item.file;
                 const targetName = item.targetName;
-                zip.file(`sounds/music/game/records/${targetName}`, file);
+                if (isSubpackEnabled) {
+                    zip.file(`subpack/${subpackId}/sounds/music/game/records/${targetName}`, file);
+                } else {
+                    zip.file(`sounds/music/game/records/${targetName}`, file);
+                }
             });
             
 
@@ -5755,10 +5778,18 @@ if (packBtn) {
                     if (isImageSizeEnabled) {
                         // 调整图片像素
                         const resizedFile = await resizeImage(imageFile, maxSize);
-                        zip.file(`textures/items/${targetName}`, resizedFile);
+                        if (isSubpackEnabled) {
+                            zip.file(`subpack/${subpackId}/textures/items/${targetName}`, resizedFile);
+                        } else {
+                            zip.file(`textures/items/${targetName}`, resizedFile);
+                        }
                     } else {
                         // 直接使用原始文件，不调整像素
-                        zip.file(`textures/items/${targetName}`, imageFile);
+                        if (isSubpackEnabled) {
+                            zip.file(`subpack/${subpackId}/textures/items/${targetName}`, imageFile);
+                        } else {
+                            zip.file(`textures/items/${targetName}`, imageFile);
+                        }
                     }
                 }
             }
@@ -5918,7 +5949,11 @@ if (packBtn) {
                             recordKey = 'pigstep';
                         }
                         const descriptionContent = `${recordKey}=${descInput.value.trim()}`;
-                        zip.file(`texts/description.txt`, descriptionContent, { append: true });
+                        if (isSubpackEnabled) {
+                            zip.file(`subpack/${subpackId}/texts/description.txt`, descriptionContent, { append: true });
+                        } else {
+                            zip.file(`texts/description.txt`, descriptionContent, { append: true });
+                        }
                     }
                 }
             });
@@ -5979,7 +6014,11 @@ if (packBtn) {
                     }
                 });
                 
-                zip.file(`texts/${lang}.lang`, langContent.trim());
+                if (isSubpackEnabled) {
+                    zip.file(`subpack/${subpackId}/texts/${lang}.lang`, langContent.trim());
+                } else {
+                    zip.file(`texts/${lang}.lang`, langContent.trim());
+                }
             });
             
             // 添加command.txt文件，内容与播放指令生成输入框相同

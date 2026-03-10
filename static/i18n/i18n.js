@@ -508,6 +508,14 @@ const i18n = {
       imageSizeLabel.textContent = this.t('upload.image_size_modify', '启用物品展示图像素修改');
     }
     
+    // 更新子包切换标签
+    const subpackLabel = document.getElementById('subpackText');
+    console.log('subpackLabel:', subpackLabel);
+    if (subpackLabel) {
+      console.log('Updating subpackLabel text');
+      subpackLabel.textContent = this.t('upload.enable_subpack', '启用子包切换');
+    }
+    
     // 更新像素输入框占位符
     const imageSizeInput = document.getElementById('imageSizeInput');
     console.log('imageSizeInput:', imageSizeInput);
