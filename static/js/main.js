@@ -2291,6 +2291,30 @@ function processResourcePackImport(file, importType) {
         if (batchAudioList) {
             batchAudioList.innerHTML = '';
         }
+    } else if (importType === 'addSubpack') {
+        // 增加子包：先创建新子包，然后导入文件
+        const subpackId = generateRandomId(8);
+        const subpackName = prompt(i18n.t('upload.input_subpack_name', '请输入子包名称:'), getNextSubpackName());
+        
+        if (subpackName !== null && subpackName.trim() !== '') {
+            const subpacks = getSubpacks();
+            subpacks.push({ id: subpackId, name: subpackName.trim() });
+            saveSubpacks(subpacks);
+            refreshSubpackSelect();
+            
+            // 自动选中新创建的子包
+            subpackSelect.value = subpackId;
+            
+            // 保存新子包ID到全局变量，供文件导入时使用
+            window.importToSubpackId = subpackId;
+        } else {
+            // 用户取消输入，不进行导入
+            const importModal = document.getElementById('resourcePackImportModal');
+            if (importModal) {
+                document.body.removeChild(importModal);
+            }
+            return;
+        }
     }
     
     JSZip.loadAsync(file)
@@ -2333,19 +2357,29 @@ function processResourcePackImport(file, importType) {
                                 zipNameInput.value = manifest.header.name || '';
                             }
                             
-                            // 填充自定义描述
-                            for (const inputInfo of fileInputs) {
-                                const descInput = document.getElementById(`desc_${inputInfo.id.replace('oggFile_', '')}`);
-                                if (descInput) {
-                                    const recordName = recordNameMap[inputInfo.id];
-                                    // 尝试两种可能的lang key格式
-                                    const langKey1 = `item.record.${recordName}.name`;
-                                    const langKey2 = `item.record_${recordName}.desc`;
-                                    
-                                    if (langData[langKey1]) {
-                                        descInput.value = langData[langKey1];
-                                    } else if (langData[langKey2]) {
-                                        descInput.value = langData[langKey2];
+                            // 如果是增加子包模式，保存lang文件内容
+                            if (window.importToSubpackId) {
+                                if (!window.extraSubpackFiles[window.importToSubpackId]) {
+                                    window.extraSubpackFiles[window.importToSubpackId] = {};
+                                }
+                                window.extraSubpackFiles[window.importToSubpackId].langContent = langContent;
+                            }
+                            
+                            // 填充自定义描述（只在全量上传时填充）
+                            if (!window.importToSubpackId) {
+                                for (const inputInfo of fileInputs) {
+                                    const descInput = document.getElementById(`desc_${inputInfo.id.replace('oggFile_', '')}`);
+                                    if (descInput) {
+                                        const recordName = recordNameMap[inputInfo.id];
+                                        // 尝试两种可能的lang key格式
+                                        const langKey1 = `item.record.${recordName}.name`;
+                                        const langKey2 = `item.record_${recordName}.desc`;
+                                        
+                                        if (langData[langKey1]) {
+                                            descInput.value = langData[langKey1];
+                                        } else if (langData[langKey2]) {
+                                            descInput.value = langData[langKey2];
+                                        }
                                     }
                                 }
                             }
@@ -2387,27 +2421,40 @@ function processResourcePackImport(file, importType) {
                                                 const audioFile = new File([blob], inputInfo.targetName, { type: 'audio/ogg' });
                                                 // 添加标记，表明这是从资源包上传的文件，不需要检查时长
                                                 audioFile.fromResourcePack = true;
-                                                const input = document.getElementById(inputInfo.id);
-                                                if (input) {
-                                                    const dataTransfer = new DataTransfer();
-                                                    dataTransfer.items.add(audioFile);
-                                                    input.files = dataTransfer.files;
-                                                    
-                                                    // 触发change事件
-                                                    const event = new Event('change');
-                                                    input.dispatchEvent(event);
-                                                }
                                                 
-                                                // 检查音频时长并显示警告（如果超过限制）
-                                                getAudioDuration(audioFile).then(duration => {
-                                                    const limit = audioDurationLimits[inputInfo.id];
-                                                    if (limit && duration > limit) {
-                                                        // 直接显示超过时长警告，不显示弹窗
-                                                        showDurationExceededWarning(inputInfo.id);
+                                                // 如果是增加子包模式，保存到额外子包文件存储
+                                                if (window.importToSubpackId) {
+                                                    if (!window.extraSubpackFiles[window.importToSubpackId]) {
+                                                        window.extraSubpackFiles[window.importToSubpackId] = {};
                                                     }
-                                                }).catch(error => {
-                                                    console.error('音频时长检测失败:', error);
-                                                });
+                                                    window.extraSubpackFiles[window.importToSubpackId][inputInfo.id] = {
+                                                        file: audioFile,
+                                                        targetName: inputInfo.targetName
+                                                    };
+                                                } else {
+                                                    // 全量上传模式，设置到input元素
+                                                    const input = document.getElementById(inputInfo.id);
+                                                    if (input) {
+                                                        const dataTransfer = new DataTransfer();
+                                                        dataTransfer.items.add(audioFile);
+                                                        input.files = dataTransfer.files;
+                                                        
+                                                        // 触发change事件
+                                                        const event = new Event('change');
+                                                        input.dispatchEvent(event);
+                                                    }
+                                                    
+                                                    // 检查音频时长并显示警告（如果超过限制）
+                                                    getAudioDuration(audioFile).then(duration => {
+                                                        const limit = audioDurationLimits[inputInfo.id];
+                                                        if (limit && duration > limit) {
+                                                            // 直接显示超过时长警告，不显示弹窗
+                                                            showDurationExceededWarning(inputInfo.id);
+                                                        }
+                                                    }).catch(error => {
+                                                        console.error('音频时长检测失败:', error);
+                                                    });
+                                                }
                                             })
                                     );
                                 }
@@ -2439,15 +2486,28 @@ function processResourcePackImport(file, importType) {
                                         zip.file(foundPath).async('blob')
                                             .then(function(blob) {
                                                 const imageFile = new File([blob], info.targetName, { type: 'image/png' });
-                                                const input = document.getElementById(info.id);
-                                                if (input) {
-                                                    const dataTransfer = new DataTransfer();
-                                                    dataTransfer.items.add(imageFile);
-                                                    input.files = dataTransfer.files;
-                                                    
-                                                    // 触发change事件
-                                                    const event = new Event('change');
-                                                    input.dispatchEvent(event);
+                                                
+                                                // 如果是增加子包模式，保存到额外子包文件存储
+                                                if (window.importToSubpackId) {
+                                                    if (!window.extraSubpackFiles[window.importToSubpackId]) {
+                                                        window.extraSubpackFiles[window.importToSubpackId] = {};
+                                                    }
+                                                    window.extraSubpackFiles[window.importToSubpackId][info.id] = {
+                                                        file: imageFile,
+                                                        targetName: info.targetName
+                                                    };
+                                                } else {
+                                                    // 全量上传模式，设置到input元素
+                                                    const input = document.getElementById(info.id);
+                                                    if (input) {
+                                                        const dataTransfer = new DataTransfer();
+                                                        dataTransfer.items.add(imageFile);
+                                                        input.files = dataTransfer.files;
+                                                        
+                                                        // 触发change事件
+                                                        const event = new Event('change');
+                                                        input.dispatchEvent(event);
+                                                    }
                                                 }
                                             })
                                     );
@@ -2478,22 +2538,6 @@ function processResourcePackImport(file, importType) {
                 });
         })
         .then(function() {
-            if (importType === 'addSubpack') {
-                // 增加子包功能：创建新子包
-                const subpackId = generateRandomId(8);
-                const subpackName = prompt(i18n.t('upload.input_subpack_name', '请输入子包名称:'), getNextSubpackName());
-                
-                if (subpackName !== null && subpackName.trim() !== '') {
-                    const subpacks = getSubpacks();
-                    subpacks.push({ id: subpackId, name: subpackName.trim() });
-                    saveSubpacks(subpacks);
-                    refreshSubpackSelect();
-                    
-                    // 自动选中新创建的子包
-                    subpackSelect.value = subpackId;
-                }
-            }
-            
             const status = document.getElementById('status');
             status.textContent = i18n.t('modal.resource_pack.import_success', '资源包导入成功！');
             status.style.color = '#4CAF50';
@@ -4245,7 +4289,8 @@ window.audioDurationLimits = audioDurationLimits;
 // 保存上一次成功上传的音频文件信息
 window.lastValidAudioFiles = {};
 
-
+// 保存额外子包的文件（用于增加子包功能）
+window.extraSubpackFiles = {};
 
 // 保存每个文件输入的上一次选择的文件信息
 const lastSelectedFiles = {};
@@ -5983,6 +6028,44 @@ if (packBtn) {
                 }
             }
             
+            // 处理额外子包的文件（用于增加子包功能）
+            if (window.extraSubpackFiles && Object.keys(window.extraSubpackFiles).length > 0) {
+                for (const [extraSubpackId, extraFiles] of Object.entries(window.extraSubpackFiles)) {
+                    // 获取额外子包的名称
+                    let extraSubpackName = '';
+                    const savedSubpacks = localStorage.getItem('subpacks');
+                    if (savedSubpacks) {
+                        const subpacks = JSON.parse(savedSubpacks);
+                        const subpack = subpacks.find(s => s.id === extraSubpackId);
+                        if (subpack) {
+                            extraSubpackName = subpack.name;
+                        }
+                    }
+                    
+                    // 添加额外子包的音频文件
+                    for (const [inputId, fileData] of Object.entries(extraFiles)) {
+                        const audioFile = fileData.file;
+                        const targetName = fileData.targetName;
+                        
+                        // 检查是否是音频文件（通过targetName判断）
+                        if (targetName && targetName.endsWith('.ogg')) {
+                            zip.file(`subpack/${extraSubpackId}/sounds/music/game/records/${targetName}`, audioFile);
+                        }
+                    }
+                    
+                    // 添加额外子包的图片文件
+                    for (const [inputId, fileData] of Object.entries(extraFiles)) {
+                        const imageFile = fileData.file;
+                        const targetName = fileData.targetName;
+                        
+                        // 检查是否是图片文件（通过targetName判断，不包含.ogg）
+                        if (targetName && !targetName.endsWith('.ogg')) {
+                            zip.file(`subpack/${extraSubpackId}/textures/items/${targetName}`, imageFile);
+                        }
+                    }
+                }
+            }
+            
             // 添加pack_icon.png（如果有，否则使用默认图标或第一个上传的物品展示图）
             if (window.lastValidIconFile) {
                 zip.file('pack_icon.png', window.lastValidIconFile);
@@ -6067,15 +6150,35 @@ if (packBtn) {
                     manifestJson.header.uuid = generateUUID();
                     manifestJson.modules[0].uuid = generateUUID();
                     
-                    // 如果启用子包切换，添加subpacks配置
-                    // 添加subpacks配置
-                    manifestJson.subpacks = [
+                    // 获取所有子包列表
+                    let allSubpacks = [
                         {
                             "folder_name": subpackId,
                             "name": subpackName,
                             "memory_tier": 1
                         }
                     ];
+                    
+                    // 添加额外子包的配置
+                    if (window.extraSubpackFiles && Object.keys(window.extraSubpackFiles).length > 0) {
+                        const savedSubpacks = localStorage.getItem('subpacks');
+                        if (savedSubpacks) {
+                            const savedSubpacksList = JSON.parse(savedSubpacks);
+                            for (const extraSubpackId of Object.keys(window.extraSubpackFiles)) {
+                                const extraSubpack = savedSubpacksList.find(s => s.id === extraSubpackId);
+                                if (extraSubpack) {
+                                    allSubpacks.push({
+                                        "folder_name": extraSubpackId,
+                                        "name": extraSubpack.name,
+                                        "memory_tier": 1
+                                    });
+                                }
+                            }
+                        }
+                    }
+                    
+                    // 添加subpacks配置
+                    manifestJson.subpacks = allSubpacks;
                     
                     // 添加修改后的manifest.json文件
                     zip.file('manifest.json', JSON.stringify(manifestJson, null, 2));
@@ -6101,14 +6204,34 @@ if (packBtn) {
                         ]
                     };
                     
-                    // 添加subpacks配置
-                    manifestJson.subpacks = [
+                    // 添加subpacks配置（同样处理额外子包）
+                    let defaultSubpacks = [
                         {
                             "folder_name": subpackId,
                             "name": subpackName,
                             "memory_tier": 1
                         }
                     ];
+                    
+                    // 添加额外子包的配置
+                    if (window.extraSubpackFiles && Object.keys(window.extraSubpackFiles).length > 0) {
+                        const savedSubpacks = localStorage.getItem('subpacks');
+                        if (savedSubpacks) {
+                            const savedSubpacksList = JSON.parse(savedSubpacks);
+                            for (const extraSubpackId of Object.keys(window.extraSubpackFiles)) {
+                                const extraSubpack = savedSubpacksList.find(s => s.id === extraSubpackId);
+                                if (extraSubpack) {
+                                    defaultSubpacks.push({
+                                        "folder_name": extraSubpackId,
+                                        "name": extraSubpack.name,
+                                        "memory_tier": 1
+                                    });
+                                }
+                            }
+                        }
+                    }
+                    
+                    manifestJson.subpacks = defaultSubpacks;
                     
                     zip.file('manifest.json', JSON.stringify(manifestJson, null, 2));
                 }
@@ -6135,14 +6258,34 @@ if (packBtn) {
                     ]
                 };
                 
-                // 添加subpacks配置
-                manifestJson.subpacks = [
+                // 添加subpacks配置（同样处理额外子包）
+                let catchSubpacks = [
                     {
                         "folder_name": subpackId,
                         "name": subpackName,
                         "memory_tier": 1
                     }
                 ];
+                
+                // 添加额外子包的配置
+                if (window.extraSubpackFiles && Object.keys(window.extraSubpackFiles).length > 0) {
+                    const savedSubpacks = localStorage.getItem('subpacks');
+                    if (savedSubpacks) {
+                        const savedSubpacksList = JSON.parse(savedSubpacks);
+                        for (const extraSubpackId of Object.keys(window.extraSubpackFiles)) {
+                            const extraSubpack = savedSubpacksList.find(s => s.id === extraSubpackId);
+                            if (extraSubpack) {
+                                catchSubpacks.push({
+                                    "folder_name": extraSubpackId,
+                                    "name": extraSubpack.name,
+                                    "memory_tier": 1
+                                });
+                            }
+                        }
+                    }
+                }
+                
+                manifestJson.subpacks = catchSubpacks;
                 
                 zip.file('manifest.json', JSON.stringify(manifestJson, null, 2));
             }
@@ -6232,6 +6375,45 @@ if (packBtn) {
                 
                 zip.file(`subpack/${subpackId}/texts/${lang}.lang`, langContent.trim());
             });
+            
+            // 处理额外子包的lang文件
+            if (window.extraSubpackFiles && Object.keys(window.extraSubpackFiles).length > 0) {
+                for (const [extraSubpackId, extraData] of Object.entries(window.extraSubpackFiles)) {
+                    if (extraData.langContent) {
+                        // 使用导入的lang文件内容
+                        languages.forEach(lang => {
+                            // 从导入的lang文件中提取当前语言的内容
+                            const langData = parseLangFile(extraData.langContent);
+                            let langContent = '# Audio Discs\n';
+                            
+                            Object.keys(defaultValues).forEach(key => {
+                                const recordKey = key === 'pigstep_master' ? 'pigstep' : key;
+                                const langKey1 = `item.record.${recordKey}.name`;
+                                const langKey2 = `item.record_${recordKey}.desc`;
+                                
+                                if (langData[langKey1]) {
+                                    langContent += `${langKey1}=${langData[langKey1]}\n`;
+                                } else if (langData[langKey2]) {
+                                    langContent += `${langKey2}=${langData[langKey2]}\n`;
+                                } else {
+                                    langContent += '\n';
+                                }
+                            });
+                            
+                            zip.file(`subpack/${extraSubpackId}/texts/${lang}.lang`, langContent.trim());
+                        });
+                    } else {
+                        // 如果没有导入的lang文件，使用默认空内容
+                        languages.forEach(lang => {
+                            let langContent = '# Audio Discs\n';
+                            Object.keys(defaultValues).forEach(() => {
+                                langContent += '\n';
+                            });
+                            zip.file(`subpack/${extraSubpackId}/texts/${lang}.lang`, langContent.trim());
+                        });
+                    }
+                }
+            }
             
             // 添加command.txt文件，内容与播放指令生成输入框相同
             const commandOutput = document.getElementById('commandOutput');
