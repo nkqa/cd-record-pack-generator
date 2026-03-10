@@ -138,7 +138,10 @@
     "select_subpack_first": "Please select a subpack first",
     "confirm_delete_subpack": "Are you sure you want to delete subpack \"{name}\"?",
     "input_subpack_name": "Please enter subpack name:",
-    "input_new_subpack_name": "Please enter new subpack name:"
+    "input_new_subpack_name": "Please enter new subpack name:",
+    "resource_pack_option": "Please select import method:",
+    "full_import": "Full Upload",
+    "add_subpack_import": "Add Subpack"
   },
   "batch_upload": {
     "title": "Batch Upload",

@@ -87,7 +87,10 @@
     "select_subpack_first": "请先选择一个子包",
     "confirm_delete_subpack": "确定要删除子包 \"{name}\" 吗？",
     "input_subpack_name": "请输入子包名称:",
-    "input_new_subpack_name": "请输入新的子包名称:"
+    "input_new_subpack_name": "请输入新的子包名称:",
+    "resource_pack_option": "请选择导入方式：",
+    "full_import": "全量上传",
+    "add_subpack_import": "增加子包"
   },
   "batch_upload": {
     "title": "批量上传",

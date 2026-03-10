@@ -2189,6 +2189,42 @@ const fileInputs = [
 
 // 处理上传资源包
 function handleResourcePackUpload(file) {
+    // 创建导入选项窗口
+    const importModal = document.createElement('div');
+    importModal.id = 'resourcePackImportModal';
+    importModal.className = 'modal';
+    importModal.style.display = 'block';
+    importModal.style.zIndex = '1002';
+    importModal.innerHTML = `
+        <div class="modal-content">
+            <h3>${i18n.t('upload.resource_pack_title', '上传资源包')}</h3>
+            <p>${i18n.t('upload.resource_pack_option', '请选择导入方式：')}</p>
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button class="btn" id="fullImportBtn" style="flex: 1;">${i18n.t('upload.full_import', '全量上传')}</button>
+                <button class="btn" id="addSubpackBtn" style="flex: 1;">${i18n.t('upload.add_subpack_import', '增加子包')}</button>
+                <button class="btn" id="cancelImportBtn" style="flex: 1;">${i18n.t('modal.cancel', '取消')}</button>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(importModal);
+    
+    // 绑定按钮事件
+    document.getElementById('fullImportBtn').addEventListener('click', function() {
+        document.body.removeChild(importModal);
+        processResourcePackImport(file, 'full');
+    });
+    
+    document.getElementById('addSubpackBtn').addEventListener('click', function() {
+        document.body.removeChild(importModal);
+        processResourcePackImport(file, 'addSubpack');
+    });
+    
+    document.getElementById('cancelImportBtn').addEventListener('click', function() {
+        document.body.removeChild(importModal);
+    });
+}
+
+function processResourcePackImport(file, importType) {
     // 创建导入窗口
     const importModal = document.createElement('div');
     importModal.id = 'resourcePackImportModal';
@@ -2207,84 +2243,84 @@ function handleResourcePackUpload(file) {
     status.textContent = '正在解析资源包...';
     status.style.color = '#4CAF50';
     
-    // 取消已选择的音乐
-    // 清空lastSelectedFiles对象
-    Object.keys(lastSelectedFiles).forEach(key => delete lastSelectedFiles[key]);
-    // 清空window.lastValidAudioFiles对象
-    window.lastValidAudioFiles = {};
-    
-    // 重置所有音频输入和按钮文本
-    fileInputs.forEach(inputInfo => {
-        const input = document.getElementById(inputInfo.id);
-        const btnText = document.getElementById(inputInfo.btnId);
-        const deleteBtn = input ? input.parentElement.querySelector('.delete-btn') : null;
-        const descInput = document.getElementById(`desc_${inputInfo.id.replace('oggFile_', '')}`);
-        const audioPreview = document.getElementById(`audioPreview_${inputInfo.id.replace('oggFile_', '')}`);
+    if (importType === 'full') {
+        // 全量上传：清空现有内容
+        // 清空lastSelectedFiles对象
+        Object.keys(lastSelectedFiles).forEach(key => delete lastSelectedFiles[key]);
+        // 清空window.lastValidAudioFiles对象
+        window.lastValidAudioFiles = {};
         
-        if (input) {
-            input.value = '';
-        }
-        if (btnText) {
-            btnText.textContent = i18n.t('upload.select_audio', '选择音频（不上传即为保持原版音乐）');
-        }
-        if (deleteBtn) {
-            deleteBtn.style.display = 'none';
-        }
-        if (descInput) {
-            descInput.value = '';
-        }
-        if (audioPreview) {
-            audioPreview.innerHTML = '';
-        }
-    });
-    
-
-    
-    // 重置所有图片输入和按钮文本
-    imageFileInputs.forEach(inputInfo => {
-        const input = document.getElementById(inputInfo.id);
-        const btnText = document.getElementById(inputInfo.btnId);
-        const deleteBtn = input ? input.parentElement.querySelector('.delete-btn') : null;
-        const imagePreview = document.getElementById(`imagePreview_${inputInfo.id.replace('imageFile_', '')}`);
+        // 重置所有音频输入和按钮文本
+        fileInputs.forEach(inputInfo => {
+            const input = document.getElementById(inputInfo.id);
+            const btnText = document.getElementById(inputInfo.btnId);
+            const deleteBtn = input ? input.parentElement.querySelector('.delete-btn') : null;
+            const descInput = document.getElementById(`desc_${inputInfo.id.replace('oggFile_', '')}`);
+            const audioPreview = document.getElementById(`audioPreview_${inputInfo.id.replace('oggFile_', '')}`);
+            
+            if (input) {
+                input.value = '';
+            }
+            if (btnText) {
+                btnText.textContent = i18n.t('upload.select_audio', '选择音频（不上传即为保持原版音乐）');
+            }
+            if (deleteBtn) {
+                deleteBtn.style.display = 'none';
+            }
+            if (descInput) {
+                descInput.value = '';
+            }
+            if (audioPreview) {
+                audioPreview.innerHTML = '';
+            }
+        });
         
-        if (input) {
-            input.value = '';
+        // 重置所有图片输入和按钮文本
+        imageFileInputs.forEach(inputInfo => {
+            const input = document.getElementById(inputInfo.id);
+            const btnText = document.getElementById(inputInfo.btnId);
+            const deleteBtn = input ? input.parentElement.querySelector('.delete-btn') : null;
+            const imagePreview = document.getElementById(`imagePreview_${inputInfo.id.replace('imageFile_', '')}`);
+            
+            if (input) {
+                input.value = '';
+            }
+            if (btnText) {
+                btnText.textContent = i18n.t('upload.item_image', '选择物品展示图（不上传即为保持原版材质）');
+            }
+            if (deleteBtn) {
+                deleteBtn.style.display = 'none';
+            }
+            if (imagePreview) {
+                imagePreview.innerHTML = '';
+            }
+        });
+        
+        // 重置图标输入
+        const iconInput = document.getElementById('iconFile');
+        const iconBtnText = document.getElementById('iconBtnText');
+        const iconPreview = document.getElementById('iconPreview');
+        
+        if (iconInput) {
+            iconInput.value = '';
         }
-        if (btnText) {
-            btnText.textContent = i18n.t('upload.item_image', '选择物品展示图（不上传即为保持原版材质）');
+        if (iconBtnText) {
+            iconBtnText.textContent = i18n.t('upload.select_icon', '选择图标');
         }
-        if (deleteBtn) {
-            deleteBtn.style.display = 'none';
+        if (iconPreview) {
+            iconPreview.innerHTML = '';
         }
-        if (imagePreview) {
-            imagePreview.innerHTML = '';
+        
+        // 重置批量上传列表
+        const batchImageList = document.getElementById('batchImageList');
+        const batchAudioList = document.getElementById('batchAudioList');
+        
+        if (batchImageList) {
+            batchImageList.innerHTML = '';
         }
-    });
-    
-    // 重置图标输入
-    const iconInput = document.getElementById('iconFile');
-    const iconBtnText = document.getElementById('iconBtnText');
-    const iconPreview = document.getElementById('iconPreview');
-    
-    if (iconInput) {
-        iconInput.value = '';
-    }
-    if (iconBtnText) {
-        iconBtnText.textContent = i18n.t('upload.select_icon', '选择图标');
-    }
-    if (iconPreview) {
-        iconPreview.innerHTML = '';
-    }
-    
-    // 重置批量上传列表
-    const batchImageList = document.getElementById('batchImageList');
-    const batchAudioList = document.getElementById('batchAudioList');
-    
-    if (batchImageList) {
-        batchImageList.innerHTML = '';
-    }
-    if (batchAudioList) {
-        batchAudioList.innerHTML = '';
+        if (batchAudioList) {
+            batchAudioList.innerHTML = '';
+        }
     }
     
     JSZip.loadAsync(file)
@@ -2294,14 +2330,23 @@ function handleResourcePackUpload(file) {
                 .then(function(manifestContent) {
                     const manifest = JSON.parse(manifestContent);
                     
-                    // 读取texts/en_US.lang
+                    // 读取texts/en_US.lang（支持子包结构）
                     return Promise.resolve()
                         .then(function() {
+                            // 尝试在根目录查找lang文件
                             if (zip.file('texts/en_US.lang')) {
                                 return zip.file('texts/en_US.lang').async('text');
                             } else {
+                                // 尝试在子包中查找lang文件
+                                const subpackDirs = Object.keys(zip.files).filter(filePath => filePath.startsWith('subpack/') && zip.files[filePath].dir);
+                                for (const subpackDir of subpackDirs) {
+                                    const langPath = `${subpackDir}texts/en_US.lang`;
+                                    if (zip.file(langPath)) {
+                                        return zip.file(langPath).async('text');
+                                    }
+                                }
                                 // 如果没有找到en_US.lang，尝试查找其他语言的lang文件
-                                const langFiles = Object.keys(zip.files).filter(filePath => filePath.startsWith('texts/') && filePath.endsWith('.lang'));
+                                const langFiles = Object.keys(zip.files).filter(filePath => (filePath.startsWith('texts/') || filePath.includes('subpack/')) && filePath.endsWith('.lang'));
                                 if (langFiles.length > 0) {
                                     return zip.file(langFiles[0]).async('text');
                                 } else {
@@ -2344,11 +2389,18 @@ function handleResourcePackUpload(file) {
                                 let possiblePaths = [];
                                 const targetName = inputInfo.targetName;
                                 
-                                // 唱片音乐
+                                // 唱片音乐 - 根目录
                                 possiblePaths = [
                                     `sounds/records/${targetName}`,
                                     `sounds/music/game/records/${targetName}`
                                 ];
+                                
+                                // 尝试在子包中查找
+                                const subpackDirs = Object.keys(zip.files).filter(filePath => filePath.startsWith('subpack/') && zip.files[filePath].dir);
+                                for (const subpackDir of subpackDirs) {
+                                    possiblePaths.push(`${subpackDir}sounds/records/${targetName}`);
+                                    possiblePaths.push(`${subpackDir}sounds/music/game/records/${targetName}`);
+                                }
                                 
                                 let foundPath = null;
                                 for (const path of possiblePaths) {
@@ -2391,17 +2443,30 @@ function handleResourcePackUpload(file) {
                                 }
                             }
                             
-
-                            
-
-                            
                             // 处理图片文件
                             const imagePromises = [];
                             for (const info of imageFileInputs) {
-                                const imagePath = `textures/items/${info.targetName}`;
-                                if (zip.file(imagePath)) {
+                                // 尝试根目录
+                                const rootImagePath = `textures/items/${info.targetName}`;
+                                let foundPath = null;
+                                
+                                if (zip.file(rootImagePath)) {
+                                    foundPath = rootImagePath;
+                                } else {
+                                    // 尝试在子包中查找
+                                    const subpackDirs = Object.keys(zip.files).filter(filePath => filePath.startsWith('subpack/') && zip.files[filePath].dir);
+                                    for (const subpackDir of subpackDirs) {
+                                        const subpackImagePath = `${subpackDir}textures/items/${info.targetName}`;
+                                        if (zip.file(subpackImagePath)) {
+                                            foundPath = subpackImagePath;
+                                            break;
+                                        }
+                                    }
+                                }
+                                
+                                if (foundPath) {
                                     imagePromises.push(
-                                        zip.file(imagePath).async('blob')
+                                        zip.file(foundPath).async('blob')
                                             .then(function(blob) {
                                                 const imageFile = new File([blob], info.targetName, { type: 'image/png' });
                                                 const input = document.getElementById(info.id);
@@ -2443,6 +2508,22 @@ function handleResourcePackUpload(file) {
                 });
         })
         .then(function() {
+            if (importType === 'addSubpack') {
+                // 增加子包功能：创建新子包
+                const subpackId = generateRandomId(8);
+                const subpackName = prompt(i18n.t('upload.input_subpack_name', '请输入子包名称:'), getNextSubpackName());
+                
+                if (subpackName !== null && subpackName.trim() !== '') {
+                    const subpacks = getSubpacks();
+                    subpacks.push({ id: subpackId, name: subpackName.trim() });
+                    saveSubpacks(subpacks);
+                    refreshSubpackSelect();
+                    
+                    // 自动选中新创建的子包
+                    subpackSelect.value = subpackId;
+                }
+            }
+            
             const status = document.getElementById('status');
             status.textContent = i18n.t('modal.resource_pack.import_success', '资源包导入成功！');
             status.style.color = '#4CAF50';
