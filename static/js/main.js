@@ -2673,8 +2673,24 @@ window.addEventListener('DOMContentLoaded', function() {
     
     // 初始化子包列表
     function initSubpacks() {
-        // 只保留一个默认的MusicPack子包
-        const defaultSubpackId = generateRandomId(8);
+        // 刷新页面后只保留一个默认的MusicPack子包
+        const savedSubpacks = localStorage.getItem('subpacks');
+        let defaultSubpackId = generateRandomId(8);
+        
+        // 如果有已保存的MusicPack，保留它
+        if (savedSubpacks) {
+            try {
+                const subpacks = JSON.parse(savedSubpacks);
+                const musicPack = subpacks.find(s => s.name === 'MusicPack');
+                if (musicPack) {
+                    defaultSubpackId = musicPack.id;
+                }
+            } catch (e) {
+                // 解析失败，使用新的ID
+            }
+        }
+        
+        // 只保留一个MusicPack子包
         const subpacks = [{ id: defaultSubpackId, name: 'MusicPack' }];
         saveSubpacks(subpacks);
         refreshSubpackSelect();
@@ -2683,8 +2699,12 @@ window.addEventListener('DOMContentLoaded', function() {
         window.currentSubpackId = defaultSubpackId;
         
         // 初始化子包文件存储
-        window.subpackFiles = {};
-        window.subpackFiles[defaultSubpackId] = { audio: {}, image: {} };
+        if (!window.subpackFiles) {
+            window.subpackFiles = {};
+        }
+        if (!window.subpackFiles[defaultSubpackId]) {
+            window.subpackFiles[defaultSubpackId] = { audio: {}, image: {} };
+        }
     }
     
     // 子包切换事件
