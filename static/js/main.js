@@ -2307,38 +2307,64 @@ function processResourcePackImport(file, importType) {
         if (batchAudioList) {
             batchAudioList.innerHTML = '';
         }
-    } else if (importType === 'addSubpack') {
-        // 增加子包：先创建新子包，然后导入文件
-        const subpackId = generateRandomId(8);
-        const subpackName = prompt(i18n.t('upload.input_subpack_name', '请输入子包名称:'), getNextSubpackName());
-        
-        if (subpackName !== null && subpackName.trim() !== '') {
-            const subpacks = getSubpacks();
-            subpacks.push({ id: subpackId, name: subpackName.trim() });
-            saveSubpacks(subpacks);
-            refreshSubpackSelect();
-            
-            // 自动选中新创建的子包
-            subpackSelect.value = subpackId;
-            
-            // 保存新子包ID到全局变量，供文件导入时使用
-            window.importToSubpackId = subpackId;
-        } else {
-            // 用户取消输入，不进行导入
-            const importModal = document.getElementById('resourcePackImportModal');
-            if (importModal) {
-                document.body.removeChild(importModal);
-            }
-            return;
-        }
-    }
-    
+    // 先读取manifest.json来获取包信息
     JSZip.loadAsync(file)
         .then(function(zip) {
             // 读取manifest.json
             return zip.file('manifest.json').async('text')
                 .then(function(manifestContent) {
                     const manifest = JSON.parse(manifestContent);
+                    
+                    // 检查是否有subpack文件夹
+                    const hasSubpacks = Object.keys(zip.files).some(filePath => filePath.startsWith('subpack/'));
+                    
+                    // 处理导入类型
+                    if (importType === 'full') {
+                        // 全量上传：清空现有文件，然后导入
+                        // 清空当前所有文件
+                        clearFileInputs();
+                        window.lastValidAudioFiles = {};
+                        window.lastValidImageFiles = {};
+                        window.extraSubpackFiles = {};
+                    } else if (importType === 'addSubpack') {
+                        // 增加子包：先创建新子包，然后导入文件
+                        const subpackId = generateRandomId(8);
+                        let subpackName = '';
+                        
+                        if (!hasSubpacks) {
+                            // 如果没有subpack文件夹，使用manifest.json的name作为子包名称
+                            subpackName = manifest.header.name || 'MusicPack';
+                        } else {
+                            // 如果有subpack文件夹，让用户输入子包名称
+                            subpackName = prompt(i18n.t('upload.input_subpack_name', '请输入子包名称:'), getNextSubpackName());
+                            
+                            // 用户取消输入，不进行导入
+                            if (subpackName === null || subpackName.trim() === '') {
+                                const importModal = document.getElementById('resourcePackImportModal');
+                                if (importModal) {
+                                    document.body.removeChild(importModal);
+                                }
+                                return Promise.reject('User cancelled');
+                            }
+                            subpackName = subpackName.trim();
+                        }
+                        
+                        // 创建新子包
+                        const subpacks = getSubpacks();
+                        subpacks.push({ id: subpackId, name: subpackName });
+                        saveSubpacks(subpacks);
+                        
+                        // 为新子包初始化文件存储
+                        window.subpackFiles[subpackId] = { audio: {}, image: {} };
+                        
+                        refreshSubpackSelect();
+                        
+                        // 自动选中新创建的子包
+                        subpackSelect.value = subpackId;
+                        
+                        // 保存新子包ID到全局变量，供文件导入时使用
+                        window.importToSubpackId = subpackId;
+                    }
                     
                     // 读取texts/en_US.lang（支持子包结构）
                     return Promise.resolve()
