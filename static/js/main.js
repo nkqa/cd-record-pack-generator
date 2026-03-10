@@ -2328,15 +2328,13 @@ function processResourcePackImport(file, importType) {
                         window.extraSubpackFiles = {};
                     } else if (importType === 'addSubpack') {
                         // 增加子包：先创建新子包，然后导入文件
-                        const subpackId = generateRandomId(8);
+                        const subpacks = getSubpacks();
                         
-                        // 处理子包名称
                         if (!hasSubpacks) {
                             // 如果没有subpack文件夹，使用manifest.json的name作为子包名称
+                            const subpackId = generateRandomId(8);
                             const subpackName = manifest.header.name || 'MusicPack';
                             
-                            // 创建新子包
-                            const subpacks = getSubpacks();
                             subpacks.push({ id: subpackId, name: subpackName });
                             saveSubpacks(subpacks);
                             
@@ -2351,131 +2349,36 @@ function processResourcePackImport(file, importType) {
                             // 保存新子包ID到全局变量，供文件导入时使用
                             window.importToSubpackId = subpackId;
                         } else {
-                            // 如果有subpack文件夹，读取manifest.json的subpacks配置
+                            // 如果有subpack文件夹，读取manifest.json的subpacks数组
                             if (manifest.subpacks && manifest.subpacks.length > 0) {
-                                // 构建子包选择列表
-                                const subpackOptions = manifest.subpacks.map((subpack, index) => {
-                                    return {
-                                        value: subpack.folder_name,
-                                        label: `${subpack.name} (${subpack.folder_name})`
-                                    };
-                                });
-                                
-                                // 如果只有一个子包，直接使用
-                                if (subpackOptions.length === 1) {
-                                    const subpackName = manifest.subpacks[0].name;
+                                // 遍历subpacks数组，为每个子包创建对应的子包
+                                for (const subpackInfo of manifest.subpacks) {
+                                    const subpackId = generateRandomId(8);
+                                    const subpackName = subpackInfo.name || 'MusicPack';
                                     
-                                    // 创建新子包
-                                    const subpacks = getSubpacks();
                                     subpacks.push({ id: subpackId, name: subpackName });
-                                    saveSubpacks(subpacks);
                                     
                                     // 为新子包初始化文件存储
                                     window.subpackFiles[subpackId] = { audio: {}, image: {} };
                                     
-                                    refreshSubpackSelect();
-                                    
-                                    // 自动选中新创建的子包
-                                    subpackSelect.value = subpackId;
-                                    
-                                    // 保存新子包ID到全局变量，供文件导入时使用
-                                    window.importToSubpackId = subpackId;
-                                } else {
-                                    // 让用户选择子包
-                                    let selectedSubpack = null;
-                                    const optionsHTML = subpackOptions.map((option, index) => 
-                                        `<option value="${index}">${option.label}</option>`
-                                    ).join('');
-                                    
-                                    const selectHTML = `
-                                        <div style="padding: 10px;">
-                                            <label>选择子包:</label>
-                                            <select id="subpackSelect" style="width: 100%; padding: 5px; margin-top: 5px;">
-                                                ${optionsHTML}
-                                            </select>
-                                        </div>
-                                    `;
-                                    
-                                    // 创建临时弹窗
-                                    const modal = document.createElement('div');
-                                    modal.style.cssText = `
-                                        position: fixed;
-                                        top: 0;
-                                        left: 0;
-                                        width: 100%;
-                                        height: 100%;
-                                        background: rgba(0,0,0,0.5);
-                                        display: flex;
-                                        align-items: center;
-                                        justify-content: center;
-                                        z-index: 10000;
-                                    `;
-                                    
-                                    const content = document.createElement('div');
-                                    content.style.cssText = `
-                                        background: white;
-                                        padding: 20px;
-                                        border-radius: 5px;
-                                        min-width: 300px;
-                                    `;
-                                    
-                                    content.innerHTML = `
-                                        <h3>选择子包</h3>
-                                        ${selectHTML}
-                                        <div style="margin-top: 15px; display: flex; gap: 10px; justify-content: flex-end;">
-                                            <button id="cancelBtn" style="padding: 5px 10px;">取消</button>
-                                            <button id="confirmBtn" style="padding: 5px 10px;">确定</button>
-                                        </div>
-                                    `;
-                                    
-                                    modal.appendChild(content);
-                                    document.body.appendChild(modal);
-                                    
-                                    // 等待用户选择
-                                    return new Promise((resolve, reject) => {
-                                        document.getElementById('confirmBtn').addEventListener('click', () => {
-                                            const select = document.getElementById('subpackSelect');
-                                            const selectedIndex = parseInt(select.value);
-                                            selectedSubpack = manifest.subpacks[selectedIndex];
-                                            document.body.removeChild(modal);
-                                            
-                                            if (selectedSubpack) {
-                                                const subpackName = selectedSubpack.name;
-                                                
-                                                // 创建新子包
-                                                const subpacks = getSubpacks();
-                                                subpacks.push({ id: subpackId, name: subpackName });
-                                                saveSubpacks(subpacks);
-                                                
-                                                // 为新子包初始化文件存储
-                                                window.subpackFiles[subpackId] = { audio: {}, image: {} };
-                                                
-                                                refreshSubpackSelect();
-                                                
-                                                // 自动选中新创建的子包
-                                                subpackSelect.value = subpackId;
-                                                
-                                                // 保存新子包ID到全局变量，供文件导入时使用
-                                                window.importToSubpackId = subpackId;
-                                                
-                                                resolve();
-                                            } else {
-                                                reject('No subpack selected');
-                                            }
-                                        });
-                                        
-                                        document.getElementById('cancelBtn').addEventListener('click', () => {
-                                            document.body.removeChild(modal);
-                                            const importModal = document.getElementById('resourcePackImportModal');
-                                            if (importModal) {
-                                                document.body.removeChild(importModal);
-                                            }
-                                            reject('User cancelled');
-                                        });
-                                    });
+                                    // 保存子包ID和原始文件夹名称的映射关系
+                                    if (!window.subpackFolderMapping) {
+                                        window.subpackFolderMapping = {};
+                                    }
+                                    window.subpackFolderMapping[subpackId] = subpackInfo.folder_name;
+                                }
+                                
+                                saveSubpacks(subpacks);
+                                refreshSubpackSelect();
+                                
+                                // 自动选中第一个子包
+                                if (subpacks.length > 0) {
+                                    subpackSelect.value = subpacks[subpacks.length - manifest.subpacks.length].id;
+                                    window.importToSubpackId = subpacks[subpacks.length - manifest.subpacks.length].id;
                                 }
                             } else {
-                                // 如果没有subpacks配置，让用户输入子包名称
+                                // 如果manifest.json没有subpacks数组，让用户输入子包名称
+                                const subpackId = generateRandomId(8);
                                 const subpackName = prompt(i18n.t('upload.input_subpack_name', '请输入子包名称:'), getNextSubpackName());
                                 
                                 // 用户取消输入，不进行导入
@@ -2487,8 +2390,6 @@ function processResourcePackImport(file, importType) {
                                     return Promise.reject('User cancelled');
                                 }
                                 
-                                // 创建新子包
-                                const subpacks = getSubpacks();
                                 subpacks.push({ id: subpackId, name: subpackName.trim() });
                                 saveSubpacks(subpacks);
                                 
@@ -2540,7 +2441,22 @@ function processResourcePackImport(file, importType) {
                             }
                             
                             // 如果是增加子包模式，保存lang文件内容
-                            if (window.importToSubpackId) {
+                            if (window.subpackFolderMapping) {
+                                // 遍历所有新创建的子包
+                                for (const [subpackId, folderName] of Object.entries(window.subpackFolderMapping)) {
+                                    // 查找对应子包文件夹中的lang文件
+                                    const langPath = `subpack/${folderName}/texts/en_US.lang`;
+                                    if (zip.file(langPath)) {
+                                        zip.file(langPath).async('text').then(function(langContent) {
+                                            if (!window.extraSubpackFiles[subpackId]) {
+                                                window.extraSubpackFiles[subpackId] = {};
+                                            }
+                                            window.extraSubpackFiles[subpackId].langContent = langContent;
+                                        });
+                                    }
+                                }
+                            } else if (window.importToSubpackId) {
+                                // 单个子包模式
                                 if (!window.extraSubpackFiles[window.importToSubpackId]) {
                                     window.extraSubpackFiles[window.importToSubpackId] = {};
                                 }
@@ -2569,6 +2485,10 @@ function processResourcePackImport(file, importType) {
                             // 处理音频文件
                             const audioPromises = [];
                             
+                            // 获取所有子包的映射关系
+                            const subpackMappings = window.subpackFolderMapping || {};
+                            const subpackIds = Object.keys(subpackMappings);
+                            
                             // 处理所有音乐文件（包括唱片音乐和背景音乐）
                             for (const inputInfo of fileInputs) {
                                 // 尝试多个可能的音频文件路径
@@ -2589,9 +2509,18 @@ function processResourcePackImport(file, importType) {
                                 }
                                 
                                 let foundPath = null;
+                                let foundSubpackId = null;
+                                
                                 for (const path of possiblePaths) {
                                     if (zip.file(path)) {
                                         foundPath = path;
+                                        // 检查是否在子包文件夹中
+                                        for (const [subpackId, folderName] of Object.entries(subpackMappings)) {
+                                            if (path.startsWith(`subpack/${folderName}/`)) {
+                                                foundSubpackId = subpackId;
+                                                break;
+                                            }
+                                        }
                                         break;
                                     }
                                 }
@@ -2605,7 +2534,17 @@ function processResourcePackImport(file, importType) {
                                                 audioFile.fromResourcePack = true;
                                                 
                                                 // 如果是增加子包模式，保存到额外子包文件存储
-                                                if (window.importToSubpackId) {
+                                                if (foundSubpackId) {
+                                                    // 保存到对应的子包
+                                                    if (!window.extraSubpackFiles[foundSubpackId]) {
+                                                        window.extraSubpackFiles[foundSubpackId] = {};
+                                                    }
+                                                    window.extraSubpackFiles[foundSubpackId][inputInfo.id] = {
+                                                        file: audioFile,
+                                                        targetName: inputInfo.targetName
+                                                    };
+                                                } else if (window.importToSubpackId) {
+                                                    // 单个子包模式
                                                     if (!window.extraSubpackFiles[window.importToSubpackId]) {
                                                         window.extraSubpackFiles[window.importToSubpackId] = {};
                                                     }
@@ -2648,6 +2587,7 @@ function processResourcePackImport(file, importType) {
                                 // 尝试根目录
                                 const rootImagePath = `textures/items/${info.targetName}`;
                                 let foundPath = null;
+                                let foundSubpackId = null;
                                 
                                 if (zip.file(rootImagePath)) {
                                     foundPath = rootImagePath;
@@ -2658,6 +2598,13 @@ function processResourcePackImport(file, importType) {
                                         const subpackImagePath = `${subpackDir}textures/items/${info.targetName}`;
                                         if (zip.file(subpackImagePath)) {
                                             foundPath = subpackImagePath;
+                                            // 检查是否在子包文件夹中
+                                            for (const [subpackId, folderName] of Object.entries(subpackMappings)) {
+                                                if (subpackImagePath.startsWith(`subpack/${folderName}/`)) {
+                                                    foundSubpackId = subpackId;
+                                                    break;
+                                                }
+                                            }
                                             break;
                                         }
                                     }
@@ -2670,7 +2617,17 @@ function processResourcePackImport(file, importType) {
                                                 const imageFile = new File([blob], info.targetName, { type: 'image/png' });
                                                 
                                                 // 如果是增加子包模式，保存到额外子包文件存储
-                                                if (window.importToSubpackId) {
+                                                if (foundSubpackId) {
+                                                    // 保存到对应的子包
+                                                    if (!window.extraSubpackFiles[foundSubpackId]) {
+                                                        window.extraSubpackFiles[foundSubpackId] = {};
+                                                    }
+                                                    window.extraSubpackFiles[foundSubpackId][info.id] = {
+                                                        file: imageFile,
+                                                        targetName: info.targetName
+                                                    };
+                                                } else if (window.importToSubpackId) {
+                                                    // 单个子包模式
                                                     if (!window.extraSubpackFiles[window.importToSubpackId]) {
                                                         window.extraSubpackFiles[window.importToSubpackId] = {};
                                                     }
