@@ -2329,41 +2329,181 @@ function processResourcePackImport(file, importType) {
                     } else if (importType === 'addSubpack') {
                         // 增加子包：先创建新子包，然后导入文件
                         const subpackId = generateRandomId(8);
-                        let subpackName = '';
                         
+                        // 处理子包名称
                         if (!hasSubpacks) {
                             // 如果没有subpack文件夹，使用manifest.json的name作为子包名称
-                            subpackName = manifest.header.name || 'MusicPack';
-                        } else {
-                            // 如果有subpack文件夹，让用户输入子包名称
-                            subpackName = prompt(i18n.t('upload.input_subpack_name', '请输入子包名称:'), getNextSubpackName());
+                            const subpackName = manifest.header.name || 'MusicPack';
                             
-                            // 用户取消输入，不进行导入
-                            if (subpackName === null || subpackName.trim() === '') {
-                                const importModal = document.getElementById('resourcePackImportModal');
-                                if (importModal) {
-                                    document.body.removeChild(importModal);
+                            // 创建新子包
+                            const subpacks = getSubpacks();
+                            subpacks.push({ id: subpackId, name: subpackName });
+                            saveSubpacks(subpacks);
+                            
+                            // 为新子包初始化文件存储
+                            window.subpackFiles[subpackId] = { audio: {}, image: {} };
+                            
+                            refreshSubpackSelect();
+                            
+                            // 自动选中新创建的子包
+                            subpackSelect.value = subpackId;
+                            
+                            // 保存新子包ID到全局变量，供文件导入时使用
+                            window.importToSubpackId = subpackId;
+                        } else {
+                            // 如果有subpack文件夹，读取manifest.json的subpacks配置
+                            if (manifest.subpacks && manifest.subpacks.length > 0) {
+                                // 构建子包选择列表
+                                const subpackOptions = manifest.subpacks.map((subpack, index) => {
+                                    return {
+                                        value: subpack.folder_name,
+                                        label: `${subpack.name} (${subpack.folder_name})`
+                                    };
+                                });
+                                
+                                // 如果只有一个子包，直接使用
+                                if (subpackOptions.length === 1) {
+                                    const subpackName = manifest.subpacks[0].name;
+                                    
+                                    // 创建新子包
+                                    const subpacks = getSubpacks();
+                                    subpacks.push({ id: subpackId, name: subpackName });
+                                    saveSubpacks(subpacks);
+                                    
+                                    // 为新子包初始化文件存储
+                                    window.subpackFiles[subpackId] = { audio: {}, image: {} };
+                                    
+                                    refreshSubpackSelect();
+                                    
+                                    // 自动选中新创建的子包
+                                    subpackSelect.value = subpackId;
+                                    
+                                    // 保存新子包ID到全局变量，供文件导入时使用
+                                    window.importToSubpackId = subpackId;
+                                } else {
+                                    // 让用户选择子包
+                                    let selectedSubpack = null;
+                                    const optionsHTML = subpackOptions.map((option, index) => 
+                                        `<option value="${index}">${option.label}</option>`
+                                    ).join('');
+                                    
+                                    const selectHTML = `
+                                        <div style="padding: 10px;">
+                                            <label>选择子包:</label>
+                                            <select id="subpackSelect" style="width: 100%; padding: 5px; margin-top: 5px;">
+                                                ${optionsHTML}
+                                            </select>
+                                        </div>
+                                    `;
+                                    
+                                    // 创建临时弹窗
+                                    const modal = document.createElement('div');
+                                    modal.style.cssText = `
+                                        position: fixed;
+                                        top: 0;
+                                        left: 0;
+                                        width: 100%;
+                                        height: 100%;
+                                        background: rgba(0,0,0,0.5);
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        z-index: 10000;
+                                    `;
+                                    
+                                    const content = document.createElement('div');
+                                    content.style.cssText = `
+                                        background: white;
+                                        padding: 20px;
+                                        border-radius: 5px;
+                                        min-width: 300px;
+                                    `;
+                                    
+                                    content.innerHTML = `
+                                        <h3>选择子包</h3>
+                                        ${selectHTML}
+                                        <div style="margin-top: 15px; display: flex; gap: 10px; justify-content: flex-end;">
+                                            <button id="cancelBtn" style="padding: 5px 10px;">取消</button>
+                                            <button id="confirmBtn" style="padding: 5px 10px;">确定</button>
+                                        </div>
+                                    `;
+                                    
+                                    modal.appendChild(content);
+                                    document.body.appendChild(modal);
+                                    
+                                    // 等待用户选择
+                                    return new Promise((resolve, reject) => {
+                                        document.getElementById('confirmBtn').addEventListener('click', () => {
+                                            const select = document.getElementById('subpackSelect');
+                                            const selectedIndex = parseInt(select.value);
+                                            selectedSubpack = manifest.subpacks[selectedIndex];
+                                            document.body.removeChild(modal);
+                                            
+                                            if (selectedSubpack) {
+                                                const subpackName = selectedSubpack.name;
+                                                
+                                                // 创建新子包
+                                                const subpacks = getSubpacks();
+                                                subpacks.push({ id: subpackId, name: subpackName });
+                                                saveSubpacks(subpacks);
+                                                
+                                                // 为新子包初始化文件存储
+                                                window.subpackFiles[subpackId] = { audio: {}, image: {} };
+                                                
+                                                refreshSubpackSelect();
+                                                
+                                                // 自动选中新创建的子包
+                                                subpackSelect.value = subpackId;
+                                                
+                                                // 保存新子包ID到全局变量，供文件导入时使用
+                                                window.importToSubpackId = subpackId;
+                                                
+                                                resolve();
+                                            } else {
+                                                reject('No subpack selected');
+                                            }
+                                        });
+                                        
+                                        document.getElementById('cancelBtn').addEventListener('click', () => {
+                                            document.body.removeChild(modal);
+                                            const importModal = document.getElementById('resourcePackImportModal');
+                                            if (importModal) {
+                                                document.body.removeChild(importModal);
+                                            }
+                                            reject('User cancelled');
+                                        });
+                                    });
                                 }
-                                return Promise.reject('User cancelled');
+                            } else {
+                                // 如果没有subpacks配置，让用户输入子包名称
+                                const subpackName = prompt(i18n.t('upload.input_subpack_name', '请输入子包名称:'), getNextSubpackName());
+                                
+                                // 用户取消输入，不进行导入
+                                if (subpackName === null || subpackName.trim() === '') {
+                                    const importModal = document.getElementById('resourcePackImportModal');
+                                    if (importModal) {
+                                        document.body.removeChild(importModal);
+                                    }
+                                    return Promise.reject('User cancelled');
+                                }
+                                
+                                // 创建新子包
+                                const subpacks = getSubpacks();
+                                subpacks.push({ id: subpackId, name: subpackName.trim() });
+                                saveSubpacks(subpacks);
+                                
+                                // 为新子包初始化文件存储
+                                window.subpackFiles[subpackId] = { audio: {}, image: {} };
+                                
+                                refreshSubpackSelect();
+                                
+                                // 自动选中新创建的子包
+                                subpackSelect.value = subpackId;
+                                
+                                // 保存新子包ID到全局变量，供文件导入时使用
+                                window.importToSubpackId = subpackId;
                             }
-                            subpackName = subpackName.trim();
                         }
-                        
-                        // 创建新子包
-                        const subpacks = getSubpacks();
-                        subpacks.push({ id: subpackId, name: subpackName });
-                        saveSubpacks(subpacks);
-                        
-                        // 为新子包初始化文件存储
-                        window.subpackFiles[subpackId] = { audio: {}, image: {} };
-                        
-                        refreshSubpackSelect();
-                        
-                        // 自动选中新创建的子包
-                        subpackSelect.value = subpackId;
-                        
-                        // 保存新子包ID到全局变量，供文件导入时使用
-                        window.importToSubpackId = subpackId;
                     }
                     
                     // 读取texts/en_US.lang（支持子包结构）
