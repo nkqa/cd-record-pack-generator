@@ -2307,7 +2307,32 @@ function processResourcePackImport(file, importType) {
         if (batchAudioList) {
             batchAudioList.innerHTML = '';
         }
-    // 先读取manifest.json来获取包信息
+    } else if (importType === 'addSubpack') {
+        // 增加子包：先创建新子包，然后导入文件
+        const subpackId = generateRandomId(8);
+        const subpackName = prompt(i18n.t('upload.input_subpack_name', '请输入子包名称:'), getNextSubpackName());
+        
+        if (subpackName !== null && subpackName.trim() !== '') {
+            const subpacks = getSubpacks();
+            subpacks.push({ id: subpackId, name: subpackName.trim() });
+            saveSubpacks(subpacks);
+            refreshSubpackSelect();
+            
+            // 自动选中新创建的子包
+            subpackSelect.value = subpackId;
+            
+            // 保存新子包ID到全局变量，供文件导入时使用
+            window.importToSubpackId = subpackId;
+        } else {
+            // 用户取消输入，不进行导入
+            const importModal = document.getElementById('resourcePackImportModal');
+            if (importModal) {
+                document.body.removeChild(importModal);
+            }
+            return;
+        }
+    }
+    
     JSZip.loadAsync(file)
         .then(function(zip) {
             // 读取manifest.json
@@ -2315,119 +2340,38 @@ function processResourcePackImport(file, importType) {
                 .then(function(manifestContent) {
                     const manifest = JSON.parse(manifestContent);
                     
-                    // 检查是否有subpack文件夹
-                    const hasSubpacks = Object.keys(zip.files).some(filePath => filePath.startsWith('subpack/'));
-                    
-                    // 处理导入类型
-                    if (importType === 'full') {
-                        // 全量上传：清空现有文件，然后导入
-                        // 清空当前所有文件
-                        clearFileInputs();
-                        window.lastValidAudioFiles = {};
-                        window.lastValidImageFiles = {};
-                        window.extraSubpackFiles = {};
-                    } else if (importType === 'addSubpack') {
-                        // 增加子包：先创建新子包，然后导入文件
-                        const subpacks = getSubpacks();
-                        
-                        if (!hasSubpacks) {
-                            // 如果没有subpack文件夹，使用manifest.json的name作为子包名称
-                            const subpackId = generateRandomId(8);
-                            const subpackName = manifest.header.name || 'MusicPack';
-                            
-                            subpacks.push({ id: subpackId, name: subpackName });
-                            saveSubpacks(subpacks);
-                            
-                            // 为新子包初始化文件存储
-                            window.subpackFiles[subpackId] = { audio: {}, image: {} };
-                            
-                            refreshSubpackSelect();
-                            
-                            // 自动选中新创建的子包
-                            subpackSelect.value = subpackId;
-                            
-                            // 保存新子包ID到全局变量，供文件导入时使用
-                            window.importToSubpackId = subpackId;
-                        } else {
-                            // 如果有subpack文件夹，读取manifest.json的subpacks数组
-                            if (manifest.subpacks && manifest.subpacks.length > 0) {
-                                // 遍历subpacks数组，为每个子包创建对应的子包
-                                for (const subpackInfo of manifest.subpacks) {
-                                    const subpackId = generateRandomId(8);
-                                    const subpackName = subpackInfo.name || 'MusicPack';
-                                    
-                                    subpacks.push({ id: subpackId, name: subpackName });
-                                    
-                                    // 为新子包初始化文件存储
-                                    window.subpackFiles[subpackId] = { audio: {}, image: {} };
-                                    
-                                    // 保存子包ID和原始文件夹名称的映射关系
-                                    if (!window.subpackFolderMapping) {
-                                        window.subpackFolderMapping = {};
-                                    }
-                                    window.subpackFolderMapping[subpackId] = subpackInfo.folder_name;
-                                }
-                                
-                                saveSubpacks(subpacks);
-                                refreshSubpackSelect();
-                                
-                                // 自动选中第一个子包
-                                if (subpacks.length > 0) {
-                                    subpackSelect.value = subpacks[subpacks.length - manifest.subpacks.length].id;
-                                    window.importToSubpackId = subpacks[subpacks.length - manifest.subpacks.length].id;
-                                }
-                            } else {
-                                // 如果manifest.json没有subpacks数组，让用户输入子包名称
-                                const subpackId = generateRandomId(8);
-                                const subpackName = prompt(i18n.t('upload.input_subpack_name', '请输入子包名称:'), getNextSubpackName());
-                                
-                                // 用户取消输入，不进行导入
-                                if (subpackName === null || subpackName.trim() === '') {
-                                    const importModal = document.getElementById('resourcePackImportModal');
-                                    if (importModal) {
-                                        document.body.removeChild(importModal);
-                                    }
-                                    return Promise.reject('User cancelled');
-                                }
-                                
-                                subpacks.push({ id: subpackId, name: subpackName.trim() });
-                                saveSubpacks(subpacks);
-                                
-                                // 为新子包初始化文件存储
-                                window.subpackFiles[subpackId] = { audio: {}, image: {} };
-                                
-                                refreshSubpackSelect();
-                                
-                                // 自动选中新创建的子包
-                                subpackSelect.value = subpackId;
-                                
-                                // 保存新子包ID到全局变量，供文件导入时使用
-                                window.importToSubpackId = subpackId;
-                            }
-                        }
-                    }
-                    
-                    // 读取texts/en_US.lang（支持子包结构）
+                    // 读取texts/en_US.lang
                     return Promise.resolve()
                         .then(function() {
                             // 尝试在根目录查找lang文件
                             if (zip.file('texts/en_US.lang')) {
                                 return zip.file('texts/en_US.lang').async('text');
                             } else {
-                                // 尝试在子包中查找lang文件
-                                const subpackDirs = Object.keys(zip.files).filter(filePath => filePath.startsWith('subpack/') && zip.files[filePath].dir);
-                                for (const subpackDir of subpackDirs) {
-                                    const langPath = `${subpackDir}texts/en_US.lang`;
-                                    if (zip.file(langPath)) {
-                                        return zip.file(langPath).async('text');
+                                // 只有在非增加子包模式下才查找子包目录
+                                if (!window.importToSubpackId) {
+                                    // 尝试在子包中查找lang文件
+                                    const subpackDirs = Object.keys(zip.files).filter(filePath => filePath.startsWith('subpack/') && zip.files[filePath].dir);
+                                    for (const subpackDir of subpackDirs) {
+                                        const langPath = `${subpackDir}texts/en_US.lang`;
+                                        if (zip.file(langPath)) {
+                                            return zip.file(langPath).async('text');
+                                        }
                                     }
-                                }
-                                // 如果没有找到en_US.lang，尝试查找其他语言的lang文件
-                                const langFiles = Object.keys(zip.files).filter(filePath => (filePath.startsWith('texts/') || filePath.includes('subpack/')) && filePath.endsWith('.lang'));
-                                if (langFiles.length > 0) {
-                                    return zip.file(langFiles[0]).async('text');
+                                    // 如果没有找到en_US.lang，尝试查找其他语言的lang文件（包括子包）
+                                    const langFiles = Object.keys(zip.files).filter(filePath => (filePath.startsWith('texts/') || filePath.includes('subpack/')) && filePath.endsWith('.lang'));
+                                    if (langFiles.length > 0) {
+                                        return zip.file(langFiles[0]).async('text');
+                                    } else {
+                                        return '';
+                                    }
                                 } else {
-                                    return '';
+                                    // 增加子包模式，只在根目录查找其他语言的lang文件
+                                    const langFiles = Object.keys(zip.files).filter(filePath => filePath.startsWith('texts/') && filePath.endsWith('.lang'));
+                                    if (langFiles.length > 0) {
+                                        return zip.file(langFiles[0]).async('text');
+                                    } else {
+                                        return '';
+                                    }
                                 }
                             }
                         })
@@ -2441,22 +2385,7 @@ function processResourcePackImport(file, importType) {
                             }
                             
                             // 如果是增加子包模式，保存lang文件内容
-                            if (window.subpackFolderMapping) {
-                                // 遍历所有新创建的子包
-                                for (const [subpackId, folderName] of Object.entries(window.subpackFolderMapping)) {
-                                    // 查找对应子包文件夹中的lang文件
-                                    const langPath = `subpack/${folderName}/texts/en_US.lang`;
-                                    if (zip.file(langPath)) {
-                                        zip.file(langPath).async('text').then(function(langContent) {
-                                            if (!window.extraSubpackFiles[subpackId]) {
-                                                window.extraSubpackFiles[subpackId] = {};
-                                            }
-                                            window.extraSubpackFiles[subpackId].langContent = langContent;
-                                        });
-                                    }
-                                }
-                            } else if (window.importToSubpackId) {
-                                // 单个子包模式
+                            if (window.importToSubpackId) {
                                 if (!window.extraSubpackFiles[window.importToSubpackId]) {
                                     window.extraSubpackFiles[window.importToSubpackId] = {};
                                 }
@@ -2485,10 +2414,6 @@ function processResourcePackImport(file, importType) {
                             // 处理音频文件
                             const audioPromises = [];
                             
-                            // 获取所有子包的映射关系
-                            const subpackMappings = window.subpackFolderMapping || {};
-                            const subpackIds = Object.keys(subpackMappings);
-                            
                             // 处理所有音乐文件（包括唱片音乐和背景音乐）
                             for (const inputInfo of fileInputs) {
                                 // 尝试多个可能的音频文件路径
@@ -2501,26 +2426,20 @@ function processResourcePackImport(file, importType) {
                                     `sounds/music/game/records/${targetName}`
                                 ];
                                 
-                                // 尝试在子包中查找
-                                const subpackDirs = Object.keys(zip.files).filter(filePath => filePath.startsWith('subpack/') && zip.files[filePath].dir);
-                                for (const subpackDir of subpackDirs) {
-                                    possiblePaths.push(`${subpackDir}sounds/records/${targetName}`);
-                                    possiblePaths.push(`${subpackDir}sounds/music/game/records/${targetName}`);
+                                // 只有在非增加子包模式下才查找子包目录
+                                if (!window.importToSubpackId) {
+                                    // 尝试在子包中查找
+                                    const subpackDirs = Object.keys(zip.files).filter(filePath => filePath.startsWith('subpack/') && zip.files[filePath].dir);
+                                    for (const subpackDir of subpackDirs) {
+                                        possiblePaths.push(`${subpackDir}sounds/records/${targetName}`);
+                                        possiblePaths.push(`${subpackDir}sounds/music/game/records/${targetName}`);
+                                    }
                                 }
                                 
                                 let foundPath = null;
-                                let foundSubpackId = null;
-                                
                                 for (const path of possiblePaths) {
                                     if (zip.file(path)) {
                                         foundPath = path;
-                                        // 检查是否在子包文件夹中
-                                        for (const [subpackId, folderName] of Object.entries(subpackMappings)) {
-                                            if (path.startsWith(`subpack/${folderName}/`)) {
-                                                foundSubpackId = subpackId;
-                                                break;
-                                            }
-                                        }
                                         break;
                                     }
                                 }
@@ -2534,17 +2453,7 @@ function processResourcePackImport(file, importType) {
                                                 audioFile.fromResourcePack = true;
                                                 
                                                 // 如果是增加子包模式，保存到额外子包文件存储
-                                                if (foundSubpackId) {
-                                                    // 保存到对应的子包
-                                                    if (!window.extraSubpackFiles[foundSubpackId]) {
-                                                        window.extraSubpackFiles[foundSubpackId] = {};
-                                                    }
-                                                    window.extraSubpackFiles[foundSubpackId][inputInfo.id] = {
-                                                        file: audioFile,
-                                                        targetName: inputInfo.targetName
-                                                    };
-                                                } else if (window.importToSubpackId) {
-                                                    // 单个子包模式
+                                                if (window.importToSubpackId) {
                                                     if (!window.extraSubpackFiles[window.importToSubpackId]) {
                                                         window.extraSubpackFiles[window.importToSubpackId] = {};
                                                     }
@@ -2587,24 +2496,17 @@ function processResourcePackImport(file, importType) {
                                 // 尝试根目录
                                 const rootImagePath = `textures/items/${info.targetName}`;
                                 let foundPath = null;
-                                let foundSubpackId = null;
                                 
                                 if (zip.file(rootImagePath)) {
                                     foundPath = rootImagePath;
-                                } else {
+                                } else if (!window.importToSubpackId) {
+                                    // 只有在非增加子包模式下才查找子包目录
                                     // 尝试在子包中查找
                                     const subpackDirs = Object.keys(zip.files).filter(filePath => filePath.startsWith('subpack/') && zip.files[filePath].dir);
                                     for (const subpackDir of subpackDirs) {
                                         const subpackImagePath = `${subpackDir}textures/items/${info.targetName}`;
                                         if (zip.file(subpackImagePath)) {
                                             foundPath = subpackImagePath;
-                                            // 检查是否在子包文件夹中
-                                            for (const [subpackId, folderName] of Object.entries(subpackMappings)) {
-                                                if (subpackImagePath.startsWith(`subpack/${folderName}/`)) {
-                                                    foundSubpackId = subpackId;
-                                                    break;
-                                                }
-                                            }
                                             break;
                                         }
                                     }
@@ -2617,17 +2519,7 @@ function processResourcePackImport(file, importType) {
                                                 const imageFile = new File([blob], info.targetName, { type: 'image/png' });
                                                 
                                                 // 如果是增加子包模式，保存到额外子包文件存储
-                                                if (foundSubpackId) {
-                                                    // 保存到对应的子包
-                                                    if (!window.extraSubpackFiles[foundSubpackId]) {
-                                                        window.extraSubpackFiles[foundSubpackId] = {};
-                                                    }
-                                                    window.extraSubpackFiles[foundSubpackId][info.id] = {
-                                                        file: imageFile,
-                                                        targetName: info.targetName
-                                                    };
-                                                } else if (window.importToSubpackId) {
-                                                    // 单个子包模式
+                                                if (window.importToSubpackId) {
                                                     if (!window.extraSubpackFiles[window.importToSubpackId]) {
                                                         window.extraSubpackFiles[window.importToSubpackId] = {};
                                                     }
