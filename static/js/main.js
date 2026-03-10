@@ -614,10 +614,8 @@ function showDurationExceededModal(limitMinutes, limitSeconds, input, inputId, i
                     
                     // 保存到子包文件存储
                     if (window.currentSubpackId) {
-                        if (!window.subpackFiles[window.currentSubpackId]) {
-                            window.subpackFiles[window.currentSubpackId] = { audio: {}, image: {} };
-                        }
-                        window.subpackFiles[window.currentSubpackId].audio[inputInfo.id] = {
+                        const currentSubpack = getCurrentSubpack();
+                        currentSubpack.audio[inputInfo.id] = {
                             file: finalFile,
                             name: finalFile.name,
                             originalName: file.name,
@@ -2755,6 +2753,20 @@ window.addEventListener('DOMContentLoaded', function() {
         });
     }
     
+    // 确保所有文件操作都使用当前子包
+    function getCurrentSubpackId() {
+        return window.currentSubpackId || 'default';
+    }
+    
+    // 确保所有操作都关联到当前子包
+    function getCurrentSubpack() {
+        const subpackId = getCurrentSubpackId();
+        if (!window.subpackFiles[subpackId]) {
+            window.subpackFiles[subpackId] = { audio: {}, image: {} };
+        }
+        return window.subpackFiles[subpackId];
+    }
+    
     // 加载子包文件
     function loadSubpackFiles(subpackId) {
         // 清空当前显示
@@ -4422,10 +4434,8 @@ function handleBatchAudioFile(file, targetName, callback) {
                 
                 // 保存到子包文件存储
                 if (window.currentSubpackId) {
-                    if (!window.subpackFiles[window.currentSubpackId]) {
-                        window.subpackFiles[window.currentSubpackId] = { audio: {}, image: {} };
-                    }
-                    window.subpackFiles[window.currentSubpackId].audio[inputInfo.id] = {
+                    const currentSubpack = getCurrentSubpack();
+                    currentSubpack.audio[inputInfo.id] = {
                         file: finalFile,
                         name: finalFile.name,
                         originalName: file.name,
@@ -5124,10 +5134,8 @@ fileInputs.forEach(inputInfo => {
                     
                     // 保存到子包文件存储
                     if (window.currentSubpackId) {
-                        if (!window.subpackFiles[window.currentSubpackId]) {
-                            window.subpackFiles[window.currentSubpackId] = { audio: {}, image: {} };
-                        }
-                        window.subpackFiles[window.currentSubpackId].audio[inputInfo.id] = {
+                        const currentSubpack = getCurrentSubpack();
+                        currentSubpack.audio[inputInfo.id] = {
                             file: finalFile,
                             name: finalFile.name,
                             originalName: originalFileName,
@@ -5466,10 +5474,8 @@ imageFileInputs.forEach(inputInfo => {
                                     
                                     // 保存到子包文件存储
                                     if (window.currentSubpackId) {
-                                        if (!window.subpackFiles[window.currentSubpackId]) {
-                                            window.subpackFiles[window.currentSubpackId] = { audio: {}, image: {} };
-                                        }
-                                        window.subpackFiles[window.currentSubpackId].image[inputInfo.id] = {
+                                        const currentSubpack = getCurrentSubpack();
+                                        currentSubpack.image[inputInfo.id] = {
                                             file: convertedFile,
                                             name: convertedFile.name,
                                             originalName: file.name,
@@ -5506,10 +5512,8 @@ imageFileInputs.forEach(inputInfo => {
                             
                             // 保存到子包文件存储
                             if (window.currentSubpackId) {
-                                if (!window.subpackFiles[window.currentSubpackId]) {
-                                    window.subpackFiles[window.currentSubpackId] = { audio: {}, image: {} };
-                                }
-                                window.subpackFiles[window.currentSubpackId].image[inputInfo.id] = {
+                                const currentSubpack = getCurrentSubpack();
+                                currentSubpack.image[inputInfo.id] = {
                                     file: file,
                                     name: file.name,
                                     originalName: file.name,
