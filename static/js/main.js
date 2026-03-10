@@ -2782,6 +2782,13 @@ window.addEventListener('DOMContentLoaded', function() {
                         preview.style.display = 'block';
                     }
                     
+                    // 更新按钮文本
+                    const btnId = inputId.replace('oggFile_', 'fileBtnText_');
+                    const btn = document.getElementById(btnId);
+                    if (btn) {
+                        btn.textContent = audioData.file.name;
+                    }
+                    
                     // 更新描述框
                     const descInput = document.getElementById(`desc_${inputId.replace('oggFile_', '')}`);
                     if (descInput && audioData.description) {
@@ -2809,6 +2816,13 @@ window.addEventListener('DOMContentLoaded', function() {
                         preview.src = url;
                         preview.style.display = 'block';
                     }
+                    
+                    // 更新按钮文本
+                    const btnId = inputId.replace('imageFile_', 'imageBtnText_');
+                    const btn = document.getElementById(btnId);
+                    if (btn) {
+                        btn.textContent = imageData.file.name;
+                    }
                 }
             }
         }
@@ -2828,6 +2842,13 @@ window.addEventListener('DOMContentLoaded', function() {
                 if (preview) {
                     preview.src = '';
                     preview.style.display = 'none';
+                }
+                
+                // 重置按钮文本
+                const btnId = inputInfo.btnId;
+                const btn = document.getElementById(btnId);
+                if (btn) {
+                    btn.textContent = i18n.t('upload.select_file', '选择文件');
                 }
                 
                 // 清空描述框
@@ -2850,6 +2871,13 @@ window.addEventListener('DOMContentLoaded', function() {
                 if (preview) {
                     preview.src = '';
                     preview.style.display = 'none';
+                }
+                
+                // 重置按钮文本
+                const btnId = inputInfo.btnId;
+                const btn = document.getElementById(btnId);
+                if (btn) {
+                    btn.textContent = i18n.t('upload.select_file', '选择文件');
                 }
             }
         });
