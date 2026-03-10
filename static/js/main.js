@@ -2673,26 +2673,19 @@ window.addEventListener('DOMContentLoaded', function() {
     
     // 初始化子包列表
     function initSubpacks() {
-        const subpacks = getSubpacks();
-        // 如果没有子包，自动创建一个默认子包
-        if (subpacks.length === 0) {
-            const defaultSubpackId = generateRandomId(8);
-            subpacks.push({ id: defaultSubpackId, name: 'MusicPack' });
-            saveSubpacks(subpacks);
-        }
+        // 重置子包列表，只保留一个默认的MusicPack
+        const defaultSubpackId = generateRandomId(8);
+        const subpacks = [{ id: defaultSubpackId, name: 'MusicPack' }];
+        saveSubpacks(subpacks);
+        
+        // 重置子包文件存储
+        window.subpackFiles = {};
+        window.subpackFiles[defaultSubpackId] = { audio: {}, image: {} };
+        
         refreshSubpackSelect();
         
         // 初始化当前子包ID
-        if (subpacks.length > 0) {
-            window.currentSubpackId = subpackSelect.value;
-        }
-        
-        // 初始化子包文件存储
-        subpacks.forEach(subpack => {
-            if (!window.subpackFiles[subpack.id]) {
-                window.subpackFiles[subpack.id] = { audio: {}, image: {} };
-            }
-        });
+        window.currentSubpackId = defaultSubpackId;
     }
     
     // 子包切换事件
