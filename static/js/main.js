@@ -2839,6 +2839,10 @@ window.addEventListener('DOMContentLoaded', function() {
                 
                 // 自动选中新创建的子包
                 subpackSelect.value = subpackId;
+                
+                // 切换到新子包的内容
+                window.currentSubpackId = subpackId;
+                loadSubpackFiles(subpackId);
             }
         });
     }
