@@ -2669,6 +2669,34 @@ window.addEventListener('DOMContentLoaded', function() {
         } else if (subpacks.length > 0) {
             subpackSelect.value = subpacks[0].id;
         }
+        
+        // 更新按钮文本
+        updateButtonTexts();
+    }
+    
+    // 更新按钮文本
+    function updateButtonTexts() {
+        const selectedId = subpackSelect.value;
+        const subpacks = getSubpacks();
+        const selectedSubpack = subpacks.find(s => s.id === selectedId);
+        
+        // 更新重命名按钮文本
+        if (renameSubpackBtn) {
+            if (selectedSubpack) {
+                renameSubpackBtn.textContent = i18n.t('upload.rename_subpack', '重命名') + `: ${selectedSubpack.name}`;
+            } else {
+                renameSubpackBtn.textContent = i18n.t('upload.rename_subpack', '重命名');
+            }
+        }
+        
+        // 更新删除按钮文本
+        if (deleteSubpackBtn) {
+            if (selectedSubpack) {
+                deleteSubpackBtn.textContent = i18n.t('upload.delete_subpack', '删除') + `: ${selectedSubpack.name}`;
+            } else {
+                deleteSubpackBtn.textContent = i18n.t('upload.delete_subpack', '删除');
+            }
+        }
     }
     
     // 初始化子包列表
@@ -2705,6 +2733,9 @@ window.addEventListener('DOMContentLoaded', function() {
         if (!window.subpackFiles[defaultSubpackId]) {
             window.subpackFiles[defaultSubpackId] = { audio: {}, image: {} };
         }
+        
+        // 更新按钮文本
+        updateButtonTexts();
     }
     
     // 子包切换事件
@@ -2715,6 +2746,9 @@ window.addEventListener('DOMContentLoaded', function() {
             
             // 切换显示的文件
             loadSubpackFiles(newSubpackId);
+            
+            // 更新按钮文本
+            updateButtonTexts();
             
             // 确保所有后续操作都使用新的子包ID
             console.log('Switched to subpack:', newSubpackId);
@@ -2843,6 +2877,9 @@ window.addEventListener('DOMContentLoaded', function() {
                 // 切换到新子包的内容
                 window.currentSubpackId = subpackId;
                 loadSubpackFiles(subpackId);
+                
+                // 更新按钮文本
+                updateButtonTexts();
             }
         });
     }
@@ -2866,6 +2903,9 @@ window.addEventListener('DOMContentLoaded', function() {
                     refreshSubpackSelect();
                     // 保持选中状态
                     subpackSelect.value = selectedId;
+                    
+                    // 更新按钮文本
+                    updateButtonTexts();
                 }
             }
         });
@@ -2894,6 +2934,9 @@ window.addEventListener('DOMContentLoaded', function() {
                     refreshSubpackSelect();
                     // 重置选择
                     subpackSelect.value = '';
+                    
+                    // 更新按钮文本
+                    updateButtonTexts();
                 }
             }
         });
